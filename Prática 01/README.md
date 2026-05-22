@@ -135,7 +135,7 @@ for i, wave in enumerate(cossine_waves) :
   matplotlib.pyplot.show()
 ```
 <p align="center">
-  <img src="assets/bannercefet.png" width="700">
+  <img src="assets1/Q1P1.png" width="700">
 </p>
 
 ## Explicação
