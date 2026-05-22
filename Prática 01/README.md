@@ -41,9 +41,9 @@ import pandas as pd
 * `pandas` → utilizado para manipulação de dados.
 
 ---
-Questão 1 
+# Questão 1
 
-# 1) Definição dos Parâmetros
+# Definição dos Parâmetros
 
 ```python
 duracaox = 5
@@ -57,7 +57,7 @@ freq_amostragem = 44100
 
 ---
 
-Criação do Eixo do Tempo
+# Criação do Eixo do Tempo
 
 ```python
 t = numpy.linspace(0, duracaox, int(duracaox * freq_amostragem), endpoint=False)
