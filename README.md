@@ -18,68 +18,49 @@
 - **Dupla:** Lucas de Farias dos Santos e Luís Felipe Chaves de Oliveira
 - **Semestre:** 2026.1
 
-## I) Práticas
-
-1. **Prática 1 - Sinais e sistemas**  
-   Geração e visualização de sinais no domínio do tempo, a criação de sinais chirp,  análise e reprodução de sinais de áudio e aplicação da convolução entre sinais.
-
-2. **Prática 2 - Amostragem**  
-   Aplicação da TMP...
-
-3. **Prática 3 - Transformada Z**  
-   Conjunto de indicadores técnicos...
-
-4. **Prática 4 - DCT E DFT**  
-   Estratégias automáticas...
-
-5. **Prática 5 - Transformadas de Hadamard e Wavelet.**  
-   Operações Long & Short...
-
-
-## I) Teste
-<h2>II) Práticas</h2>
+<h2>I) Práticas</h2>
 
 <table>
   <tr>
     <td width="60"><b>01</b></td>
     <td>
-      <a href="#"><b>Prática 1 - Modelagem do Preço</b></a>
+      <a href="#"><b>Prática 1 - Sinais e sistemas</b></a>
       <br><br>
-      Modelagem estocástica do preço, volatilidade, índice Sharpe etc.
+      Geração e visualização de sinais no domínio do tempo, a criação de sinais chirp,  análise e reprodução de sinais de áudio e aplicação da convolução entre sinais.
     </td>
   </tr>
 
   <tr>
     <td><b>02</b></td>
     <td>
-      <a href="#"><b>Prática 2 - Teoria Moderna do Portfólio</b></a>
+      <a href="#"><b>Prática 2 - Amostragem</b></a>
       <br><br>
-      Aplicação da Teoria Moderna do Portfólio (TMP).
+      Amostragem e análise no domínio da frequência. 
     </td>
   </tr>
 
   <tr>
     <td><b>03</b></td>
     <td>
-      <a href="#"><b>Prática 3 - Indicadores Técnicos</b></a>
+      <a href="#"><b>Prática 3 - Transformada Z</b></a>
       <br><br>
-      Indicadores usados em estratégias quantitativas.
+      Análise de sistemas discretos descritos por funções de transferência no domínio Z , análise de suas respostas em frequência e diagramas de pólos e zeros, avaliação dos efeitos de filtros da função de transferência.
     </td>
   </tr>
 
   <tr>
     <td><b>04</b></td>
     <td>
-      <a href="#"><b>Prática 4 - Algo Trading</b></a>
+      <a href="#"><b>Prática 4 - DCT E DFT</b></a>
       <br><br>
-      Estratégias automáticas utilizando médias móveis.
+      Análise no domínio da frequência através da  (DTFT) e  (DFT), Efeitos da técnica de zero-padding e Análise do desempenho das transformadas DFT e DCT  aplicadas à compressão de sinais 2D.
     </td>
   </tr>
 
   <tr>
     <td><b>05</b></td>
     <td>
-      <a href="#"><b>Prática 5 - Long & Short</b></a>
+      <a href="#"><b>Prática 5 - Transformadas de Hadamard e Wavelet.</b></a>
       <br><br>
       Estratégias Long & Short com pares de ações.
     </td>
