@@ -55,8 +55,6 @@ freq_amostragem = 44100
 * `duracaox` define a duração do sinal em segundos.
 * `freq_amostragem` define a frequência de amostragem do sinal.
 
-A frequência de 44100 Hz é amplamente utilizada em aplicações de áudio digital.
-
 ---
 
 Criação do Eixo do Tempo
@@ -78,14 +76,6 @@ Geração das Frequências
 ```python
 frequencias = [500, 5000, 10000]
 ```
-
-## Explicação
-
-Foram escolhidas três frequências diferentes para comparação:
-
-* 500 Hz
-* 5000 Hz
-* 10000 Hz
 
 ---
 
@@ -134,7 +124,7 @@ for i, wave in enumerate(cossine_waves) :
 </p>
 
 
-# 6) Reprodução dos Áudios
+#Reprodução dos Áudios
 
 ```python
 for i, wave in enumerate(cossine_waves):
@@ -167,11 +157,6 @@ Os parâmetros utilizados definem:
 
 Neste experimento, o sinal varia de:
 
-- 500 Hz
-- até 10000 Hz
-
----
-
 # 2A) Geração dos Sinais Chirp
 
 ```python
@@ -184,23 +169,6 @@ quadratic_chirp = chirp(t, f0=f0, f1=f1, t1=duracaox, method='quadratic')
 # Geração do sinal chirp logarítmico
 logarithmic_chirp = chirp(t, f0=f0, f1=f1, t1=duracaox, method='logarithmic')
 ```
-
-## Explicação
-
-O sinal chirp é um sinal cuja frequência varia ao longo do tempo.
-
-Foram gerados três tipos diferentes:
-
-### Chirp Linear
-A frequência cresce linearmente.
-
-### Chirp Quadrático
-A frequência varia segundo uma função quadrática.
-
-### Chirp Logarítmico
-A frequência cresce exponencialmente.
-
----
 
 # Plotagem dos Gráficos
 
@@ -237,8 +205,6 @@ matplotlib.pyplot.show()
 
 ## Explicação
 
-Os gráficos mostram a variação temporal dos sinais chirp.
-
 O comando:
 
 ```python
@@ -271,13 +237,6 @@ display(Audio(data=quadratic_chirp, rate=freq_amostragem))
 print("Chirp Logarítmico...")
 display(Audio(data=logarithmic_chirp, rate=freq_amostragem))
 ```
-
-## Explicação
-
-Os sinais gerados são reproduzidos em áudio para permitir a percepção da variação de frequência ao longo do tempo.
-
----
-
 # Áudios dos Chirps
 
 [▶ Chirp Linear](assets1/chirp_linear.wav)
@@ -288,16 +247,6 @@ Os sinais gerados são reproduzidos em áudio para permitir a percepção da var
 
 ---
 
-# Resultado Esperado
-
-Ao executar o código, são obtidos:
-
-- Gráficos dos sinais chirp.
-- Reprodução sonora dos sinais.
-- Comparação entre diferentes métodos de variação de frequência.
-- Visualização do comportamento temporal dos chirps.
-
----
 ---
 
 # Questão 3
@@ -364,19 +313,6 @@ matplotlib.pyplot.grid(True)
 
 matplotlib.pyplot.show()
 ```
-
-## Explicação
-
-O gráfico mostra a variação da amplitude do sinal de áudio ao longo do tempo.
-
-Isso permite visualizar:
-
-- intensidade do sinal;
-- comportamento temporal;
-- variações de amplitude.
-
----
-
 # Resultado do Gráfico
 
 <p align="center">
@@ -411,18 +347,7 @@ display(Audio(data=normalized_data, rate=4 * fs))
 
 ## Explicação
 
-O sinal é inicialmente normalizado para evitar clipping e garantir melhor reprodução sonora.
-
-Foram reproduzidas três versões do áudio:
-
-### Áudio Original
-Mantém a frequência de amostragem original.
-
-### Áudio com Frequência Dobrada
-A reprodução ocorre mais rapidamente, aumentando a percepção da frequência sonora.
-
-### Áudio com Frequência Quadruplicada
-A reprodução ocorre ainda mais rapidamente, alterando significativamente o tom do áudio.
+O sinal é normalizado para evitar clipping e garantir melhor reprodução sonora.
 
 ---
 
@@ -442,17 +367,6 @@ A reprodução ocorre ainda mais rapidamente, alterando significativamente o tom
 
 ---
 
-# Resultado Esperado
-
-Ao executar o código, são obtidos:
-
-- Visualização gráfica do sinal de áudio.
-- Reprodução do áudio original.
-- Reprodução com diferentes frequências de amostragem.
-- Comparação perceptiva das alterações sonoras.
-
----
-
 ---
 
 # Questão 4
@@ -466,10 +380,6 @@ fb, data = wavfile.read(hbanheiro)
 ```
 
 ## Explicação
-
-O arquivo `h_banheiro.wav` representa a resposta impulsiva acústica de um banheiro.
-
-Esse tipo de sinal é utilizado para simular o efeito de reverberação de um ambiente.
 
 A função:
 
@@ -519,17 +429,6 @@ matplotlib.pyplot.grid(True)
 
 matplotlib.pyplot.show()
 ```
-
-## Explicação
-
-O gráfico mostra a resposta impulsiva do ambiente.
-
-Esse sinal contém informações sobre:
-
-- eco;
-- reverberação;
-- características acústicas do local.
-
 ---
 
 # Resultado do Gráfico
@@ -611,13 +510,6 @@ matplotlib.pyplot.grid(True)
 
 matplotlib.pyplot.show()
 ```
-
-## Explicação
-
-O gráfico apresenta a variação da amplitude do sinal sonoro da taça ao longo do tempo.
-
----
-
 # Resultado do Gráfico
 
 <p align="center">
@@ -681,15 +573,6 @@ handel_convoluido = numpy.convolve(
     mode='full'
 )
 ```
-
-## Explicação
-
-A convolução aplica ao áudio original as características acústicas do banheiro.
-
-O resultado é um áudio com efeito de reverberação.
-
----
-
 # Convolução da Taça com o Banheiro
 
 ```python
@@ -699,12 +582,6 @@ taca_convoluido = numpy.convolve(
     mode='full'
 )
 ```
-
-## Explicação
-
-O sinal da taça também recebe as características acústicas do banheiro através da convolução.
-
----
 
 # Normalização dos Sinais
 
@@ -745,14 +622,5 @@ display(Audio(data=taca_convoluido_normalizado, rate=fb))
 [▶ Taça Convoluída](assets1/taca_convoluido.wav)
 
 ---
-
-# Resultado Esperado
-
-Ao executar o código, são obtidos:
-
-- Visualização gráfica dos sinais acústicos.
-- Reprodução dos sinais originais.
-- Aplicação de reverberação através da convolução.
-- Comparação perceptiva entre sinais originais e convoluídos.
 
 ---
