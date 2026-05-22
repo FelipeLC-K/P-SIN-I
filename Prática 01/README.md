@@ -319,15 +319,6 @@ matplotlib.pyplot.show()
   <img src="assets1/Q3P1.png" width="800">
 </p>
 
-
-<p align="center">
-  <img src="assets1/doisQ3P1.png" width="800">
-</p>
-
-<p align="center">
-  <img src="assets1/tresQ3P1.png" width="800">
-</p>
-
 ---
 
 # 3B) Reprodução dos Áudios
@@ -369,9 +360,9 @@ O sinal é normalizado para evitar clipping e garantir melhor reprodução sonor
 
 ---
 
-# Questão 4
+# Questão 5
 
-# 4A) Carregamento do Áudio de Resposta ao Impulso (Banheiro)
+# 5A) Carregamento do Áudio de Resposta ao Impulso (Banheiro)
 
 ```python
 hbanheiro = 'h_banheiro.wav'
@@ -434,7 +425,7 @@ matplotlib.pyplot.show()
 # Resultado do Gráfico
 
 <p align="center">
-  <img src="assets1/Q4P1.png" width="800">
+  <img src="assets1/doisQ3P1.png" width="800">
 </p>
 
 ---
@@ -461,7 +452,7 @@ O áudio é normalizado para evitar distorções e permitir melhor reprodução 
 
 ---
 
-# 4B) Carregamento do Áudio da Taça
+# 5B) Carregamento do Áudio da Taça
 
 ```python
 sinaltaca = 'sinal_taca.wav'
@@ -513,7 +504,7 @@ matplotlib.pyplot.show()
 # Resultado do Gráfico
 
 <p align="center">
-  <img src="assets1/Q4P2.png" width="800">
+  <img src="assets1/tresQ3P1.png" width="800">
 </p>
 
 ---
@@ -540,7 +531,7 @@ O sinal é normalizado para melhorar a reprodução do áudio.
 
 ---
 
-# Questão 5
+# Questão 6
 
 # Reamostragem do Áudio
 
