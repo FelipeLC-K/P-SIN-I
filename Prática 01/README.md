@@ -142,23 +142,9 @@ for i, wave in enumerate(cossine_waves):
     display(Audio(data=normalized_wave, rate=freq_amostragem))
 ```
 
-<audio controls>
-  <source src="assets1/500hz.wav" type="audio/wav">
-</audio>
-
-<audio controls>
-  <source src="assets1/5000hz.wav" type="audio/wav">
-</audio>
-
-<audio controls>
-  <source src="assets1/10000hz.wav" type="audio/wav">
-</audio>
-
-
-
-
-
-
+[▶ Áudio 500 Hz](assets1/500hz.wav)
+[▶ Áudio 500 Hz](assets1/5000hz.wav)
+[▶ Áudio 500 Hz](assets1/10000hz.wav)
 
 
 
