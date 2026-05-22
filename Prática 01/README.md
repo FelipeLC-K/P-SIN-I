@@ -41,6 +41,7 @@ import pandas as pd
 * `pandas` → utilizado para manipulação de dados.
 
 ---
+Questão 1 
 
 # 1) Definição dos Parâmetros
 
@@ -146,37 +147,144 @@ for i, wave in enumerate(cossine_waves):
 [▶ Áudio 500 Hz](assets1/5000hz.wav)
 [▶ Áudio 500 Hz](assets1/10000hz.wav)
 
-
-
-
-
-
-
-
-## Explicação
-
-Os sinais são normalizados para evitar distorções de amplitude.
-
-Em seguida, cada sinal é reproduzido utilizando o player de áudio do Jupyter Notebook.
-
 ---
 
-# 7) Geração do Sinal Chirp
+# Questão 2
+
+# 2) Definição dos Parâmetros Iniciais
 
 ```python
-linear_chirp = chirp(t, f0=f0, f1=f1, t1=duracaox, method='linear')
+f0 = 500
+f1 = 10000
 ```
 
 ## Explicação
 
-O sinal *chirp* é um sinal cuja frequência varia ao longo do tempo.
+Os parâmetros utilizados definem:
 
-Neste caso:
+- `f0` → frequência inicial do sinal chirp.
+- `f1` → frequência final do sinal chirp.
 
-* Frequência inicial: 500 Hz
-* Frequência final: 10000 Hz
+Neste experimento, o sinal varia de:
 
-O método linear faz com que a frequência aumente linearmente durante o intervalo de tempo.
+- 500 Hz
+- até 10000 Hz
+
+---
+
+# 2A) Geração dos Sinais Chirp
+
+```python
+# Geração do sinal chirp linear
+linear_chirp = chirp(t, f0=f0, f1=f1, t1=duracaox, method='linear')
+
+# Geração do sinal chirp quadrático
+quadratic_chirp = chirp(t, f0=f0, f1=f1, t1=duracaox, method='quadratic')
+
+# Geração do sinal chirp logarítmico
+logarithmic_chirp = chirp(t, f0=f0, f1=f1, t1=duracaox, method='logarithmic')
+```
+
+## Explicação
+
+O sinal chirp é um sinal cuja frequência varia ao longo do tempo.
+
+Foram gerados três tipos diferentes:
+
+### Chirp Linear
+A frequência cresce linearmente.
+
+### Chirp Quadrático
+A frequência varia segundo uma função quadrática.
+
+### Chirp Logarítmico
+A frequência cresce exponencialmente.
+
+---
+
+# Plotagem dos Gráficos
+
+```python
+matplotlib.pyplot.figure(figsize=(15, 10))
+
+matplotlib.pyplot.subplot(3, 1, 1)
+matplotlib.pyplot.plot(t, linear_chirp)
+matplotlib.pyplot.title('Chirp Linear')
+matplotlib.pyplot.xlabel('Tempo (s)')
+matplotlib.pyplot.ylabel('Amplitude')
+matplotlib.pyplot.xlim(0, 0.1)
+matplotlib.pyplot.grid(True)
+
+matplotlib.pyplot.subplot(3, 1, 2)
+matplotlib.pyplot.plot(t, quadratic_chirp)
+matplotlib.pyplot.title('Chirp Quadrático')
+matplotlib.pyplot.xlabel('Tempo (s)')
+matplotlib.pyplot.ylabel('Amplitude')
+matplotlib.pyplot.xlim(0, 0.1)
+matplotlib.pyplot.grid(True)
+
+matplotlib.pyplot.subplot(3, 1, 3)
+matplotlib.pyplot.plot(t, logarithmic_chirp)
+matplotlib.pyplot.title('Chirp Logarítmico')
+matplotlib.pyplot.xlabel('Tempo (s)')
+matplotlib.pyplot.ylabel('Amplitude')
+matplotlib.pyplot.xlim(0, 0.1)
+matplotlib.pyplot.grid(True)
+
+matplotlib.pyplot.tight_layout()
+matplotlib.pyplot.show()
+```
+
+## Explicação
+
+Os gráficos mostram a variação temporal dos sinais chirp.
+
+O comando:
+
+```python
+matplotlib.pyplot.xlim(0, 0.1)
+```
+
+limita a visualização para facilitar a observação da variação de frequência.
+
+---
+
+# Resultado dos Gráficos
+
+<p align="center">
+  <img src="assets1/Q2P1.png" width="800">
+</p>
+
+---
+
+# 2B) Reprodução dos Áudios
+
+```python
+print("Áudios dos chirps:")
+
+print("Chirp Linear...")
+display(Audio(data=linear_chirp, rate=freq_amostragem))
+
+print("Chirp Quadrático...")
+display(Audio(data=quadratic_chirp, rate=freq_amostragem))
+
+print("Chirp Logarítmico...")
+display(Audio(data=logarithmic_chirp, rate=freq_amostragem))
+```
+
+## Explicação
+
+Os sinais gerados são reproduzidos em áudio para permitir a percepção da variação de frequência ao longo do tempo.
+
+---
+
+# Áudios dos Chirps
+
+[▶ Chirp Linear](assets1/chirp_linear.wav)
+
+[▶ Chirp Quadrático](assets1/chirp_quadratico.wav)
+
+[▶ Chirp Logarítmico](assets1/chirp_logaritmico.wav)
 
 ---
 
@@ -184,17 +292,9 @@ O método linear faz com que a frequência aumente linearmente durante o interva
 
 Ao executar o código, são obtidos:
 
-* Gráficos das ondas cossenoidais.
-* Reprodução sonora dos sinais.
-* Geração do sinal chirp.
-* Comparação entre diferentes frequências.
+- Gráficos dos sinais chirp.
+- Reprodução sonora dos sinais.
+- Comparação entre diferentes métodos de variação de frequência.
+- Visualização do comportamento temporal dos chirps.
 
 ---
-
-# Tecnologias Utilizadas
-
-* Python
-* NumPy
-
-print("Áudio taca_convoluido:")
-display(Audio(data=taca_convoluido_normalizado, rate=fb))
