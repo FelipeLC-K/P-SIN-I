@@ -64,7 +64,7 @@ A frequência de 44100 Hz é amplamente utilizada em aplicações de áudio digi
 
 ---
 
-# 2) Criação do Eixo do Tempo
+Criação do Eixo do Tempo
 
 ```python
 t = numpy.linspace(0, duracaox, int(duracaox * freq_amostragem), endpoint=False)
@@ -78,7 +78,7 @@ A função `linspace()` cria amostras igualmente espaçadas no intervalo especif
 
 ---
 
-# 3) Geração das Frequências
+Geração das Frequências
 
 ```python
 frequencias = [500, 5000, 10000]
@@ -94,7 +94,7 @@ Foram escolhidas três frequências diferentes para comparação:
 
 ---
 
-# 4) Geração das Ondas Cossenoidais
+Geração das Ondas Cossenoidais
 
 ```python
 cossine_waves = []
@@ -121,7 +121,7 @@ Cada onda gerada é armazenada na lista `cossine_waves`.
 
 ---
 
-# 5) Plotagem dos Gráficos
+Plotagem dos Gráficos
 
 ```python
 for i, wave in enumerate(cossine_waves) :
@@ -134,6 +134,9 @@ for i, wave in enumerate(cossine_waves) :
   matplotlib.pyplot.xlim(0, 0.01)
   matplotlib.pyplot.show()
 ```
+<p align="center">
+  <img src="assets/Q1P1.png" width="700">
+</p>
 
 ## Explicação
 
@@ -157,6 +160,25 @@ for i, wave in enumerate(cossine_waves):
     print(f"Audios da onda de {frequencias[i]} Hz...")
     display(Audio(data=normalized_wave, rate=freq_amostragem))
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Explicação
 
