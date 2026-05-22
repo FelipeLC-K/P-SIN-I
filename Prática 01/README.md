@@ -20,12 +20,6 @@
 
 # Prática 1 — Geração e Análise de Sinais
 
-## Objetivo
-
-Esta prática tem como objetivo gerar sinais cossenoidais utilizando Python, visualizar seus gráficos e reproduzir os sinais em áudio. Além disso, são gerados sinais do tipo *chirp*, amplamente utilizados em sistemas de telecomunicações e processamento digital de sinais.
-
----
-
 # Bibliotecas Utilizadas
 
 ```python
@@ -138,19 +132,6 @@ for i, wave in enumerate(cossine_waves) :
   <img src="assets1/Q1P1.png" width="700">
 </p>
 
-## Explicação
-
-Os gráficos mostram o comportamento temporal dos sinais gerados.
-
-O comando:
-
-```python
-matplotlib.pyplot.xlim(0, 0.01)
-```
-
-limita a visualização para os primeiros milissegundos do sinal, facilitando a observação dos ciclos da onda.
-
----
 
 # 6) Reprodução dos Áudios
 
@@ -161,11 +142,17 @@ for i, wave in enumerate(cossine_waves):
     display(Audio(data=normalized_wave, rate=freq_amostragem))
 ```
 
+<audio controls>
+  <source src="assets1/500hz.wav" type="audio/wav">
+</audio>
 
+<audio controls>
+  <source src="assets1/5000hz.wav" type="audio/wav">
+</audio>
 
-
-
-
+<audio controls>
+  <source src="assets1/10000hz.wav" type="audio/wav">
+</audio>
 
 
 
