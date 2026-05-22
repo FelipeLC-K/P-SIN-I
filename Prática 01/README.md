@@ -298,3 +298,461 @@ Ao executar o código, são obtidos:
 - Visualização do comportamento temporal dos chirps.
 
 ---
+---
+
+# Questão 3
+
+# 3A) Carregamento do Arquivo de Áudio
+
+```python
+file_path = 'handel.wav'
+fs, data = wavfile.read(file_path)
+```
+
+## Explicação
+
+O arquivo de áudio `handel.wav` é carregado utilizando a função:
+
+```python
+wavfile.read()
+```
+
+Essa função retorna:
+
+- `fs` → frequência de amostragem do áudio.
+- `data` → vetor contendo as amostras do sinal.
+
+---
+
+# Criação do Eixo Temporal
+
+```python
+duracaohandel = len(data) / fs
+
+t_audio = numpy.linspace(
+    0,
+    duracaohandel,
+    len(data),
+    endpoint=False
+)
+```
+
+## Explicação
+
+O vetor `t_audio` representa o eixo do tempo correspondente ao sinal de áudio.
+
+A duração do áudio é calculada por:
+
+$$
+Duração = \frac{Número\ de\ Amostras}{Frequência\ de\ Amostragem}
+$$
+
+---
+
+# Plotagem do Sinal de Áudio
+
+```python
+matplotlib.pyplot.figure(figsize=(15, 5))
+
+matplotlib.pyplot.plot(t_audio, data)
+
+matplotlib.pyplot.title('Sinal de Áudio de handel.wav')
+matplotlib.pyplot.xlabel('Tempo (s)')
+matplotlib.pyplot.ylabel('Amplitude')
+
+matplotlib.pyplot.grid(True)
+
+matplotlib.pyplot.show()
+```
+
+## Explicação
+
+O gráfico mostra a variação da amplitude do sinal de áudio ao longo do tempo.
+
+Isso permite visualizar:
+
+- intensidade do sinal;
+- comportamento temporal;
+- variações de amplitude.
+
+---
+
+# Resultado do Gráfico
+
+<p align="center">
+  <img src="assets1/Q3P1.png" width="800">
+</p>
+
+
+<p align="center">
+  <img src="assets1/doisQ3P1.png" width="800">
+</p>
+
+<p align="center">
+  <img src="assets1/tresQ3P1.png" width="800">
+</p>
+
+---
+
+# 3B) Reprodução dos Áudios
+
+```python
+normalized_data = data / numpy.max(numpy.abs(data))
+
+print("Áudio Original:")
+display(Audio(data=normalized_data, rate=fs))
+
+print("Áudio com o dobro da frequência de amostragem:")
+display(Audio(data=normalized_data, rate=2 * fs))
+
+print("Áudio com o quádruplo da frequência de amostragem:")
+display(Audio(data=normalized_data, rate=4 * fs))
+```
+
+## Explicação
+
+O sinal é inicialmente normalizado para evitar clipping e garantir melhor reprodução sonora.
+
+Foram reproduzidas três versões do áudio:
+
+### Áudio Original
+Mantém a frequência de amostragem original.
+
+### Áudio com Frequência Dobrada
+A reprodução ocorre mais rapidamente, aumentando a percepção da frequência sonora.
+
+### Áudio com Frequência Quadruplicada
+A reprodução ocorre ainda mais rapidamente, alterando significativamente o tom do áudio.
+
+---
+
+# Áudios Gerados
+
+## Áudio Original
+
+[▶ Áudio Original](assets1/audio_original.wav)
+
+## Áudio Dobrado
+
+[▶ Áudio Dobrado](assets1/audio_2x.wav)
+
+## Áudio Quadruplicado
+
+[▶ Áudio Quadruplicado](assets1/audio_4x.wav)
+
+---
+
+# Resultado Esperado
+
+Ao executar o código, são obtidos:
+
+- Visualização gráfica do sinal de áudio.
+- Reprodução do áudio original.
+- Reprodução com diferentes frequências de amostragem.
+- Comparação perceptiva das alterações sonoras.
+
+---
+
+---
+
+# Questão 4
+
+# 4A) Carregamento do Áudio de Resposta ao Impulso (Banheiro)
+
+```python
+hbanheiro = 'h_banheiro.wav'
+
+fb, data = wavfile.read(hbanheiro)
+```
+
+## Explicação
+
+O arquivo `h_banheiro.wav` representa a resposta impulsiva acústica de um banheiro.
+
+Esse tipo de sinal é utilizado para simular o efeito de reverberação de um ambiente.
+
+A função:
+
+```python
+wavfile.read()
+```
+
+retorna:
+
+- `fb` → frequência de amostragem.
+- `data` → amostras do sinal de áudio.
+
+---
+
+# Criação do Eixo Temporal
+
+```python
+duracaobanheiro = len(data) / fb
+
+t_audioB = numpy.linspace(
+    0,
+    duracaobanheiro,
+    len(data),
+    endpoint=False
+)
+```
+
+## Explicação
+
+O vetor `t_audioB` representa o eixo temporal correspondente ao sinal de áudio do banheiro.
+
+---
+
+# Plotagem do Sinal do Banheiro
+
+```python
+matplotlib.pyplot.figure(figsize=(15, 5))
+
+matplotlib.pyplot.plot(t_audioB, data)
+
+matplotlib.pyplot.title('Sinal de Áudio de Hbanheiro.wav')
+
+matplotlib.pyplot.xlabel('Tempo (s)')
+matplotlib.pyplot.ylabel('Amplitude')
+
+matplotlib.pyplot.grid(True)
+
+matplotlib.pyplot.show()
+```
+
+## Explicação
+
+O gráfico mostra a resposta impulsiva do ambiente.
+
+Esse sinal contém informações sobre:
+
+- eco;
+- reverberação;
+- características acústicas do local.
+
+---
+
+# Resultado do Gráfico
+
+<p align="center">
+  <img src="assets1/Q4P1.png" width="800">
+</p>
+
+---
+
+# Reprodução do Áudio do Banheiro
+
+```python
+banheiro_normalizado = data / numpy.max(numpy.abs(data))
+
+print("Áudio H_banheiro:")
+
+display(Audio(data=banheiro_normalizado, rate=fb))
+```
+
+## Explicação
+
+O áudio é normalizado para evitar distorções e permitir melhor reprodução sonora.
+
+---
+
+# Áudio do Banheiro
+
+[▶ Áudio H_banheiro](assets1/h_banheiro.wav)
+
+---
+
+# 4B) Carregamento do Áudio da Taça
+
+```python
+sinaltaca = 'sinal_taca.wav'
+
+ft, data = wavfile.read(sinaltaca)
+```
+
+## Explicação
+
+O arquivo `sinal_taca.wav` contém o sinal acústico associado ao som de uma taça.
+
+---
+
+# Criação do Eixo Temporal
+
+```python
+duracaotaca = len(data) / ft
+
+t_audioT = numpy.linspace(
+    0,
+    duracaotaca,
+    len(data),
+    endpoint=False
+)
+```
+
+## Explicação
+
+O vetor `t_audioT` representa o eixo temporal do áudio da taça.
+
+---
+
+# Plotagem do Sinal da Taça
+
+```python
+matplotlib.pyplot.figure(figsize=(15, 5))
+
+matplotlib.pyplot.plot(t_audioT, data)
+
+matplotlib.pyplot.title('Sinal de Áudio de Sinal_taca.wav')
+
+matplotlib.pyplot.xlabel('Tempo (s)')
+matplotlib.pyplot.ylabel('Amplitude')
+
+matplotlib.pyplot.grid(True)
+
+matplotlib.pyplot.show()
+```
+
+## Explicação
+
+O gráfico apresenta a variação da amplitude do sinal sonoro da taça ao longo do tempo.
+
+---
+
+# Resultado do Gráfico
+
+<p align="center">
+  <img src="assets1/Q4P2.png" width="800">
+</p>
+
+---
+
+# Reprodução do Áudio da Taça
+
+```python
+taca_normalizado = data / numpy.max(numpy.abs(data))
+
+print("Áudio sinal_taca:")
+
+display(Audio(data=taca_normalizado, rate=ft))
+```
+
+## Explicação
+
+O sinal é normalizado para melhorar a reprodução do áudio.
+
+---
+
+# Áudio da Taça
+
+[▶ Áudio sinal_taca](assets1/sinal_taca.wav)
+
+---
+
+# Questão 5
+
+# Reamostragem do Áudio
+
+```python
+handel_reamostrado = resample_poly(
+    normalized_data,
+    fb,
+    fs
+)
+```
+
+## Explicação
+
+Para realizar a convolução entre sinais, ambos devem possuir a mesma frequência de amostragem.
+
+O sinal `handel.wav` é reamostrado utilizando:
+
+```python
+resample_poly()
+```
+
+---
+
+# Convolução do Handel com o Banheiro
+
+```python
+handel_convoluido = numpy.convolve(
+    handel_reamostrado,
+    banheiro_normalizado,
+    mode='full'
+)
+```
+
+## Explicação
+
+A convolução aplica ao áudio original as características acústicas do banheiro.
+
+O resultado é um áudio com efeito de reverberação.
+
+---
+
+# Convolução da Taça com o Banheiro
+
+```python
+taca_convoluido = numpy.convolve(
+    taca_normalizado,
+    banheiro_normalizado,
+    mode='full'
+)
+```
+
+## Explicação
+
+O sinal da taça também recebe as características acústicas do banheiro através da convolução.
+
+---
+
+# Normalização dos Sinais
+
+```python
+handel_convoluido_normalizado = handel_convoluido / numpy.max(numpy.abs(handel_convoluido))
+
+taca_convoluido_normalizado = taca_convoluido / numpy.max(numpy.abs(taca_convoluido))
+```
+
+## Explicação
+
+Os sinais convoluídos são normalizados para evitar clipping durante a reprodução.
+
+---
+
+# Reprodução dos Áudios Convoluídos
+
+```python
+print("Áudio handel_convoluido:")
+
+display(Audio(data=handel_convoluido_normalizado, rate=fb))
+
+print("Áudio taca_convoluido:")
+
+display(Audio(data=taca_convoluido_normalizado, rate=fb))
+```
+
+---
+
+# Áudios Resultantes
+
+## Handel Convoluído
+
+[▶ Handel Convoluído](assets1/handel_convoluido.wav)
+
+## Taça Convoluída
+
+[▶ Taça Convoluída](assets1/taca_convoluido.wav)
+
+---
+
+# Resultado Esperado
+
+Ao executar o código, são obtidos:
+
+- Visualização gráfica dos sinais acústicos.
+- Reprodução dos sinais originais.
+- Aplicação de reverberação através da convolução.
+- Comparação perceptiva entre sinais originais e convoluídos.
+
+---
