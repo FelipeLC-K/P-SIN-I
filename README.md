@@ -62,7 +62,7 @@
     <td>
       <a href="#"><b>Prática 5 - Transformadas de Hadamard e Wavelet.</b></a>
       <br><br>
-      Estratégias Long & Short com pares de ações.
+      Aplicações envolvendo sistemas CDMA, influência do ruído AWGN, técnicas de decomposição e filtragem de sinais não estacionários, exploração da técnica de denoising com wavelets.
     </td>
   </tr>
 </table>
