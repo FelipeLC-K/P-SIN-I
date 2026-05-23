@@ -3097,3 +3097,1202 @@ Ao executar o código, são obtidos:
 - análise temporal e espectral do sinal.
 
 ---
+
+---
+
+# Prática 5 — Questão 3(d)
+
+# Decomposição Wavelet em 5 Níveis
+
+Nesta etapa foi realizada uma decomposição wavelet multinível utilizando:
+
+- wavelet biortogonal bior4.4;
+- cinco níveis de decomposição;
+- análise das subfaixas de detalhe e aproximação.
+
+O objetivo é separar o sinal em diferentes bandas de frequência para analisar:
+
+- componentes lentas;
+- componentes rápidas;
+- transientes;
+- mudanças locais do sinal.
+
+---
+
+# Importação da Biblioteca
+
+```python
+import pywt
+```
+
+## Explicação
+
+A biblioteca:
+
+```python
+PyWavelets
+```
+
+é utilizada para:
+
+- transformadas wavelet;
+- decomposição multinível;
+- análise multirresolução.
+
+---
+
+# Decomposição em 5 Níveis
+
+```python
+coeffs_5 = pywt.wavedec(
+    x,
+    'bior4.4',
+    level=5
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+wavedec()
+```
+
+realiza a decomposição wavelet discreta do sinal.
+
+---
+
+# Wavelet Utilizada
+
+Foi utilizada a wavelet:
+
+```python
+bior4.4
+```
+
+---
+
+# Características da bior4.4
+
+A wavelet biortogonal possui:
+
+- simetria;
+- baixa distorção de fase;
+- boa reconstrução;
+- eficiência na análise de transientes.
+
+---
+
+# Estrutura dos Coeficientes
+
+```python
+[cA5, cD5, cD4, cD3, cD2, cD1]
+```
+
+## Explicação
+
+A decomposição retorna:
+
+- `cA5` → aproximação do nível 5;
+- `cD5` → detalhe nível 5;
+- `cD4` → detalhe nível 4;
+- `cD3` → detalhe nível 3;
+- `cD2` → detalhe nível 2;
+- `cD1` → detalhe nível 1.
+
+---
+
+# Modelo Matemático da Decomposição
+
+:contentReference[oaicite:0]{index=0}
+
+---
+
+# Extração da Aproximação
+
+```python
+ca5 = coeffs_5[0]
+```
+
+## Explicação
+
+Os coeficientes:
+
+```python
+cA5
+```
+
+representam:
+
+- baixas frequências;
+- tendência global do sinal;
+- componentes lentas.
+
+---
+
+# Extração dos Detalhes
+
+```python
+details = coeffs_5[1:]
+```
+
+## Explicação
+
+Os coeficientes de detalhe representam:
+
+- altas frequências;
+- transientes;
+- mudanças rápidas.
+
+---
+
+# Criação da Figura
+
+```python
+plt.figure(figsize=(14, 12))
+```
+
+## Explicação
+
+Define o tamanho da figura utilizada para visualização.
+
+---
+
+# Plotagem da Aproximação
+
+```python
+plt.subplot(6, 1, 1)
+```
+
+## Explicação
+
+O primeiro gráfico apresenta os coeficientes de aproximação.
+
+---
+
+# Exibição da Aproximação
+
+```python
+plt.plot(
+    ca5,
+    color='black'
+)
+```
+
+## Explicação
+
+O gráfico mostra as componentes de baixa frequência do sinal.
+
+---
+
+# Configuração do Título
+
+```python
+plt.title(
+    'Coeficientes de Aproximação (cA5)'
+)
+```
+
+## Explicação
+
+A aproximação representa a tendência global do sinal.
+
+---
+
+# Configuração da Grade
+
+```python
+plt.grid(True)
+```
+
+## Explicação
+
+A grade facilita a visualização das oscilações.
+
+---
+
+# Loop dos Detalhes
+
+```python
+for i, cd in enumerate(details):
+```
+
+## Explicação
+
+O laço percorre todos os níveis de detalhe.
+
+---
+
+# Definição do Nível
+
+```python
+level = 5 - i
+```
+
+## Explicação
+
+O código identifica automaticamente o nível correspondente.
+
+---
+
+# Criação dos Subplots
+
+```python
+plt.subplot(6, 1, i + 2)
+```
+
+## Explicação
+
+Cada subfaixa é exibida em um gráfico separado.
+
+---
+
+# Plotagem dos Detalhes
+
+```python
+plt.plot(
+    cd,
+    color='C'+str(i+1)
+)
+```
+
+## Explicação
+
+Cada nível é exibido com uma cor diferente.
+
+---
+
+# Configuração do Título
+
+```python
+plt.title(
+    f'Subfaixa de Detalhe cD{level}'
+)
+```
+
+## Explicação
+
+Cada gráfico representa uma banda específica de frequência.
+
+---
+
+# Significado das Subfaixas
+
+## cD1
+
+Representa:
+
+- componentes de frequência mais alta;
+- transientes rápidos;
+- mudanças abruptas.
+
+---
+
+## cD2 e cD3
+
+Representam:
+
+- frequências intermediárias;
+- oscilações moderadas.
+
+---
+
+## cD4 e cD5
+
+Representam:
+
+- frequências mais baixas;
+- componentes lentas.
+
+---
+
+# Aproximação cA5
+
+A aproximação final contém:
+
+- comportamento global do sinal;
+- componentes de baixa frequência;
+- tendência geral.
+
+---
+
+# Organização da Figura
+
+```python
+plt.tight_layout()
+```
+
+## Explicação
+
+Evita sobreposição entre gráficos e títulos.
+
+---
+
+# Exibição Final
+
+```python
+plt.show()
+```
+
+## Explicação
+
+Exibe todos os coeficientes wavelet obtidos.
+
+---
+
+# Interpretação dos Resultados
+
+A decomposição wavelet permite:
+
+- separar frequências;
+- localizar transientes no tempo;
+- analisar mudanças locais;
+- estudar sinais não-estacionários.
+
+---
+
+# Resultado Esperado
+
+Os gráficos mostram:
+
+- maior atividade nos detalhes onde existem transientes;
+- redução gradual das componentes rápidas nos níveis mais altos;
+- tendência global concentrada em `cA5`.
+
+---
+
+# Resultado do Gráfico
+
+## Aproximação e Subfaixas Wavelet
+
+<p align="center">
+  <img src="assets5/Q3DP5.png" width="900">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, são obtidos:
+
+- decomposição wavelet multinível;
+- coeficientes de aproximação;
+- subfaixas de detalhe;
+- separação das bandas de frequência;
+- análise temporal e espectral do sinal.
+
+---
+
+---
+
+# Prática 5 — Questão 4(a)
+
+# Análise Temporal e Espectral do Sinal `leleccum.mat`
+
+Nesta etapa foi realizado:
+
+- carregamento do arquivo `.mat`;
+- extração do sinal;
+- cálculo da FFT;
+- análise espectral;
+- visualização no domínio do tempo e frequência.
+
+O objetivo é observar:
+
+- comportamento temporal;
+- distribuição espectral;
+- componentes de frequência presentes no sinal.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import scipy.io
+import numpy as np
+import matplotlib.pyplot as plt
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `scipy.io` → leitura de arquivos `.mat`;
+- `numpy` → operações numéricas e FFT;
+- `matplotlib` → geração dos gráficos.
+
+---
+
+# Carregamento do Arquivo `.mat`
+
+```python
+mat_data = scipy.io.loadmat('/content/leleccum.mat')
+```
+
+## Explicação
+
+A função:
+
+```python
+loadmat()
+```
+
+carrega arquivos MATLAB `.mat` para o Python.
+
+O conteúdo do arquivo é armazenado em:
+
+```python
+mat_data
+```
+
+---
+
+# Extração do Sinal
+
+```python
+signal_leleccum = mat_data['leleccum'].flatten()
+```
+
+## Explicação
+
+O vetor:
+
+```python
+leleccum
+```
+
+é extraído do arquivo MATLAB.
+
+A função:
+
+```python
+flatten()
+```
+
+transforma a matriz em um vetor unidimensional.
+
+---
+
+# Comprimento do Sinal
+
+```python
+N_lele = len(signal_leleccum)
+```
+
+## Explicação
+
+Define o número total de amostras do sinal.
+
+---
+
+# Frequência de Amostragem
+
+```python
+fs = 1.0
+```
+
+## Explicação
+
+Foi utilizada frequência unitária para:
+
+- normalização do eixo de frequência;
+- análise espectral relativa.
+
+Assim, o espectro é exibido em frequência normalizada.
+
+---
+
+# Cálculo da FFT
+
+```python
+fft_vals = np.fft.fft(signal_leleccum)
+```
+
+## Explicação
+
+A função:
+
+```python
+fft()
+```
+
+calcula a Transformada Discreta de Fourier do sinal.
+
+---
+
+# Modelo Matemático da FFT
+
+:contentReference[oaicite:0]{index=0}
+
+---
+
+# Magnitude do Espectro
+
+```python
+fft_mag = np.abs(np.fft.fftshift(fft_vals))
+```
+
+## Explicação
+
+Foram utilizadas duas operações:
+
+### `np.abs()`
+
+Calcula:
+
+- magnitude das componentes espectrais.
+
+---
+
+### `fftshift()`
+
+Move:
+
+- frequência zero para o centro do gráfico.
+
+Isso facilita a visualização do espectro.
+
+---
+
+# Frequências do Espectro
+
+```python
+freqs_lele = np.fft.fftshift(
+    np.fft.fftfreq(N_lele, d=1/fs)
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+fftfreq()
+```
+
+gera o eixo de frequências correspondente à FFT.
+
+---
+
+# Organização da Figura
+
+```python
+plt.figure(figsize=(12, 10))
+```
+
+## Explicação
+
+Define o tamanho da figura contendo:
+
+- gráfico temporal;
+- gráfico espectral.
+
+---
+
+# Gráfico no Domínio do Tempo
+
+```python
+plt.subplot(2, 1, 1)
+```
+
+## Explicação
+
+Cria o primeiro gráfico da figura.
+
+---
+
+# Plotagem do Sinal
+
+```python
+plt.plot(signal_leleccum, color='navy')
+```
+
+## Explicação
+
+Exibe o sinal no domínio do tempo.
+
+---
+
+# Configuração do Título
+
+```python
+plt.title(
+    'Sinal Original (leleccum.mat) no Tempo'
+)
+```
+
+## Explicação
+
+Identifica o gráfico temporal do sinal carregado.
+
+---
+
+# Configuração dos Eixos
+
+```python
+plt.xlabel('Amostras')
+plt.ylabel('Amplitude')
+```
+
+## Explicação
+
+Os eixos representam:
+
+- número de amostras;
+- amplitude do sinal.
+
+---
+
+# Grade do Gráfico
+
+```python
+plt.grid(True)
+```
+
+## Explicação
+
+Facilita a visualização das oscilações do sinal.
+
+---
+
+# Gráfico do Espectro
+
+```python
+plt.subplot(2, 1, 2)
+```
+
+## Explicação
+
+Cria o segundo gráfico da figura.
+
+---
+
+# Plotagem do Espectro
+
+```python
+plt.plot(freqs_lele, fft_mag, color='darkred')
+```
+
+## Explicação
+
+Mostra a magnitude espectral do sinal.
+
+---
+
+# Configuração do Título
+
+```python
+plt.title(
+    'Espectro de Magnitude do Sinal'
+)
+```
+
+## Explicação
+
+Identifica o gráfico espectral obtido pela FFT.
+
+---
+
+# Configuração dos Eixos
+
+```python
+plt.xlabel('Frequência Normalizada')
+plt.ylabel('Magnitude')
+```
+
+## Explicação
+
+Os eixos representam:
+
+- frequência normalizada;
+- magnitude das componentes espectrais.
+
+---
+
+# Organização Final
+
+```python
+plt.tight_layout()
+```
+
+## Explicação
+
+Evita sobreposição entre gráficos e títulos.
+
+---
+
+# Exibição Final
+
+```python
+plt.show()
+```
+
+## Explicação
+
+Exibe os gráficos gerados.
+
+---
+
+# Interpretação dos Resultados
+
+O gráfico temporal permite observar:
+
+- variações de amplitude;
+- comportamento do sinal ao longo do tempo;
+- possíveis transientes.
+
+---
+
+# Interpretação Espectral
+
+O espectro permite identificar:
+
+- frequências dominantes;
+- distribuição de energia;
+- componentes harmônicas.
+
+---
+
+# Resultado Esperado
+
+Os gráficos mostram:
+
+- o sinal original no tempo;
+- o espectro centrado em frequência zero;
+- as componentes de frequência presentes no sinal.
+
+---
+
+# Resultado dos Gráficos
+
+## Domínio do Tempo e Espectro
+
+<p align="center">
+  <img src="assets5/Q4AP5.png" width="900">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, obtém-se:
+
+- leitura do arquivo `.mat`;
+- análise temporal;
+- cálculo da FFT;
+- espectro de magnitude;
+- visualização completa do sinal.
+
+---
+
+---
+
+# Prática 5 — Questão 4(b)
+
+# Remoção de Ruído (Denoising) com Wavelets
+
+Nesta etapa foi realizado o processo de:
+
+- decomposição wavelet;
+- estimação do ruído;
+- aplicação de thresholding;
+- reconstrução do sinal filtrado.
+
+O objetivo é reduzir o ruído presente no sinal:
+
+```python
+signal_leleccum
+```
+
+preservando as principais características do sinal original.
+
+---
+
+# Wavelet Utilizada
+
+```python
+wavelet_name = 'db4'
+```
+
+## Explicação
+
+Foi utilizada a wavelet:
+
+```python
+Daubechies 4 (db4)
+```
+
+---
+
+# Características da Wavelet db4
+
+A wavelet db4 possui:
+
+- boa compactação de energia;
+- boa localização temporal;
+- eficiência para remoção de ruído;
+- suavização eficiente do sinal.
+
+---
+
+# Definição do Nível de Decomposição
+
+```python
+level = 5
+```
+
+## Explicação
+
+O sinal foi decomposto em:
+
+- cinco níveis wavelet.
+
+Isso permite separar:
+
+- baixas frequências;
+- altas frequências;
+- componentes de ruído.
+
+---
+
+# Decomposição Wavelet
+
+```python
+coeffs_noise = pywt.wavedec(
+    signal_leleccum,
+    wavelet_name,
+    level=level
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+wavedec()
+```
+
+realiza a decomposição wavelet discreta do sinal.
+
+---
+
+# Estrutura dos Coeficientes
+
+A decomposição gera:
+
+```python
+[cA5, cD5, cD4, cD3, cD2, cD1]
+```
+
+Onde:
+
+- `cA5` → aproximação;
+- `cDk` → detalhes.
+
+---
+
+# Modelo Matemático da Decomposição
+
+:contentReference[oaicite:0]{index=0}
+
+---
+
+# Estimativa do Ruído
+
+```python
+sigma_est = np.median(
+    np.abs(coeffs_noise[-1])
+) / 0.6745
+```
+
+## Explicação
+
+O ruído é estimado utilizando:
+
+- MAD (Median Absolute Deviation).
+
+Foi utilizado:
+
+```python
+cD1
+```
+
+pois os coeficientes de alta frequência geralmente concentram mais ruído.
+
+---
+
+# Modelo da Estimativa MAD
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Cálculo do Threshold
+
+```python
+thresh = sigma_est * np.sqrt(
+    2 * np.log(len(signal_leleccum))
+)
+```
+
+## Explicação
+
+Foi utilizado o método:
+
+```python
+VisuShrink
+```
+
+para definir o limiar de remoção do ruído.
+
+---
+
+# Modelo do Threshold
+
+:contentReference[oaicite:2]{index=2}
+
+---
+
+# Inicialização dos Novos Coeficientes
+
+```python
+new_coeffs = [coeffs_noise[0]]
+```
+
+## Explicação
+
+Os coeficientes de aproximação:
+
+```python
+cA5
+```
+
+foram preservados.
+
+Isso mantém:
+
+- tendência global;
+- componentes principais do sinal.
+
+---
+
+# Soft Thresholding
+
+```python
+for i in range(1, len(coeffs_noise)):
+```
+
+## Explicação
+
+O laço percorre todos os coeficientes de detalhe.
+
+---
+
+# Aplicação do Threshold
+
+```python
+pywt.threshold(
+    coeffs_noise[i],
+    value=thresh,
+    mode='soft'
+)
+```
+
+## Explicação
+
+Foi aplicado:
+
+```python
+soft thresholding
+```
+
+---
+
+# Funcionamento do Soft Thresholding
+
+O método:
+
+- reduz coeficientes pequenos;
+- preserva coeficientes importantes;
+- suaviza o sinal;
+- reduz o ruído.
+
+---
+
+# Modelo do Soft Thresholding
+
+:contentReference[oaicite:3]{index=3}
+
+---
+
+# Reconstrução do Sinal
+
+```python
+signal_denoised = pywt.waverec(
+    new_coeffs,
+    wavelet_name
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+waverec()
+```
+
+reconstrói o sinal utilizando:
+
+- coeficientes filtrados;
+- transformada wavelet inversa.
+
+---
+
+# Comparação Visual
+
+```python
+plt.figure(figsize=(12, 8))
+```
+
+## Explicação
+
+Cria a figura utilizada para comparar:
+
+- sinal original;
+- sinal filtrado.
+
+---
+
+# Plotagem do Sinal Original
+
+```python
+plt.plot(
+    signal_leleccum,
+    color='lightgray',
+    label='Original Ruidoso',
+    alpha=0.5
+)
+```
+
+## Explicação
+
+O sinal original é exibido em cinza claro.
+
+A transparência facilita a comparação visual.
+
+---
+
+# Plotagem do Sinal Filtrado
+
+```python
+plt.plot(
+    signal_denoised,
+    color='blue',
+    label='Sinal Filtrado (Denoised)',
+    linewidth=1.5
+)
+```
+
+## Explicação
+
+O sinal filtrado é exibido em azul.
+
+---
+
+# Configuração do Título
+
+```python
+plt.title(
+    'Denoising com Wavelet'
+)
+```
+
+## Explicação
+
+O gráfico mostra a comparação entre:
+
+- sinal ruidoso;
+- sinal filtrado.
+
+---
+
+# Legenda
+
+```python
+plt.legend()
+```
+
+## Explicação
+
+Identifica cada sinal exibido no gráfico.
+
+---
+
+# Grade do Gráfico
+
+```python
+plt.grid(True)
+```
+
+## Explicação
+
+Facilita a visualização das oscilações do sinal.
+
+---
+
+# Exibição Final
+
+```python
+plt.show()
+```
+
+## Explicação
+
+Exibe o resultado do processo de denoising.
+
+---
+
+# Interpretação dos Resultados
+
+Após o thresholding:
+
+- componentes de ruído são reduzidas;
+- oscilações indesejadas diminuem;
+- características principais são preservadas.
+
+---
+
+# Resultado Esperado
+
+O gráfico deve mostrar:
+
+- sinal original mais irregular;
+- sinal filtrado mais suave;
+- preservação da estrutura principal do sinal.
+
+---
+
+# Resultado do Denoising
+
+## Comparação entre Sinal Original e Filtrado
+
+<p align="center">
+  <img src="assets5/Q4BP5.png" width="900">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, obtém-se:
+
+- decomposição wavelet;
+- estimação do ruído;
+- thresholding dos coeficientes;
+- reconstrução do sinal;
+- redução eficiente do ruído.
+
+---
