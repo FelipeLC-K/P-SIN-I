@@ -61,7 +61,6 @@ Neste caso:
 ```python
 N = 8
 ```
-
 ---
 
 # a) Inicialização da Semente Aleatória
@@ -79,8 +78,6 @@ np.random.seed()
 ```
 
 garante reprodutibilidade dos resultados aleatórios.
-
-Assim, as mesmas mensagens serão geradas sempre que o código for executado.
 
 ---
 
@@ -102,7 +99,7 @@ A função:
 np.fft.fft()
 ```
 
-calcula a Transformada Rápida de Fourier (FFT) do sinal.
+calcula a FFT do sinal.
 
 A magnitude do espectro é obtida utilizando:
 
@@ -164,12 +161,6 @@ print("m2:", m2)
 print("m3:", m3)
 ```
 
-## Explicação
-
-As mensagens geradas são exibidas no terminal.
-
----
-
 # 2) Geração da Matriz de Hadamard
 
 ```python
@@ -221,10 +212,6 @@ para:
 ```python
 i ≠ j
 ```
-
-Isso permite que múltiplos usuários compartilhem o mesmo canal sem interferência significativa.
-
----
 
 # 3) Codificação dos Sinais
 
@@ -287,15 +274,6 @@ fig, axes = plt.subplots(
 )
 ```
 
-## Explicação
-
-São criados gráficos para comparar:
-
-- espectros originais;
-- espectros codificados.
-
----
-
 # Plotagem dos Espectros Originais
 
 ```python
@@ -306,12 +284,6 @@ axes[i, 0].stem(
     markerfmt='bo'
 )
 ```
-
-## Explicação
-
-O gráfico apresenta o espectro do sinal original.
-
----
 
 # Plotagem dos Espectros Codificados
 
@@ -324,23 +296,6 @@ axes[i, 1].stem(
 )
 ```
 
-## Explicação
-
-O gráfico apresenta o espectro do sinal espalhado.
-
-Após a codificação, a energia do sinal torna-se distribuída em uma faixa maior de frequências.
-
----
-
-# Resultado Esperado do Espalhamento
-
-O espalhamento espectral provoca:
-
-- aumento da largura de banda;
-- distribuição espectral da energia;
-- maior robustez contra interferências;
-- possibilidade de múltiplos acessos simultâneos.
-
 ---
 
 # Plotagem dos Sinais
@@ -352,18 +307,6 @@ fig, axes = plt.subplots(
     figsize=(15, 10)
 )
 ```
-
-## Explicação
-
-Os gráficos exibem:
-
-- mensagem original;
-- código de Hadamard;
-- sinal codificado.
-
-para cada usuário.
-
----
 
 # Visualização dos Sinais
 
@@ -411,11 +354,6 @@ for ax in axes.flatten():
     ax.grid(True)
 ```
 
-## Explicação
-
-Os limites verticais são ajustados para melhorar a visualização dos sinais binários bipolares.
-
----
 
 # Resultado dos Gráficos
 
