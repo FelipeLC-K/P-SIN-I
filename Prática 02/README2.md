@@ -886,3 +886,1316 @@ Ao executar o código, são obtidos:
 - análise dos efeitos da subamostragem no domínio da frequência.
 
 ---
+
+---
+
+# Questão 5
+
+# Subamostragem utilizando `resample_poly`
+
+## Importação da Função
+
+```python
+from scipy.signal import resample_poly
+```
+
+## Explicação
+
+A função `resample_poly()` realiza reamostragem utilizando filtragem polifásica.
+
+Esse método é mais eficiente e produz melhores resultados quando comparado à subamostragem simples.
+
+---
+
+# Definição dos Fatores de Subamostragem
+
+```python
+M_factors_resample = [2, 4, 8]
+
+resampled_poly_signals = {}
+
+resampled_poly_sampling_frequencies = {}
+```
+
+## Explicação
+
+Foram utilizados três fatores de subamostragem:
+
+- \(M = 2\)
+- \(M = 4\)
+- \(M = 8\)
+
+Cada fator reduz a frequência de amostragem do sinal original.
+
+---
+
+# Aplicação do `resample_poly`
+
+```python
+resampled_poly_signal = resample_poly(
+    normalized_data_handel,
+    1,
+    M
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+resample_poly(signal, up, down)
+```
+
+realiza:
+
+- interpolação (`up`);
+- decimação (`down`).
+
+Neste caso:
+
+- `up = 1`
+- `down = M`
+
+Portanto, o sinal é subamostrado por um fator \(M\).
+
+---
+
+# Nova Frequência de Amostragem
+
+```python
+new_fs_resample = fs_handel_original / M
+```
+
+## Explicação
+
+A nova frequência de amostragem é calculada por:
+
+:contentReference[oaicite:0]{index=0}
+
+Onde:
+
+- \(f_s\) → frequência original;
+- \(M\) → fator de subamostragem.
+
+---
+
+# Armazenamento dos Resultados
+
+```python
+resampled_poly_signals[f'M={M}'] = resampled_poly_signal
+
+resampled_poly_sampling_frequencies[f'M={M}'] = new_fs_resample
+```
+
+## Explicação
+
+Os sinais subamostrados e suas frequências de amostragem são armazenados para posterior análise e reprodução.
+
+---
+
+# Cálculo do Espectro
+
+```python
+frequencies_rp, amplitudes_rp = calculate_spectrum(
+    resampled_poly_signal,
+    new_fs_resample
+)
+```
+
+## Explicação
+
+A FFT é aplicada aos sinais reamostrados para análise espectral.
+
+---
+
+# Plotagem dos Espectros
+
+```python
+ax = plt.subplot(
+    len(M_factors_resample),
+    1,
+    i + 1
+)
+
+ax.plot(
+    frequencies_rp,
+    amplitudes_rp
+)
+
+ax.set_title(
+    f'Espectro do Handel Subamostrado com resample_poly (M={M}, Fs={new_fs_resample:.2f} Hz)'
+)
+
+ax.set_xlabel('Frequência (Hz)')
+ax.set_ylabel('Amplitude')
+
+ax.grid(True)
+
+ax.set_xlim(0, new_fs_resample / 2)
+```
+
+## Explicação
+
+Os gráficos apresentam o espectro dos sinais subamostrados utilizando `resample_poly`.
+
+O comando:
+
+```python
+ax.set_xlim(0, new_fs_resample / 2)
+```
+
+limita o eixo de frequência até a nova frequência de Nyquist:
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Resultado Esperado dos Espectros
+
+Ao executar o código, é possível observar:
+
+- redução da largura espectral;
+- preservação mais eficiente do sinal;
+- menor ocorrência de aliasing;
+- melhor qualidade espectral em comparação à subamostragem simples.
+
+---
+
+# Resultado dos Gráficos
+
+<p align="center">
+  <img src="assets2/Q5P2.png" width="850">
+</p>
+
+---
+
+# Reprodução dos Áudios
+
+```python
+print("Sinal Original:")
+
+display(
+    Audio(
+        data=normalized_data_handel,
+        rate=fs_handel_original
+    )
+)
+
+for M in M_factors_resample:
+
+    signal_rp = resampled_poly_signals[f'M={M}']
+
+    fs_rp = resampled_poly_sampling_frequencies[f'M={M}']
+
+    print(
+        f"Sinal Subamostrado com resample_poly M={M} (Fs={fs_rp:.2f} Hz):"
+    )
+
+    display(
+        Audio(
+            data=signal_rp,
+            rate=fs_rp
+        )
+    )
+```
+
+## Explicação
+
+Os sinais reamostrados são reproduzidos para comparação auditiva com o sinal original.
+
+O método `resample_poly` preserva melhor o conteúdo espectral do áudio.
+
+---
+
+# Áudios Gerados
+
+## Handel Original
+
+[▶ Handel Original](assets2/handel_original.wav)
+
+---
+
+## Handel Reamostrado M = 2
+
+[▶ Handel resample_poly M=2](assets2/handel_resample_M2.wav)
+
+---
+
+## Handel Reamostrado M = 4
+
+[▶ Handel resample_poly M=4](assets2/handel_resample_M4.wav)
+
+---
+
+## Handel Reamostrado M = 8
+
+[▶ Handel resample_poly M=8](assets2/handel_resample_M8.wav)
+
+---
+
+# Resultado Final
+
+Ao executar o código, são obtidos:
+
+- sinais reamostrados utilizando filtragem polifásica;
+- espectros de frequência correspondentes;
+- comparação auditiva entre diferentes taxas de amostragem;
+- análise dos efeitos da reamostragem no domínio da frequência.
+
+---
+
+---
+
+# Questão 6
+
+# Sobreamostragem do Arquivo `handel.wav`
+
+## 6A) Criação da Função de Sobreamostragem
+
+```python
+def upsample_signal_zero_insertion(signal, L):
+
+    upsampled_signal = np.zeros(len(signal) * L)
+
+    upsampled_signal[::L] = signal
+
+    return upsampled_signal
+```
+
+## Explicação
+
+A função `upsample_signal_zero_insertion()` realiza a sobreamostragem do sinal utilizando inserção de zeros.
+
+O processo consiste em:
+
+- aumentar a quantidade de amostras;
+- inserir \(L-1\) zeros entre cada amostra original.
+
+---
+
+# Conceito Matemático
+
+A nova frequência de amostragem após a sobreamostragem é dada por:
+
+:contentReference[oaicite:0]{index=0}
+
+Onde:
+
+- \(f_s\) → frequência de amostragem original;
+- \(L\) → fator de sobreamostragem;
+- \(f_s'\) → nova frequência de amostragem.
+
+---
+
+# Inserção de Zeros
+
+```python
+upsampled_signal = np.zeros(len(signal) * L)
+```
+
+## Explicação
+
+Cria um vetor preenchido com zeros com tamanho ampliado em \(L\) vezes.
+
+---
+
+# Inserção das Amostras Originais
+
+```python
+upsampled_signal[::L] = signal
+```
+
+## Explicação
+
+As amostras originais são inseridas a cada \(L\) posições do vetor.
+
+As posições intermediárias permanecem com valor zero.
+
+---
+
+# Objetivos da Sobreamostragem
+
+A sobreamostragem é utilizada para:
+
+- aumentar resolução temporal;
+- facilitar processamento digital;
+- preparar sinais para filtragem;
+- alterar frequência de amostragem.
+
+---
+
+# 6B) Definição dos Fatores de Sobreamostragem
+
+```python
+L_factors = [2, 4, 8]
+
+upsampled_signals_zero_insertion = {}
+
+upsampled_sampling_frequencies_zero_insertion = {}
+```
+
+## Explicação
+
+Foram utilizados três fatores de sobreamostragem:
+
+- \(L = 2\)
+- \(L = 4\)
+- \(L = 8\)
+
+Quanto maior o valor de \(L\), maior será a nova frequência de amostragem.
+
+---
+
+# Aplicação da Sobreamostragem
+
+```python
+for i, L in enumerate(L_factors):
+
+    upsampled_signal = upsample_signal_zero_insertion(
+        normalized_data_handel,
+        L
+    )
+
+    new_fs = fs_handel_original * L
+```
+
+## Explicação
+
+Para cada fator \(L\):
+
+- o sinal é sobreamostrado;
+- a nova frequência de amostragem é calculada.
+
+---
+
+# Armazenamento dos Resultados
+
+```python
+upsampled_signals_zero_insertion[f'L={L}'] = upsampled_signal
+
+upsampled_sampling_frequencies_zero_insertion[f'L={L}'] = new_fs
+```
+
+## Explicação
+
+Os sinais sobreamostrados e suas frequências de amostragem são armazenados para posterior análise.
+
+---
+
+# Cálculo do Espectro
+
+```python
+frequencies_us, amplitudes_us = calculate_spectrum(
+    upsampled_signal,
+    new_fs
+)
+```
+
+## Explicação
+
+A FFT é aplicada aos sinais sobreamostrados para análise espectral.
+
+---
+
+# Plotagem dos Espectros
+
+```python
+ax = plt.subplot(
+    len(L_factors),
+    1,
+    i + 1
+)
+
+ax.plot(
+    frequencies_us,
+    amplitudes_us
+)
+
+ax.set_title(
+    f'Espectro do Handel Sobreamostrado (L={L}, Fs={new_fs:.2f} Hz)'
+)
+
+ax.set_xlabel('Frequência (Hz)')
+ax.set_ylabel('Amplitude')
+
+ax.grid(True)
+
+ax.set_xlim(
+    0,
+    fs_handel_original / 2 * (L + 0.5)
+)
+```
+
+## Explicação
+
+Os gráficos mostram o espectro dos sinais sobreamostrados.
+
+A inserção de zeros provoca imagens espectrais (*spectral images*) no domínio da frequência.
+
+O comando:
+
+```python
+ax.set_xlim(
+    0,
+    fs_handel_original / 2 * (L + 0.5)
+)
+```
+
+amplia a visualização para destacar essas imagens espectrais.
+
+---
+
+# Frequência de Nyquist
+
+A nova frequência de Nyquist é dada por:
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Resultado Esperado dos Espectros
+
+Ao executar o código, é possível observar:
+
+- aumento da frequência de amostragem;
+- replicações espectrais;
+- imagens espectrais causadas pela inserção de zeros;
+- alteração da representação espectral do sinal.
+
+---
+
+# Resultado dos Gráficos
+
+<p align="center">
+  <img src="assets2/Q6P2.png" width="850">
+</p>
+
+---
+
+# Reprodução dos Áudios
+
+```python
+print("Sinal Original:")
+
+display(
+    Audio(
+        data=normalized_data_handel,
+        rate=fs_handel_original
+    )
+)
+
+for L in L_factors:
+
+    signal = upsampled_signals_zero_insertion[f'L={L}']
+
+    fs_us = upsampled_sampling_frequencies_zero_insertion[f'L={L}']
+
+    print(
+        f"Sinal Sobreamostrado por L={L} (Fs={fs_us:.2f} Hz):"
+    )
+
+    display(
+        Audio(
+            data=signal,
+            rate=fs_us
+        )
+    )
+```
+
+## Explicação
+
+Os sinais sobreamostrados são reproduzidos para comparação auditiva com o sinal original.
+
+A inserção de zeros altera o espectro do sinal, podendo introduzir componentes indesejadas caso não seja aplicado um filtro de interpolação.
+
+---
+
+# Áudios Gerados
+
+## Handel Original
+
+[▶ Handel Original](assets2/handel_original.wav)
+
+---
+
+## Sobreamostragem L = 2
+
+[▶ Handel L=2](assets2/handel_L2.wav)
+
+---
+
+## Sobreamostragem L = 4
+
+[▶ Handel L=4](assets2/handel_L4.wav)
+
+---
+
+## Sobreamostragem L = 8
+
+[▶ Handel L=8](assets2/handel_L8.wav)
+
+---
+
+# Resultado Final
+
+Ao executar o código, são obtidos:
+
+- sinais sobreamostrados;
+- espectros de frequência correspondentes;
+- análise das imagens espectrais;
+- comparação auditiva entre diferentes fatores de sobreamostragem.
+
+---
+
+---
+
+# Prática 2 — Questão 7
+
+# Sobreamostragem utilizando `scipy.signal.resample_poly`
+
+## Importação da Função
+
+```python
+from scipy.signal import resample_poly
+```
+
+## Explicação
+
+A função `resample_poly()` realiza reamostragem utilizando filtragem polifásica.
+
+Esse método é mais eficiente e reduz a presença de imagens espectrais e aliasing quando comparado à inserção simples de zeros.
+
+---
+
+# Definição dos Fatores de Sobreamostragem
+
+```python
+L_factors_resample_poly = [2, 4, 8]
+
+resampled_poly_upsampled_signals = {}
+
+resampled_poly_upsampled_sampling_frequencies = {}
+```
+
+## Explicação
+
+Foram utilizados três fatores de sobreamostragem:
+
+- \(L = 2\)
+- \(L = 4\)
+- \(L = 8\)
+
+Cada fator aumenta a frequência de amostragem do sinal original.
+
+---
+
+# Aplicação da Sobreamostragem com `resample_poly`
+
+```python
+resampled_poly_upsampled_signal = resample_poly(
+    normalized_data_handel,
+    L,
+    1
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+resample_poly(signal, up, down)
+```
+
+realiza:
+
+- interpolação (`up`);
+- decimação (`down`).
+
+Neste caso:
+
+- `up = L`
+- `down = 1`
+
+Portanto, o sinal é sobreamostrado por um fator \(L\).
+
+---
+
+# Nova Frequência de Amostragem
+
+```python
+new_fs_upsample = fs_handel_original * L
+```
+
+## Explicação
+
+A nova frequência de amostragem é dada por:
+
+:contentReference[oaicite:0]{index=0}
+
+Onde:
+
+- \(f_s\) → frequência original;
+- \(L\) → fator de sobreamostragem;
+- \(f_s'\) → nova frequência de amostragem.
+
+---
+
+# Armazenamento dos Resultados
+
+```python
+resampled_poly_upsampled_signals[f'L={L}'] = resampled_poly_upsampled_signal
+
+resampled_poly_upsampled_sampling_frequencies[f'L={L}'] = new_fs_upsample
+```
+
+## Explicação
+
+Os sinais sobreamostrados e suas respectivas frequências de amostragem são armazenados para posterior análise.
+
+---
+
+# Cálculo do Espectro
+
+```python
+frequencies_rp_us, amplitudes_rp_us = calculate_spectrum(
+    resampled_poly_upsampled_signal,
+    new_fs_upsample
+)
+```
+
+## Explicação
+
+A FFT é aplicada aos sinais sobreamostrados para análise espectral.
+
+---
+
+# Plotagem dos Espectros
+
+```python
+ax = plt.subplot(
+    len(L_factors_resample_poly),
+    1,
+    i + 1
+)
+
+ax.plot(
+    frequencies_rp_us,
+    amplitudes_rp_us
+)
+
+ax.set_title(
+    f'Espectro do Handel Sobreamostrado com resample_poly (L={L}, Fs={new_fs_upsample:.2f} Hz)'
+)
+
+ax.set_xlabel('Frequência (Hz)')
+ax.set_ylabel('Amplitude')
+
+ax.grid(True)
+
+ax.set_xlim(
+    0,
+    fs_handel_original / 2 + 1000
+)
+```
+
+## Explicação
+
+Os gráficos mostram os espectros dos sinais sobreamostrados utilizando filtragem polifásica.
+
+Diferentemente da inserção simples de zeros, o método `resample_poly` reduz significativamente:
+
+- imagens espectrais;
+- distorções;
+- componentes indesejadas.
+
+O comando:
+
+```python
+ax.set_xlim(
+    0,
+    fs_handel_original / 2 + 1000
+)
+```
+
+limita a visualização para destacar a banda espectral original do sinal.
+
+---
+
+# Frequência de Nyquist
+
+A nova frequência de Nyquist é dada por:
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Resultado Esperado dos Espectros
+
+Ao executar o código, observa-se:
+
+- preservação mais eficiente do espectro original;
+- redução das imagens espectrais;
+- melhoria na qualidade da sobreamostragem;
+- espectros mais suaves e contínuos.
+
+---
+
+# Resultado dos Gráficos
+
+<p align="center">
+  <img src="assets2/Q7P2.png" width="850">
+</p>
+
+---
+
+# Reprodução dos Áudios
+
+```python
+print("Sinal Original:")
+
+display(
+    Audio(
+        data=normalized_data_handel,
+        rate=fs_handel_original
+    )
+)
+
+for L in L_factors_resample_poly:
+
+    signal_rp_us = resampled_poly_upsampled_signals[f'L={L}']
+
+    fs_rp_us = resampled_poly_upsampled_sampling_frequencies[f'L={L}']
+
+    print(
+        f"Sinal Sobreamostrado com resample_poly L={L} (Fs={fs_rp_us:.2f} Hz):"
+    )
+
+    display(
+        Audio(
+            data=signal_rp_us,
+            rate=fs_rp_us
+        )
+    )
+```
+
+## Explicação
+
+Os sinais sobreamostrados são reproduzidos para comparação auditiva com o sinal original.
+
+O método `resample_poly` preserva melhor a qualidade sonora quando comparado à sobreamostragem por inserção de zeros.
+
+---
+
+# Áudios Gerados
+
+## Handel Original
+
+[▶ Handel Original](assets2/handel_original.wav)
+
+---
+
+## Sobreamostragem com resample_poly L = 2
+
+[▶ Handel resample_poly L=2](assets2/handel_resamplepoly_L2.wav)
+
+---
+
+## Sobreamostragem com resample_poly L = 4
+
+[▶ Handel resample_poly L=4](assets2/handel_resamplepoly_L4.wav)
+
+---
+
+## Sobreamostragem com resample_poly L = 8
+
+[▶ Handel resample_poly L=8](assets2/handel_resamplepoly_L8.wav)
+
+---
+
+# Resultado Final
+
+Ao executar o código, são obtidos:
+
+- sinais sobreamostrados utilizando filtragem polifásica;
+- espectros de frequência correspondentes;
+- comparação auditiva entre diferentes fatores de sobreamostragem;
+- análise da preservação espectral do sinal.
+
+---
+
+---
+
+# Prática 2 — Questão 8
+
+# Análise e Reconstrução de Sinal Contínuo
+
+O sinal analisado é dado por:
+
+:contentReference[oaicite:0]{index=0}
+
+Para aproximar um sinal contínuo, foi utilizada uma frequência de amostragem muito elevada:
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# 8A) Geração do Sinal no Domínio do Tempo
+
+## Definição dos Parâmetros
+
+```python
+fs_cont = 10e6
+
+duration = 10e-3
+
+t_cont = np.linspace(
+    0,
+    duration,
+    int(duration * fs_cont),
+    endpoint=False
+)
+```
+
+## Explicação
+
+Os parâmetros utilizados definem:
+
+- frequência de amostragem contínua aproximada;
+- duração do sinal;
+- vetor temporal.
+
+Neste caso:
+
+- \(f_s = 10\text{ MHz}\)
+- duração = \(10\text{ ms}\)
+
+---
+
+# Geração do Sinal
+
+```python
+x_t = np.cos(2000 * t_cont) + np.sin(5000 * t_cont)
+```
+
+## Explicação
+
+O sinal é composto pela soma de:
+
+- uma componente cossenoidal;
+- uma componente senoidal.
+
+---
+
+# Plotagem do Sinal
+
+```python
+plt.figure(figsize=(12, 4))
+
+plt.plot(t_cont * 1000, x_t)
+
+plt.title('x(t) no Domínio do Tempo (10 ms)')
+
+plt.xlabel('Tempo (ms)')
+plt.ylabel('Amplitude')
+
+plt.grid(True)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+## Explicação
+
+O gráfico apresenta o sinal no domínio do tempo.
+
+O eixo temporal foi convertido para milissegundos:
+
+```python
+t_cont * 1000
+```
+
+---
+
+# Resultado do Gráfico
+
+<p align="center">
+  <img src="assets2/Q8P2.png" width="850">
+</p>
+
+---
+
+# 8B) Cálculo do Espectro de x(t)
+
+## Aplicação da FFT
+
+```python
+frequencies_xt, amplitudes_xt = calculate_spectrum(
+    x_t,
+    fs_cont
+)
+```
+
+## Explicação
+
+A FFT é utilizada para calcular o espectro de frequência do sinal contínuo aproximado.
+
+---
+
+# Plotagem do Espectro
+
+```python
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    frequencies_xt,
+    amplitudes_xt
+)
+
+plt.title('Espectro de x(t)')
+
+plt.xlabel('Frequência (Hz)')
+plt.ylabel('Amplitude')
+
+plt.grid(True)
+
+plt.xlim(0, 1000)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+## Explicação
+
+As frequências angulares presentes no sinal são:
+
+- \(2000\ \text{rad/s}\)
+- \(5000\ \text{rad/s}\)
+
+Convertendo para Hz:
+
+
+::contentReference[oaicite:2]{index=2}
+
+
+obtém-se aproximadamente:
+
+- \(318.3\ \text{Hz}\)
+- \(795.8\ \text{Hz}\)
+
+---
+
+# Resultado do Gráfico
+
+<p align="center">
+  <img src="assets2/doisQ8P2.png" width="850">
+</p>
+
+---
+
+# 8C) Amostragem na Frequência de Nyquist
+
+## Cálculo da Frequência Máxima
+
+```python
+f_max_component_hz = 5000 / (2 * np.pi)
+```
+
+## Explicação
+
+A maior frequência do sinal é aproximadamente:
+
+```python
+795.8 Hz
+```
+
+---
+
+# Frequência de Nyquist
+
+A frequência mínima de Nyquist é dada por:
+
+:contentReference[oaicite:3]{index=3}
+
+---
+
+# Definição da Frequência de Amostragem
+
+```python
+fs_sampled = fs_nyquist_min * 1.05
+```
+
+## Explicação
+
+Foi utilizada uma frequência ligeiramente superior à frequência mínima de Nyquist para garantir reconstrução adequada.
+
+---
+
+# Vetor Temporal do Sinal Amostrado
+
+```python
+t_sampled = np.linspace(
+    0,
+    duration,
+    int(duration * fs_sampled),
+    endpoint=False
+)
+```
+
+---
+
+# Amostragem do Sinal
+
+```python
+x_n = np.cos(2000 * t_sampled) + np.sin(5000 * t_sampled)
+```
+
+## Explicação
+
+O sinal contínuo foi amostrado utilizando a nova frequência de amostragem.
+
+---
+
+# Plotagem do Sinal Amostrado
+
+```python
+plt.figure(figsize=(12, 4))
+
+plt.stem(
+    t_sampled * 1000,
+    x_n,
+    linefmt='b-',
+    markerfmt='bo',
+    basefmt='r-'
+)
+
+plt.plot(
+    t_cont * 1000,
+    x_t,
+    'g--',
+    alpha=0.7,
+    label='Sinal Original'
+)
+
+plt.title('Sinal x[n] Amostrado')
+
+plt.xlabel('Tempo (ms)')
+plt.ylabel('Amplitude')
+
+plt.legend()
+
+plt.grid(True)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+## Explicação
+
+O gráfico compara:
+
+- sinal contínuo original;
+- amostras discretas obtidas.
+
+---
+
+# Resultado do Gráfico
+
+<p align="center">
+  <img src="assets2/tresQ8P2.png" width="850">
+</p>
+
+---
+
+# 8D) Espectro do Sinal Amostrado
+
+## Cálculo do Espectro
+
+```python
+frequencies_xn, amplitudes_xn = calculate_spectrum(
+    x_n,
+    fs_sampled
+)
+```
+
+## Explicação
+
+A FFT é aplicada ao sinal discreto \(x[n]\).
+
+---
+
+# Plotagem do Espectro
+
+```python
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    frequencies_xn,
+    amplitudes_xn
+)
+
+plt.title('Espectro de x[n]')
+
+plt.xlabel('Frequência (Hz)')
+plt.ylabel('Amplitude')
+
+plt.grid(True)
+
+plt.xlim(0, fs_sampled / 2 + 100)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+## Explicação
+
+O espectro apresenta as componentes do sinal discreto limitadas pela nova frequência de Nyquist.
+
+---
+
+# Resultado do Gráfico
+
+<p align="center">
+  <img src="assets2/quatroQ8P2.png" width="850">
+</p>
+
+---
+
+# 8E) Reconstrução do Sinal
+
+## Reconstrução utilizando Interpolação Sinc
+
+```python
+x_reconstructed_sinc = resample(
+    x_n,
+    num_points_reconstructed
+)
+```
+
+## Explicação
+
+A função `resample()` realiza reconstrução utilizando interpolação sinc.
+
+Esse método aproxima a reconstrução ideal do sinal contínuo.
+
+---
+
+# Reconstrução utilizando ZOH
+
+## Interpolação de Ordem Zero
+
+```python
+f_zoh = interp1d(
+    t_sampled,
+    x_n,
+    kind='previous',
+    fill_value="extrapolate"
+)
+```
+
+## Explicação
+
+O método ZOH (*Zero-Order Hold*) mantém o valor de cada amostra constante até a próxima amostra.
+
+---
+
+# Geração do Sinal Reconstruído
+
+```python
+x_reconstructed_zoh = f_zoh(t_cont)
+```
+
+---
+
+# Plotagem Final
+
+```python
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    t_cont * 1000,
+    x_t,
+    'g-',
+    label='Sinal Original'
+)
+
+plt.plot(
+    t_cont * 1000,
+    x_reconstructed_sinc,
+    'r--',
+    alpha=0.8,
+    label='Reconstruído com Sinc'
+)
+
+plt.plot(
+    t_cont * 1000,
+    x_reconstructed_zoh,
+    'b:',
+    alpha=0.6,
+    label='Reconstruído com ZOH'
+)
+
+plt.stem(
+    t_sampled * 1000,
+    x_n,
+    linefmt='k:',
+    markerfmt='ko',
+    basefmt=' ',
+    label='Amostras'
+)
+
+plt.title('Reconstrução de x(t)')
+
+plt.xlabel('Tempo (ms)')
+plt.ylabel('Amplitude')
+
+plt.legend()
+
+plt.grid(True)
+
+plt.xlim(0, 5)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+## Explicação
+
+O gráfico final compara:
+
+- sinal original;
+- reconstrução sinc;
+- reconstrução ZOH;
+- amostras discretas.
+
+A interpolação sinc produz reconstrução mais próxima do sinal original.
+
+---
+
+# Resultado do Gráfico
+
+<p align="center">
+  <img src="assets2/cincoQ8P2.png" width="850">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, são obtidos:
+
+- sinal contínuo aproximado;
+- espectro do sinal;
+- sinal discretizado;
+- espectro do sinal amostrado;
+- reconstrução utilizando sinc;
+- reconstrução utilizando ZOH;
+- comparação entre os métodos de reconstrução.
+
+---
