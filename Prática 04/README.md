@@ -1576,7 +1576,7 @@ pois grande parte da energia da imagem fica concentrada em poucos coeficientes.
 ## Imagem Original
 
 <p align="center">
-  <img src="assets4/Q4A_P4.png" width="700">
+  <img src="assets4/Q4P4.png" width="700">
 </p>
 
 ---
@@ -1584,7 +1584,7 @@ pois grande parte da energia da imagem fica concentrada em poucos coeficientes.
 ## Imagem em Tons de Cinza
 
 <p align="center">
-  <img src="assets4/Q4B_P4.png" width="700">
+  <img src="assets4/doisQ4P4.png" width="700">
 </p>
 
 ---
@@ -1592,7 +1592,7 @@ pois grande parte da energia da imagem fica concentrada em poucos coeficientes.
 ## Coeficientes da DCT
 
 <p align="center">
-  <img src="assets4/Q4C_P4.png" width="700">
+  <img src="assets4/tresQ4P4.png" width="700">
 </p>
 
 ---
