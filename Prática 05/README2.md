@@ -3962,7 +3962,7 @@ mostram:
 ## Subfaixas Wavelet do Sinal `leleccum`
 
 <p align="center">
-  <img src="assets5/Q4P5.png" width="900">
+  <img src="assets5/tresQ4P5.png" width="900">
 </p>
 
 ---
@@ -4441,7 +4441,7 @@ A wavelet trabalha simultaneamente em:
 ## Comparação entre Denoising Wavelet e DFT
 
 <p align="center">
-  <img src="assets5/tresQ4P5.png" width="900">
+  <img src="assets5/quatroQ4P5.png" width="900">
 </p>
 
 ---
