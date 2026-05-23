@@ -2199,3 +2199,227 @@ Ao executar o código, são obtidos:
 - comparação entre os métodos de reconstrução.
 
 ---
+
+---
+
+# Prática 2 — Questão 9
+
+# Análise dos Sinais de Áudio `h_banheiro.wav` e `sinal_taca.wav`
+
+## 9A) Leitura dos Arquivos de Áudio
+
+```python
+fs_banheiro, data_banheiro = wavfile.read(
+    '/content/h_banheiro.wav'
+)
+
+fs_taca, data_taca = wavfile.read(
+    '/content/sinal_taca.wav'
+)
+```
+
+## Explicação
+
+Os arquivos de áudio são carregados utilizando:
+
+```python
+wavfile.read()
+```
+
+A função retorna:
+
+- frequência de amostragem do áudio;
+- vetor contendo as amostras do sinal.
+
+Neste caso:
+
+- `fs_banheiro` → frequência de amostragem do sinal `h_banheiro.wav`;
+- `data_banheiro` → amostras do sinal do banheiro;
+- `fs_taca` → frequência de amostragem do sinal `sinal_taca.wav`;
+- `data_taca` → amostras do sinal da taça.
+
+---
+
+# Normalização dos Sinais
+
+```python
+normalized_data_banheiro = (
+    data_banheiro /
+    np.max(np.abs(data_banheiro))
+)
+
+normalized_data_taca = (
+    data_taca /
+    np.max(np.abs(data_taca))
+)
+```
+
+## Explicação
+
+Os sinais são normalizados para que suas amplitudes permaneçam entre:
+
+:contentReference[oaicite:0]{index=0}
+
+A normalização evita:
+
+- clipping;
+- saturação;
+- distorções durante o processamento.
+
+---
+
+# Cálculo do Espectro do Sinal `h_banheiro.wav`
+
+```python
+frequencies_banheiro, amplitudes_banheiro = calculate_spectrum(
+    normalized_data_banheiro,
+    fs_banheiro
+)
+```
+
+## Explicação
+
+A FFT é aplicada ao sinal `h_banheiro.wav` para obtenção do espectro de frequência.
+
+O resultado contém:
+
+- frequências do sinal;
+- amplitudes espectrais correspondentes.
+
+---
+
+# Cálculo do Espectro do Sinal `sinal_taca.wav`
+
+```python
+frequencies_taca, amplitudes_taca = calculate_spectrum(
+    normalized_data_taca,
+    fs_taca
+)
+```
+
+## Explicação
+
+A FFT é aplicada ao sinal `sinal_taca.wav`.
+
+O espectro obtido permite identificar as frequências presentes no sinal da taça.
+
+---
+
+# Plotagem dos Espectros
+
+```python
+plt.figure(figsize=(12, 10))
+```
+
+## Explicação
+
+A figura é criada para exibir os dois espectros em subgráficos separados.
+
+---
+
+# Espectro de `h_banheiro.wav`
+
+```python
+plt.subplot(2, 1, 1)
+
+plt.plot(
+    frequencies_banheiro,
+    amplitudes_banheiro
+)
+
+plt.title(
+    'Espectro do Sinal de Áudio h_banheiro.wav (Normalizado)'
+)
+
+plt.xlabel('Frequência (Hz)')
+plt.ylabel('Amplitude')
+
+plt.grid(True)
+
+plt.xlim(0, fs_banheiro / 2)
+```
+
+## Explicação
+
+O gráfico apresenta o espectro do sinal do banheiro.
+
+O eixo de frequência é limitado até a frequência de Nyquist:
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Espectro de `sinal_taca.wav`
+
+```python
+plt.subplot(2, 1, 2)
+
+plt.plot(
+    frequencies_taca,
+    amplitudes_taca
+)
+
+plt.title(
+    'Espectro do Sinal de Áudio sinal_taca.wav (Normalizado)'
+)
+
+plt.xlabel('Frequência (Hz)')
+plt.ylabel('Amplitude')
+
+plt.grid(True)
+
+plt.xlim(0, fs_taca / 2)
+```
+
+## Explicação
+
+O gráfico apresenta o espectro do sinal da taça.
+
+A FFT permite visualizar:
+
+- componentes harmônicas;
+- frequências predominantes;
+- distribuição espectral do áudio.
+
+---
+
+# Exibição Final dos Gráficos
+
+```python
+plt.tight_layout()
+
+plt.show()
+```
+
+## Explicação
+
+O comando:
+
+```python
+plt.tight_layout()
+```
+
+ajusta automaticamente os espaçamentos da figura para melhorar a visualização.
+
+---
+
+# Resultado Esperado
+
+Ao executar o código, são obtidos:
+
+- espectro do sinal `h_banheiro.wav`;
+- espectro do sinal `sinal_taca.wav`;
+- análise das componentes espectrais dos áudios;
+- comparação entre os conteúdos harmônicos dos sinais.
+
+---
+
+# Resultado dos Gráficos
+
+## Espectro de `h_banheiro.wav` e `sinal_taca.wav`
+
+<p align="center">
+  <img src="assets2/Q9P2.png" width="850">
+</p>
+
+---
