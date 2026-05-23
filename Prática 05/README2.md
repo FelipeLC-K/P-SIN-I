@@ -6,8 +6,6 @@
 
 <p align="center">
   
-  Prática 05
-  
 </p>
 
 # PROSIN — Processamento de Sinais
