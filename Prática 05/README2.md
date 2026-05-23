@@ -1206,14 +1206,1894 @@ Os ticks do eixo Y são ajustados manualmente para melhor visualização da BER.
 
 ---
 
+
+# f) Recuperação de Mensagens com Códigos de Hadamard Distorcidos
+
+Nesta etapa, foi analisado o impacto da distorção dos códigos de Hadamard no processo de recuperação das mensagens em um sistema CDMA.
+
+O objetivo é verificar:
+
+- robustez do sistema;
+- degradação da ortogonalidade;
+- influência da distorção na recuperação das mensagens.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.linalg import hadamard
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → operações matemáticas;
+- `matplotlib.pyplot` → geração de gráficos;
+- `hadamard` → criação da matriz de Hadamard.
+
+---
+
+# Definição do Comprimento do Código
+
+```python
+N = 8
+```
+
+## Explicação
+
+O comprimento dos códigos de espalhamento é igual a:
+
+```python
+8
+```
+
+---
+
+# Definição da Semente Aleatória
+
+```python
+np.random.seed(42)
+```
+
+## Explicação
+
+A semente garante reprodutibilidade dos resultados.
+
+---
+
+# Geração das Mensagens
+
+```python
+m1 = np.random.choice([-1, 1], size=N)
+
+m2 = np.random.choice([-1, 1], size=N)
+
+m3 = np.random.choice([-1, 1], size=N)
+```
+
+## Explicação
+
+Cada usuário transmite uma sequência binária bipolar:
+
+:contentReference[oaicite:0]{index=0}
+
+---
+
+# Geração da Matriz de Hadamard
+
+```python
+H = hadamard(N)
+```
+
+## Explicação
+
+A matriz de Hadamard gera códigos ortogonais utilizados no sistema CDMA.
+
+---
+
+# Seleção dos Códigos
+
+```python
+c1 = H[1, :]
+c2 = H[2, :]
+c3 = H[3, :]
+```
+
+## Explicação
+
+Cada usuário recebe um código ortogonal diferente.
+
+---
+
+# Codificação das Mensagens
+
+```python
+s1 = m1 * c1
+s2 = m2 * c2
+s3 = m3 * c3
+```
+
+## Explicação
+
+Cada mensagem é espalhada utilizando o código correspondente.
+
+---
+
+# Modelo Matemático da Codificação
+
+:contentReference[oaicite:1]{index=1}
+
+Onde:
+
+- \(m[n]\) → mensagem;
+- \(c[n]\) → código de Hadamard;
+- \(s[n]\) → sinal espalhado.
+
+---
+
+# Variâncias da Distorção
+
+```python
+sigma_code_sq_values = [0.01, 0.1, 0.5]
+```
+
+## Explicação
+
+Foram utilizados diferentes níveis de distorção nos códigos:
+
+- 0.01
+- 0.1
+- 0.5
+
+Quanto maior a variância, maior a degradação da ortogonalidade.
+
+---
+
+# Sinal Recebido
+
+```python
+y_n = s1 + s2 + s3
+```
+
+## Explicação
+
+O sinal total recebido é formado pela soma dos sinais espalhados.
+
+---
+
+# Modelo do Sinal Recebido
+
+:contentReference[oaicite:2]{index=2}
+
+---
+
+# Dicionário das Mensagens
+
+```python
+original_messages = {
+    'm1': m1,
+    'm2': m2,
+    'm3': m3
+}
+```
+
+## Explicação
+
+As mensagens originais são armazenadas para posterior comparação.
+
+---
+
+# Índices dos Códigos
+
+```python
+original_code_indices = {
+    'm1': 1,
+    'm2': 2,
+    'm3': 3
+}
+```
+
+## Explicação
+
+Cada usuário é associado à linha correspondente da matriz de Hadamard.
+
+---
+
+# Loop das Variâncias
+
+```python
+for sigma_code_sq in sigma_code_sq_values:
+```
+
+## Explicação
+
+O sistema é testado para diferentes níveis de distorção.
+
+---
+
+# Geração da Matriz de Distorção
+
+```python
+W_matrix = np.random.normal(
+    0,
+    np.sqrt(sigma_code_sq),
+    H.shape
+)
+```
+
+## Explicação
+
+A matriz \(W\) representa perturbações aleatórias adicionadas aos códigos.
+
+---
+
+# Modelo do Código Distorcido
+
+:contentReference[oaicite:3]{index=3}
+
+Onde:
+
+- \(C\) → matriz original;
+- \(W\) → ruído de distorção;
+- \(\hat{C}\) → matriz distorcida.
+
+---
+
+# Criação da Matriz Distorcida
+
+```python
+H_hat = H + W_matrix
+```
+
+## Explicação
+
+Os códigos utilizados pelo receptor tornam-se imperfeitos.
+
+---
+
+# Criação da Figura
+
+```python
+fig, axes = plt.subplots(
+    3,
+    2,
+    figsize=(14, 10)
+)
+```
+
+## Explicação
+
+A figura apresenta:
+
+- mensagem original;
+- mensagem estimada;
+
+para cada usuário.
+
+---
+
+# Seleção do Código Distorcido
+
+```python
+c_hat_j = H_hat[user_idx, :]
+```
+
+## Explicação
+
+O receptor utiliza uma versão distorcida do código original.
+
+---
+
+# Estimativa da Mensagem
+
+```python
+m_hat_j_raw = c_hat_j * y_n
+```
+
+## Explicação
+
+O desespalhamento é realizado multiplicando o sinal recebido pelo código estimado.
+
+---
+
+# Modelo do Desespalhamento
+
+:contentReference[oaicite:4]{index=4}
+
+---
+
+# Decisão Binária
+
+```python
+m_hat_j_binary = np.sign(m_hat_j_raw)
+```
+
+## Explicação
+
+A decisão binária utiliza:
+
+- positivo → +1;
+- negativo → -1.
+
+---
+
+# Contagem de Erros
+
+```python
+error_count =
+np.sum(
+    original_m != m_hat_j_binary
+)
+```
+
+## Explicação
+
+O número de erros corresponde às amostras recuperadas incorretamente.
+
+---
+
+# Verificação da Recuperação
+
+```python
+if error_count == 0:
+```
+
+## Explicação
+
+Caso não existam erros, a mensagem foi recuperada corretamente.
+
+---
+
+# Plotagem da Mensagem Original
+
+```python
+axes[i, 0].stem(
+    range(N),
+    original_m
+)
+```
+
+## Explicação
+
+O gráfico apresenta a mensagem original transmitida.
+
+---
+
+# Plotagem da Mensagem Estimada
+
+```python
+axes[i, 1].stem(
+    range(N),
+    m_hat_j_binary
+)
+```
+
+## Explicação
+
+O gráfico apresenta a mensagem recuperada pelo receptor.
+
+---
+
+# Configuração dos Gráficos
+
+```python
+axes[i, 0].grid(True)
+
+axes[i, 1].grid(True)
+```
+
+## Explicação
+
+A grade facilita a comparação visual entre os sinais.
+
+---
+
+# Ajuste do Layout
+
+```python
+plt.tight_layout(
+    rect=[0, 0.03, 1, 0.95]
+)
+```
+
+## Explicação
+
+O comando evita sobreposição entre os gráficos e o título principal.
+
+---
+
+# Resultado Esperado
+
+À medida que a distorção aumenta:
+
+- a ortogonalidade dos códigos diminui;
+- ocorre maior interferência entre usuários;
+- aumenta a quantidade de erros na recuperação.
+
+---
+
+# Resultado dos Gráficos
+
+## Recuperação das Mensagens
+
+<p align="center">
+  <img src="assets5/Q21P5.png" width="950">
+</p>
+
+---
+
 # Resultado Final
 
 Ao executar o código, são obtidos:
 
-- simulação Monte Carlo do sistema CDMA;
-- recuperação dos bits transmitidos;
+- códigos de Hadamard distorcidos;
+- recuperação aproximada das mensagens;
+- análise do impacto da perda de ortogonalidade;
+- comparação entre mensagens originais e estimadas;
+- avaliação da robustez do sistema CDMA.
+
+---
+
+# f real BER em Função da Distorção dos Códigos
+
+Nesta etapa, foi analisada a relação entre:
+
+- variância da distorção dos códigos;
+- perda de ortogonalidade;
+- probabilidade de erro de bit (BER).
+
+O objetivo é verificar como a degradação dos códigos de Hadamard afeta o desempenho do sistema CDMA.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.linalg import hadamard
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → operações matemáticas;
+- `matplotlib.pyplot` → geração de gráficos;
+- `hadamard` → geração da matriz de Hadamard.
+
+---
+
+# Definição do Comprimento dos Códigos
+
+```python
+N = 8
+```
+
+## Explicação
+
+O comprimento dos códigos ortogonais é igual a:
+
+```python
+8
+```
+
+---
+
+# Definição da Semente Aleatória
+
+```python
+np.random.seed(42)
+```
+
+## Explicação
+
+A semente garante repetibilidade dos resultados obtidos.
+
+---
+
+# Geração das Mensagens
+
+```python
+m1 = np.random.choice([-1, 1], size=N)
+
+m2 = np.random.choice([-1, 1], size=N)
+
+m3 = np.random.choice([-1, 1], size=N)
+```
+
+## Explicação
+
+Cada usuário transmite uma sequência binária bipolar.
+
+---
+
+# Modelo das Mensagens
+
+:contentReference[oaicite:0]{index=0}
+
+---
+
+# Geração da Matriz de Hadamard
+
+```python
+H = hadamard(N)
+```
+
+## Explicação
+
+A matriz de Hadamard gera códigos ortogonais utilizados no espalhamento espectral.
+
+---
+
+# Seleção dos Códigos
+
+```python
+c1 = H[1, :]
+c2 = H[2, :]
+c3 = H[3, :]
+```
+
+## Explicação
+
+Cada usuário recebe um código ortogonal diferente.
+
+---
+
+# Codificação das Mensagens
+
+```python
+s1 = m1 * c1
+
+s2 = m2 * c2
+
+s3 = m3 * c3
+```
+
+## Explicação
+
+Cada mensagem é espalhada pelo respectivo código.
+
+---
+
+# Modelo Matemático do Espalhamento
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Variâncias da Distorção
+
+```python
+sigma_code_sq_values = [
+    0.001,
+    0.005,
+    0.01,
+    0.05,
+    0.1,
+    0.2,
+    0.5,
+    1.0
+]
+```
+
+## Explicação
+
+Foram utilizados diferentes níveis de distorção nos códigos de Hadamard.
+
+Quanto maior o valor de:
+
+:contentReference[oaicite:2]{index=2}
+
+maior será a degradação da ortogonalidade.
+
+---
+
+# Sinal Recebido
+
+```python
+y_n = s1 + s2 + s3
+```
+
+## Explicação
+
+O sinal recebido é formado pela soma dos sinais espalhados.
+
+---
+
+# Modelo do Sinal Recebido
+
+:contentReference[oaicite:3]{index=3}
+
+---
+
+# Dicionário das Mensagens
+
+```python
+original_messages = {
+    'm1': m1,
+    'm2': m2,
+    'm3': m3
+}
+```
+
+## Explicação
+
+As mensagens originais são armazenadas para comparação posterior.
+
+---
+
+# Índices dos Usuários
+
+```python
+original_code_indices = {
+    'm1': 1,
+    'm2': 2,
+    'm3': 3
+}
+```
+
+## Explicação
+
+Cada usuário é associado a uma linha da matriz de Hadamard.
+
+---
+
+# Quantidade de Bits
+
+```python
+bits_per_message = N
+```
+
+## Explicação
+
+Cada mensagem possui:
+
+```python
+8 bits
+```
+
+---
+
+# Vetor da BER
+
+```python
+ber_values = []
+```
+
+## Explicação
+
+O vetor armazena os valores de BER calculados para cada variância.
+
+---
+
+# Número de Simulações
+
+```python
+num_runs = 100
+```
+
+## Explicação
+
+O sistema é simulado diversas vezes para obter resultados médios mais confiáveis.
+
+---
+
+# Loop das Variâncias
+
+```python
+for sigma_code_sq in sigma_code_sq_values:
+```
+
+## Explicação
+
+O sistema é testado para diferentes níveis de distorção dos códigos.
+
+---
+
+# Inicialização dos Erros
+
+```python
+total_errors_for_sigma = 0
+
+total_bits_for_sigma = 0
+```
+
+## Explicação
+
+As variáveis acumulam:
+
+- quantidade total de erros;
+- quantidade total de bits transmitidos.
+
+---
+
+# Geração da Matriz de Distorção
+
+```python
+W_matrix = np.random.normal(
+    0,
+    np.sqrt(sigma_code_sq),
+    H.shape
+)
+```
+
+## Explicação
+
+A matriz \(W\) representa perturbações aleatórias adicionadas aos códigos.
+
+---
+
+# Modelo do Código Distorcido
+
+:contentReference[oaicite:4]{index=4}
+
+---
+
+# Criação da Matriz Distorcida
+
+```python
+H_hat = H + W_matrix
+```
+
+## Explicação
+
+A matriz utilizada pelo receptor passa a conter erros.
+
+---
+
+# Seleção do Código Distorcido
+
+```python
+c_hat_j = H_hat[user_idx, :]
+```
+
+## Explicação
+
+O receptor utiliza um código imperfeito para recuperar a mensagem.
+
+---
+
+# Recuperação da Mensagem
+
+```python
+m_hat_j_raw = c_hat_j * y_n
+```
+
+## Explicação
+
+O desespalhamento é realizado multiplicando o sinal recebido pelo código distorcido.
+
+---
+
+# Modelo do Desespalhamento
+
+:contentReference[oaicite:5]{index=5}
+
+---
+
+# Decisão Binária
+
+```python
+m_hat_j_binary = np.sign(m_hat_j_raw)
+```
+
+## Explicação
+
+O receptor decide:
+
+- +1 → bit positivo;
+- -1 → bit negativo.
+
+---
+
+# Contagem de Erros
+
+```python
+error_count = np.sum(
+    original_m != m_hat_j_binary
+)
+```
+
+## Explicação
+
+São contabilizadas as diferenças entre:
+
+- mensagem original;
+- mensagem recuperada.
+
+---
+
+# Acumulação dos Erros
+
+```python
+total_errors_for_sigma += error_count
+```
+
+## Explicação
+
+O número total de erros é acumulado ao longo das simulações.
+
+---
+
+# Acumulação dos Bits
+
+```python
+total_bits_for_sigma += bits_per_message
+```
+
+## Explicação
+
+A quantidade total de bits transmitidos também é acumulada.
+
+---
+
+# Cálculo da BER
+
+```python
+average_ber =
+total_errors_for_sigma /
+total_bits_for_sigma
+```
+
+## Explicação
+
+A BER é calculada por:
+
+:contentReference[oaicite:6]{index=6}
+
+---
+
+# Armazenamento da BER
+
+```python
+ber_values.append(average_ber)
+```
+
+## Explicação
+
+Os valores calculados são armazenados para posterior plotagem.
+
+---
+
+# Exibição dos Resultados
+
+```python
+print(
+    f"σ²_código = {sigma_code_sq:.4f},
+    BER = {average_ber:.6f}"
+)
+```
+
+## Explicação
+
+O código exibe:
+
+- variância da distorção;
+- BER correspondente.
+
+---
+
+# Criação do Gráfico
+
+```python
+fig_ber = plt.figure(figsize=(10, 6))
+```
+
+## Explicação
+
+A figura será utilizada para exibir a curva BER × distorção.
+
+---
+
+# Plotagem da BER
+
+```python
+plt.semilogy(
+    sigma_code_sq_values,
+    ber_values,
+    'o-',
+    color='blue'
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+semilogy()
+```
+
+utiliza escala logarítmica no eixo Y.
+
+---
+
+# Configuração do Título
+
+```python
+plt.title(
+    'Probabilidade de Erro (BER)
+    vs. σ² da Distorção do Código'
+)
+```
+
+## Explicação
+
+O gráfico apresenta o impacto da distorção dos códigos na BER.
+
+---
+
+# Configuração dos Eixos
+
+```python
+plt.xlabel(
+    'Variância da Distorção'
+)
+
+plt.ylabel(
+    'BER'
+)
+```
+
+## Explicação
+
+Os eixos representam:
+
+- variância da distorção;
+- probabilidade de erro.
+
+---
+
+# Configuração da Grade
+
+```python
+plt.grid(
+    True,
+    which="both",
+    ls="-"
+)
+```
+
+## Explicação
+
+A grade auxilia a visualização em escala logarítmica.
+
+---
+
+# Configuração dos Ticks
+
+```python
+plt.xticks(
+    sigma_code_sq_values,
+    [f'{s:.3f}' for s in sigma_code_sq_values],
+    rotation=45
+)
+```
+
+## Explicação
+
+Os valores do eixo X são configurados manualmente.
+
+---
+
+# Resultado Esperado
+
+À medida que a distorção dos códigos aumenta:
+
+- a ortogonalidade diminui;
+- aumenta a interferência entre usuários;
+- cresce a BER;
+- piora o desempenho do sistema CDMA.
+
+---
+
+# Resultado do Gráfico
+
+## BER × Distorção do Código
+
+<p align="center">
+  <img src="assets5/Q21BEP5.png" width="850">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, são obtidos:
+
+- simulação de códigos de Hadamard distorcidos;
 - cálculo da BER;
-- análise do impacto do ruído AWGN;
-- comparação de desempenho entre os usuários.
+- análise da degradação da ortogonalidade;
+- avaliação do impacto da distorção no sistema CDMA;
+- curva BER × variância da distorção.
+
+---
+
+---
+
+# Prática 5 — Questão 3(a)
+
+# Geração de um Sinal Não-Estacionário
+
+Nesta etapa foi criado um sinal composto por:
+
+- senoides com frequência variável no tempo;
+- transientes localizados.
+
+O objetivo é simular um sinal não-estacionário, isto é, um sinal cujas características variam ao longo do tempo.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → cálculos numéricos;
+- `matplotlib.pyplot` → geração dos gráficos.
+
+---
+
+# Definição do Comprimento do Sinal
+
+```python
+N = 2000
+```
+
+## Explicação
+
+O sinal possui:
+
+```python
+2000 amostras
+```
+
+---
+
+# Vetor de Tempo
+
+```python
+t = np.arange(N + 1)
+```
+
+## Explicação
+
+O vetor `t` representa os instantes de tempo discretos do sinal.
+
+---
+
+# Inicialização do Sinal
+
+```python
+x = np.zeros_like(
+    t,
+    dtype=np.float64
+)
+```
+
+## Explicação
+
+Inicialmente o sinal é preenchido apenas com zeros.
+
+Posteriormente serão adicionadas:
+
+- senoides;
+- componentes transitórias.
+
+---
+
+# Definição das Regiões das Senoides
+
+```python
+pos_sin = np.array([
+    0,
+    600,
+    1080,
+    1380,
+    1680,
+    2000
+])
+```
+
+## Explicação
+
+O vetor define os intervalos onde cada senoide será inserida.
+
+Cada trecho do sinal terá uma frequência diferente.
+
+---
+
+# Definição dos Períodos
+
+```python
+T_sin = np.array([
+    100,
+    40,
+    20,
+    10,
+    5
+])
+```
+
+## Explicação
+
+Os períodos das senoides são:
+
+- 100;
+- 40;
+- 20;
+- 10;
+- 5 amostras.
+
+Quanto menor o período:
+
+- maior a frequência da senoide.
+
+---
+
+# Geração das Senoides
+
+```python
+for i in range(5):
+```
+
+## Explicação
+
+O laço percorre os cinco segmentos do sinal.
+
+---
+
+# Definição dos Limites do Segmento
+
+```python
+m, n = pos_sin[i], pos_sin[i+1]
+```
+
+## Explicação
+
+Os valores:
+
+- `m` → início do segmento;
+- `n` → fim do segmento.
+
+---
+
+# Vetor de Tempo Local
+
+```python
+t_segment =
+np.arange(1, n - m + 1)
+```
+
+## Explicação
+
+Cada senoide possui um vetor de tempo próprio.
+
+---
+
+# Geração da Senoide
+
+```python
+x[m:n] =
+np.sin(
+    2*np.pi*t_segment/T_sin[i]
+)
+```
+
+## Explicação
+
+A senoide é inserida no trecho correspondente do sinal.
+
+---
+
+# Modelo Matemático
+
+:contentReference[oaicite:0]{index=0}
+
+---
+
+# Comportamento do Sinal
+
+À medida que o período diminui:
+
+- a frequência aumenta;
+- as oscilações ficam mais rápidas.
+
+---
+
+# Definição das Amplitudes dos Transientes
+
+```python
+amp_imp = np.array([
+    3,
+    -2,
+    2,
+    2.5,
+    -2.5
+])
+```
+
+## Explicação
+
+Cada transiente possui uma amplitude diferente.
+
+Os sinais negativos representam pulsos invertidos.
+
+---
+
+# Definição das Posições dos Transientes
+
+```python
+pos_imp = np.array([
+    200,
+    372,
+    1324,
+    1343,
+    1802
+])
+```
+
+## Explicação
+
+Esses valores definem onde os eventos transitórios ocorrem.
+
+---
+
+# Definição dos Períodos dos Transientes
+
+```python
+T_imp = np.array([
+    5,
+    25,
+    5,
+    5,
+    5
+])
+```
+
+## Explicação
+
+Os transientes possuem curta duração.
+
+---
+
+# Geração dos Transientes
+
+```python
+for i in range(5):
+```
+
+## Explicação
+
+O laço percorre todos os eventos transitórios.
+
+---
+
+# Definição da Posição Inicial
+
+```python
+m = pos_imp[i]
+```
+
+## Explicação
+
+Define o ponto onde o transiente será inserido.
+
+---
+
+# Cálculo do Offset
+
+```python
+offset = int(T_imp[i] / 2)
+```
+
+## Explicação
+
+O offset define metade da duração do pulso.
+
+---
+
+# Definição do Limite Final
+
+```python
+n = m + offset
+```
+
+## Explicação
+
+Define o final da região do transiente.
+
+---
+
+# Vetor de Tempo Local do Transiente
+
+```python
+t_segment =
+np.arange(1, n - m + 2)
+```
+
+## Explicação
+
+Cria os instantes de tempo do pulso transitório.
+
+---
+
+# Inserção do Transiente
+
+```python
+x[m:n+1] +=
+amp_imp[i] *
+(
+    np.sin(
+        2*np.pi*t_segment/T_imp[i]
+    )
+)**2
+```
+
+## Explicação
+
+Os transientes são adicionados ao sinal principal.
+
+Foi utilizada uma senoide ao quadrado para criar pulsos localizados.
+
+---
+
+# Modelo Matemático do Transiente
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Efeito dos Transientes
+
+Os transientes geram:
+
+- perturbações localizadas;
+- mudanças abruptas no sinal;
+- eventos temporários.
+
+---
+
+# Criação da Figura
+
+```python
+plt.figure(figsize=(12, 5))
+```
+
+## Explicação
+
+Define o tamanho da figura do gráfico.
+
+---
+
+# Plotagem do Sinal
+
+```python
+plt.plot(t, x)
+```
+
+## Explicação
+
+O sinal completo é exibido no domínio do tempo.
+
+---
+
+# Configuração do Título
+
+```python
+plt.title(
+    'Sinal Não-Estacionário'
+)
+```
+
+## Explicação
+
+O título descreve o comportamento variável do sinal.
+
+---
+
+# Configuração dos Eixos
+
+```python
+plt.xlabel('t')
+
+plt.ylabel('x(t)')
+```
+
+## Explicação
+
+Os eixos representam:
+
+- tempo discreto;
+- amplitude do sinal.
+
+---
+
+# Configuração da Grade
+
+```python
+plt.grid(True)
+```
+
+## Explicação
+
+A grade auxilia na visualização das mudanças do sinal.
+
+---
+
+# Exibição do Gráfico
+
+```python
+plt.show()
+```
+
+## Explicação
+
+Exibe o sinal final gerado.
+
+---
+
+# Resultado do Gráfico
+
+## Sinal Não-Estacionário Gerado
+
+<p align="center">
+  <img src="assets5/Q3AP5.png" width="900">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, são obtidos:
+
+- senoides com frequência variável;
+- eventos transitórios localizados;
+- um sinal não-estacionário;
+- visualização completa do sinal no domínio do tempo.
+
+---
+
+---
+
+# Prática 5 — Questão 3(b)
+
+# Decomposição Wavelet do Sinal Não-Estacionário
+
+Nesta etapa foi realizada a decomposição wavelet do sinal gerado anteriormente utilizando:
+
+- wavelet biortogonal bior4.4;
+- decomposição multinível;
+- análise em diferentes escalas.
+
+O objetivo é analisar:
+
+- componentes lentas;
+- componentes rápidas;
+- transientes;
+- mudanças de frequência no tempo.
+
+---
+
+# Importação da Biblioteca PyWavelets
+
+```python
+try:
+    import pywt
+except ImportError:
+    !pip install PyWavelets
+    import pywt
+```
+
+## Explicação
+
+O código verifica se a biblioteca:
+
+```python
+PyWavelets
+```
+
+está instalada.
+
+Caso não esteja:
+
+- ela é instalada automaticamente.
+
+---
+
+# Importação da Biblioteca
+
+```python
+import pywt
+```
+
+## Explicação
+
+A biblioteca:
+
+```python
+pywt
+```
+
+é utilizada para:
+
+- transformadas wavelet;
+- decomposição multinível;
+- reconstrução de sinais.
+
+---
+
+# Definição da Wavelet
+
+```python
+wavelet = pywt.Wavelet('bior4.4')
+```
+
+## Explicação
+
+Foi utilizada a wavelet:
+
+```python
+bior4.4
+```
+
+que pertence à família:
+
+- biorthogonal wavelets.
+
+---
+
+# Características da Wavelet Biortogonal
+
+A wavelet bior4.4 possui:
+
+- boa reconstrução;
+- filtros simétricos;
+- boa representação de transientes;
+- baixa distorção de fase.
+
+---
+
+# Estrutura da Decomposição Wavelet
+
+A transformada wavelet divide o sinal em:
+
+- aproximações;
+- detalhes.
+
+---
+
+# Modelo Matemático da Decomposição
+
+:contentReference[oaicite:0]{index=0}
+
+---
+
+# Coeficientes dos Filtros de Análise
+
+```python
+print(
+    f"Filtro Passa-Baixa (Lo_D):
+    {wavelet.dec_lo}"
+)
+
+print(
+    f"Filtro Passa-Alta (Hi_D):
+    {wavelet.dec_hi}"
+)
+```
+
+## Explicação
+
+Os filtros de análise são utilizados durante a decomposição do sinal.
+
+---
+
+# Filtro Passa-Baixa
+
+```python
+Lo_D
+```
+
+## Explicação
+
+O filtro passa-baixa extrai:
+
+- componentes lentas;
+- tendências gerais;
+- aproximações do sinal.
+
+---
+
+# Filtro Passa-Alta
+
+```python
+Hi_D
+```
+
+## Explicação
+
+O filtro passa-alta extrai:
+
+- detalhes rápidos;
+- transientes;
+- mudanças bruscas.
+
+---
+
+# Coeficientes dos Filtros de Síntese
+
+```python
+print(
+    f"Filtro Passa-Baixa (Lo_R):
+    {wavelet.rec_lo}"
+)
+
+print(
+    f"Filtro Passa-Alta (Hi_R):
+    {wavelet.rec_hi}"
+)
+```
+
+## Explicação
+
+Os filtros de síntese são utilizados na reconstrução do sinal original.
+
+---
+
+# Reconstrução do Sinal
+
+A reconstrução combina:
+
+- aproximações;
+- detalhes.
+
+---
+
+# Modelo Matemático da Reconstrução
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Decomposição Multinível
+
+```python
+coeffs = pywt.wavedec(
+    x,
+    'bior4.4',
+    level=4
+)
+```
+
+## Explicação
+
+O sinal é decomposto em:
+
+```python
+4 níveis
+```
+
+de resolução.
+
+---
+
+# Funcionamento da Decomposição
+
+Em cada nível:
+
+- o sinal passa por filtros;
+- ocorre subamostragem;
+- são obtidos coeficientes de detalhe.
+
+---
+
+# Componentes Obtidas
+
+A decomposição produz:
+
+- aproximação final;
+- detalhes dos níveis 1 a 4.
+
+---
+
+# Estrutura dos Coeficientes
+
+```python
+coeffs[0]
+```
+
+→ aproximação final.
+
+```python
+coeffs[1]
+```
+
+→ detalhe nível 4.
+
+```python
+coeffs[2]
+```
+
+→ detalhe nível 3.
+
+```python
+coeffs[3]
+```
+
+→ detalhe nível 2.
+
+```python
+coeffs[4]
+```
+
+→ detalhe nível 1.
+
+---
+
+# Criação da Figura
+
+```python
+plt.figure(figsize=(12, 10))
+```
+
+## Explicação
+
+Define o tamanho da figura utilizada para visualização.
+
+---
+
+# Plotagem do Sinal Original
+
+```python
+plt.subplot(5, 1, 1)
+
+plt.plot(x)
+
+plt.title(
+    'Sinal Original x(t)'
+)
+```
+
+## Explicação
+
+O primeiro gráfico apresenta o sinal original antes da decomposição.
+
+---
+
+# Plotagem dos Detalhes
+
+```python
+for i in range(1, 5):
+```
+
+## Explicação
+
+O laço percorre os quatro níveis de detalhe.
+
+---
+
+# Criação dos Subplots
+
+```python
+plt.subplot(5, 1, i+1)
+```
+
+## Explicação
+
+Cada nível de detalhe é exibido em um gráfico separado.
+
+---
+
+# Plotagem dos Coeficientes
+
+```python
+plt.plot(coeffs[i])
+```
+
+## Explicação
+
+Os coeficientes wavelet representam informações específicas do sinal.
+
+---
+
+# Configuração do Título
+
+```python
+plt.title(
+    f'Coeficientes de Detalhe - Nível {5-i}'
+)
+```
+
+## Explicação
+
+Cada gráfico identifica o nível correspondente da decomposição.
+
+---
+
+# Organização da Figura
+
+```python
+plt.tight_layout()
+```
+
+## Explicação
+
+Evita sobreposição entre os gráficos.
+
+---
+
+# Exibição Final
+
+```python
+plt.show()
+```
+
+## Explicação
+
+Exibe os resultados da decomposição wavelet.
+
+---
+
+# Interpretação dos Resultados
+
+Os níveis de detalhe representam:
+
+- frequências altas;
+- frequências médias;
+- transientes;
+- mudanças locais do sinal.
+
+---
+
+# Comportamento dos Níveis
+
+## Níveis Altos
+
+Capturam:
+
+- componentes lentas;
+- tendências globais.
+
+## Níveis Baixos
+
+Capturam:
+
+- transientes rápidos;
+- mudanças bruscas;
+- oscilações rápidas.
+
+---
+
+# Resultado do Gráfico
+
+## Decomposição Wavelet do Sinal
+
+<p align="center">
+  <img src="assets5/Q3BP5.png" width="900">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, são obtidos:
+
+- filtros wavelet biortogonais;
+- decomposição multinível;
+- coeficientes de detalhe;
+- separação de componentes em diferentes escalas;
+- análise temporal e espectral do sinal.
 
 ---
