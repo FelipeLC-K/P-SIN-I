@@ -496,4 +496,393 @@ Ao executar o código, são obtidos:
 
 ---
 
+# Questão 3
+
+# Análise Espectral do Arquivo `handel.wav`
+
+## Leitura do Arquivo de Áudio
+
+```python
+fs_handel_original, data_handel_original = wavfile.read('/content/handel.wav')
+```
+
+## Explicação
+
+O arquivo de áudio `handel.wav` é carregado utilizando:
+
+```python
+wavfile.read()
+```
+
+A função retorna:
+
+- `fs_handel_original` → frequência de amostragem do áudio.
+- `data_handel_original` → vetor contendo as amostras do sinal.
+
+---
+
+# Normalização do Áudio
+
+```python
+normalized_data_handel = data_handel_original / np.max(np.abs(data_handel_original))
+```
+
+## Explicação
+
+O sinal é normalizado para que sua amplitude fique entre:
+
+$$
+-1 \leq x(t) \leq 1
+$$
+
+Isso evita:
+
+- clipping;
+- distorções;
+- problemas de escala durante o processamento.
+
+---
+
+# Cálculo do Espectro
+
+```python
+frequencies_handel, amplitudes_handel = calculate_spectrum(
+    normalized_data_handel,
+    fs_handel_original
+)
+```
+
+## Explicação
+
+A função `calculate_spectrum()` aplica a FFT ao sinal de áudio.
+
+O resultado obtido contém:
+
+- `frequencies_handel` → eixo de frequências.
+- `amplitudes_handel` → amplitudes espectrais.
+
+---
+
+# Plotagem do Espectro
+
+```python
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    frequencies_handel,
+    amplitudes_handel
+)
+
+plt.title('Espectro do Sinal de Áudio Handel (Normalizado)')
+
+plt.xlabel('Frequência (Hz)')
+plt.ylabel('Amplitude')
+
+plt.grid(True)
+
+plt.xlim(0, fs_handel_original / 2)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+## Explicação
+
+O gráfico apresenta o conteúdo espectral do áudio.
+
+Cada componente do espectro indica a presença de determinadas frequências no sinal musical.
+
+O comando:
+
+```python
+plt.xlim(0, fs_handel_original / 2)
+```
+
+limita a visualização até a frequência de Nyquist:
+
+:contentReference[oaicite:0]{index=0}
+
+onde:
+
+- \(f_N\) → frequência de Nyquist;
+- \(f_s\) → frequência de amostragem.
+
+---
+
+# Resultado Esperado
+
+Ao executar o código, são obtidos:
+
+- espectro de frequência do áudio;
+- identificação das componentes espectrais;
+- análise do conteúdo harmônico do sinal musical.
+
+---
+
+# Resultado do Gráfico
+
+<p align="center">
+  <img src="assets2/Q3P2.png" width="850">
+</p>
+
+---
+
+# Questão 4
+
+# Subamostragem do Arquivo `handel.wav`
+
+## a) Criação da Função de Subamostragem
+
+```python
+def downsample_signal(signal, M):
+
+    return signal[::M]
+```
+
+## Explicação
+
+A função `downsample_signal()` realiza a subamostragem de um sinal discreto utilizando um fator \(M\).
+
+O comando:
+
+```python
+signal[::M]
+```
+
+seleciona apenas uma amostra a cada \(M\) amostras do sinal original.
+
+---
+
+# Conceito Matemático
+
+A nova frequência de amostragem após a subamostragem é dada por:
+
+:contentReference[oaicite:0]{index=0}
+
+Onde:
+
+- \(f_s\) → frequência de amostragem original;
+- \(f_s'\) → nova frequência de amostragem;
+- \(M\) → fator de subamostragem.
+
+---
+
+# Objetivos da Subamostragem
+
+A técnica de subamostragem permite:
+
+- reduzir quantidade de dados;
+- diminuir custo computacional;
+- estudar efeitos de aliasing;
+- modificar resolução temporal do sinal.
+
+---
+
+# b) Definição dos Fatores de Subamostragem
+
+```python
+M_factors = [2, 4, 8]
+
+downsampled_signals = {}
+
+down_sampling_frequencies = {}
+```
+
+## Explicação
+
+Foram utilizados três fatores de subamostragem:
+
+- \(M = 2\)
+- \(M = 4\)
+- \(M = 8\)
+
+Quanto maior o valor de \(M\), menor será a nova frequência de amostragem.
+
+---
+
+# Aplicação da Subamostragem
+
+```python
+for i, M in enumerate(M_factors):
+
+    downsampled_signal = downsample_signal(
+        normalized_data_handel,
+        M
+    )
+
+    new_fs = fs_handel_original / M
+```
+
+## Explicação
+
+Para cada fator \(M\):
+
+- o sinal é subamostrado;
+- a nova frequência de amostragem é calculada.
+
+---
+
+# Armazenamento dos Resultados
+
+```python
+downsampled_signals[f'M={M}'] = downsampled_signal
+
+down_sampling_frequencies[f'M={M}'] = new_fs
+```
+
+## Explicação
+
+Os sinais subamostrados e suas respectivas frequências de amostragem são armazenados em dicionários para facilitar o acesso posterior.
+
+---
+
+# Cálculo do Espectro
+
+```python
+frequencies_ds, amplitudes_ds = calculate_spectrum(
+    downsampled_signal,
+    new_fs
+)
+```
+
+## Explicação
+
+A FFT é aplicada aos sinais subamostrados para analisar os efeitos da redução da frequência de amostragem no espectro.
+
+---
+
+# Plotagem dos Espectros
+
+```python
+ax = plt.subplot(len(M_factors), 1, i + 1)
+
+ax.plot(
+    frequencies_ds,
+    amplitudes_ds
+)
+
+ax.set_title(
+    f'Espectro do Sinal de Handel Subamostrado (M={M}, Fs={new_fs:.2f} Hz)'
+)
+
+ax.set_xlabel('Frequência (Hz)')
+ax.set_ylabel('Amplitude')
+
+ax.grid(True)
+
+ax.set_xlim(0, new_fs / 2)
+```
+
+## Explicação
+
+Os gráficos apresentam os espectros dos sinais subamostrados.
+
+O comando:
+
+```python
+ax.set_xlim(0, new_fs / 2)
+```
+
+limita o eixo de frequência até a nova frequência de Nyquist:
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Resultado Esperado dos Espectros
+
+Ao executar o código, observa-se:
+
+- redução da largura espectral;
+- alteração da resolução temporal;
+- possíveis efeitos de aliasing;
+- mudança da frequência máxima representável.
+
+---
+
+# Resultado dos Gráficos
+
+<p align="center">
+  <img src="assets2/Q4P1.png" width="850">
+</p>
+
+---
+
+# c) Reprodução dos Sinais Subamostrados
+
+```python
+print("Sinal Original:")
+
+display(
+    Audio(
+        data=normalized_data_handel,
+        rate=fs_handel_original
+    )
+)
+
+for M in M_factors:
+
+    signal = downsampled_signals[f'M={M}']
+
+    fs_ds = down_sampling_frequencies[f'M={M}']
+
+    print(f"Sinal Subamostrado M={M} (Fs={fs_ds:.2f} Hz):")
+
+    display(
+        Audio(
+            data=signal,
+            rate=fs_ds
+        )
+    )
+```
+
+## Explicação
+
+Os sinais subamostrados são reproduzidos para comparação auditiva com o sinal original.
+
+A redução da frequência de amostragem pode causar:
+
+- perda de qualidade;
+- redução da faixa espectral;
+- distorções;
+- aliasing.
+
+---
+
+# Áudios Gerados
+
+## Sinal Original
+
+[▶ Handel Original](assets2/handel_original.wav)
+
+---
+
+## Subamostragem M = 2
+
+[▶ Handel M=2](assets2/handel_M2.wav)
+
+---
+
+## Subamostragem M = 4
+
+[▶ Handel M=4](assets2/handel_M4.wav)
+
+---
+
+## Subamostragem M = 8
+
+[▶ Handel M=8](assets2/handel_M8.wav)
+
+---
+
+# Resultado Final
+
+Ao executar o código, são obtidos:
+
+- sinais subamostrados;
+- espectros de frequência correspondentes;
+- comparação auditiva entre diferentes taxas de amostragem;
+- análise dos efeitos da subamostragem no domínio da frequência.
+
 ---
