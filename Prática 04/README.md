@@ -15,8 +15,6 @@
 
 # Prática 4 — Sinais e sistemas
 
----
-
 # Questão 1
 
 # Comparação entre DTFT e DFT com Diferentes Valores de N
