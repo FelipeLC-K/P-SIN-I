@@ -1083,441 +1083,7 @@ Os ticks do eixo Y são ajustados manualmente para melhor visualização da BER.
   <img src="assets5/quatroQ1P5.png" width="850">
 </p>
 
----
-
-
-# f) Recuperação de Mensagens com Códigos de Hadamard Distorcidos
-
-Nesta etapa, foi analisado o impacto da distorção dos códigos de Hadamard no processo de recuperação das mensagens em um sistema CDMA.
-
-O objetivo é verificar:
-
-- robustez do sistema;
-- degradação da ortogonalidade;
-- influência da distorção na recuperação das mensagens.
-
----
-
-# Importação das Bibliotecas
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.linalg import hadamard
-```
-
-## Explicação
-
-As bibliotecas utilizadas foram:
-
-- `numpy` → operações matemáticas;
-- `matplotlib.pyplot` → geração de gráficos;
-- `hadamard` → criação da matriz de Hadamard.
-
----
-
-# Definição do Comprimento do Código
-
-```python
-N = 8
-```
-
-## Explicação
-
-O comprimento dos códigos de espalhamento é igual a:
-
-```python
-8
-```
-
----
-
-# Definição da Semente Aleatória
-
-```python
-np.random.seed(42)
-```
-
-## Explicação
-
-A semente garante reprodutibilidade dos resultados.
-
----
-
-# Geração das Mensagens
-
-```python
-m1 = np.random.choice([-1, 1], size=N)
-
-m2 = np.random.choice([-1, 1], size=N)
-
-m3 = np.random.choice([-1, 1], size=N)
-```
-
-## Explicação
-
-Cada usuário transmite uma sequência binária bipolar:
-
-:contentReference[oaicite:0]{index=0}
-
----
-
-# Geração da Matriz de Hadamard
-
-```python
-H = hadamard(N)
-```
-
-## Explicação
-
-A matriz de Hadamard gera códigos ortogonais utilizados no sistema CDMA.
-
----
-
-# Seleção dos Códigos
-
-```python
-c1 = H[1, :]
-c2 = H[2, :]
-c3 = H[3, :]
-```
-
-## Explicação
-
-Cada usuário recebe um código ortogonal diferente.
-
----
-
-# Codificação das Mensagens
-
-```python
-s1 = m1 * c1
-s2 = m2 * c2
-s3 = m3 * c3
-```
-
-## Explicação
-
-Cada mensagem é espalhada utilizando o código correspondente.
-
----
-
-# Modelo Matemático da Codificação
-
-:contentReference[oaicite:1]{index=1}
-
-Onde:
-
-- \(m[n]\) → mensagem;
-- \(c[n]\) → código de Hadamard;
-- \(s[n]\) → sinal espalhado.
-
----
-
-# Variâncias da Distorção
-
-```python
-sigma_code_sq_values = [0.01, 0.1, 0.5]
-```
-
-## Explicação
-
-Foram utilizados diferentes níveis de distorção nos códigos:
-
-- 0.01
-- 0.1
-- 0.5
-
-Quanto maior a variância, maior a degradação da ortogonalidade.
-
----
-
-# Sinal Recebido
-
-```python
-y_n = s1 + s2 + s3
-```
-
-## Explicação
-
-O sinal total recebido é formado pela soma dos sinais espalhados.
-
----
-
-# Modelo do Sinal Recebido
-
-:contentReference[oaicite:2]{index=2}
-
----
-
-# Dicionário das Mensagens
-
-```python
-original_messages = {
-    'm1': m1,
-    'm2': m2,
-    'm3': m3
-}
-```
-
-## Explicação
-
-As mensagens originais são armazenadas para posterior comparação.
-
----
-
-# Índices dos Códigos
-
-```python
-original_code_indices = {
-    'm1': 1,
-    'm2': 2,
-    'm3': 3
-}
-```
-
-## Explicação
-
-Cada usuário é associado à linha correspondente da matriz de Hadamard.
-
----
-
-# Loop das Variâncias
-
-```python
-for sigma_code_sq in sigma_code_sq_values:
-```
-
-## Explicação
-
-O sistema é testado para diferentes níveis de distorção.
-
----
-
-# Geração da Matriz de Distorção
-
-```python
-W_matrix = np.random.normal(
-    0,
-    np.sqrt(sigma_code_sq),
-    H.shape
-)
-```
-
-## Explicação
-
-A matriz \(W\) representa perturbações aleatórias adicionadas aos códigos.
-
----
-
-# Modelo do Código Distorcido
-
-:contentReference[oaicite:3]{index=3}
-
-Onde:
-
-- \(C\) → matriz original;
-- \(W\) → ruído de distorção;
-- \(\hat{C}\) → matriz distorcida.
-
----
-
-# Criação da Matriz Distorcida
-
-```python
-H_hat = H + W_matrix
-```
-
-## Explicação
-
-Os códigos utilizados pelo receptor tornam-se imperfeitos.
-
----
-
-# Criação da Figura
-
-```python
-fig, axes = plt.subplots(
-    3,
-    2,
-    figsize=(14, 10)
-)
-```
-
-## Explicação
-
-A figura apresenta:
-
-- mensagem original;
-- mensagem estimada;
-
-para cada usuário.
-
----
-
-# Seleção do Código Distorcido
-
-```python
-c_hat_j = H_hat[user_idx, :]
-```
-
-## Explicação
-
-O receptor utiliza uma versão distorcida do código original.
-
----
-
-# Estimativa da Mensagem
-
-```python
-m_hat_j_raw = c_hat_j * y_n
-```
-
-## Explicação
-
-O desespalhamento é realizado multiplicando o sinal recebido pelo código estimado.
-
----
-
-# Modelo do Desespalhamento
-
-:contentReference[oaicite:4]{index=4}
-
----
-
-# Decisão Binária
-
-```python
-m_hat_j_binary = np.sign(m_hat_j_raw)
-```
-
-## Explicação
-
-A decisão binária utiliza:
-
-- positivo → +1;
-- negativo → -1.
-
----
-
-# Contagem de Erros
-
-```python
-error_count =
-np.sum(
-    original_m != m_hat_j_binary
-)
-```
-
-## Explicação
-
-O número de erros corresponde às amostras recuperadas incorretamente.
-
----
-
-# Verificação da Recuperação
-
-```python
-if error_count == 0:
-```
-
-## Explicação
-
-Caso não existam erros, a mensagem foi recuperada corretamente.
-
----
-
-# Plotagem da Mensagem Original
-
-```python
-axes[i, 0].stem(
-    range(N),
-    original_m
-)
-```
-
-## Explicação
-
-O gráfico apresenta a mensagem original transmitida.
-
----
-
-# Plotagem da Mensagem Estimada
-
-```python
-axes[i, 1].stem(
-    range(N),
-    m_hat_j_binary
-)
-```
-
-## Explicação
-
-O gráfico apresenta a mensagem recuperada pelo receptor.
-
----
-
-# Configuração dos Gráficos
-
-```python
-axes[i, 0].grid(True)
-
-axes[i, 1].grid(True)
-```
-
-## Explicação
-
-A grade facilita a comparação visual entre os sinais.
-
----
-
-# Ajuste do Layout
-
-```python
-plt.tight_layout(
-    rect=[0, 0.03, 1, 0.95]
-)
-```
-
-## Explicação
-
-O comando evita sobreposição entre os gráficos e o título principal.
-
----
-
-# Resultado Esperado
-
-À medida que a distorção aumenta:
-
-- a ortogonalidade dos códigos diminui;
-- ocorre maior interferência entre usuários;
-- aumenta a quantidade de erros na recuperação.
-
----
-
-# Resultado dos Gráficos
-
-## Recuperação das Mensagens
-
-<p align="center">
-  <img src="assets5/Q21P5.png" width="950">
-</p>
-
----
-
-# Resultado Final
-
-Ao executar o código, são obtidos:
-
-- códigos de Hadamard distorcidos;
-- recuperação aproximada das mensagens;
-- análise do impacto da perda de ortogonalidade;
-- comparação entre mensagens originais e estimadas;
-- avaliação da robustez do sistema CDMA.
-
----
-
-# f real BER em Função da Distorção dos Códigos
+# f) BER em Função da Distorção dos Códigos
 
 Nesta etapa, foi analisada a relação entre:
 
@@ -2060,53 +1626,19 @@ Os valores do eixo X são configurados manualmente.
 
 ---
 
-# Resultado Esperado
-
-À medida que a distorção dos códigos aumenta:
-
-- a ortogonalidade diminui;
-- aumenta a interferência entre usuários;
-- cresce a BER;
-- piora o desempenho do sistema CDMA.
-
----
-
 # Resultado do Gráfico
 
 ## BER × Distorção do Código
 
 <p align="center">
-  <img src="assets5/Q21BEP5.png" width="850">
+  <img src="assets5/cincoQ1P5.png" width="850">
 </p>
 
 ---
 
-# Resultado Final
+# Questão 3
 
-Ao executar o código, são obtidos:
-
-- simulação de códigos de Hadamard distorcidos;
-- cálculo da BER;
-- análise da degradação da ortogonalidade;
-- avaliação do impacto da distorção no sistema CDMA;
-- curva BER × variância da distorção.
-
----
-
----
-
-# Prática 5 — Questão 3(a)
-
-# Geração de um Sinal Não-Estacionário
-
-Nesta etapa foi criado um sinal composto por:
-
-- senoides com frequência variável no tempo;
-- transientes localizados.
-
-O objetivo é simular um sinal não-estacionário, isto é, um sinal cujas características variam ao longo do tempo.
-
----
+# a) Geração de um Sinal Não-Estacionário
 
 # Importação das Bibliotecas
 
@@ -2279,15 +1811,6 @@ A senoide é inserida no trecho correspondente do sinal.
 # Modelo Matemático
 
 :contentReference[oaicite:0]{index=0}
-
----
-
-# Comportamento do Sinal
-
-À medida que o período diminui:
-
-- a frequência aumenta;
-- as oscilações ficam mais rápidas.
 
 ---
 
@@ -2476,12 +1999,6 @@ plt.title(
 )
 ```
 
-## Explicação
-
-O título descreve o comportamento variável do sinal.
-
----
-
 # Configuração dos Eixos
 
 ```python
@@ -2528,27 +2045,12 @@ Exibe o sinal final gerado.
 ## Sinal Não-Estacionário Gerado
 
 <p align="center">
-  <img src="assets5/Q3AP5.png" width="900">
+  <img src="assets5/Q3P5.png" width="900">
 </p>
 
 ---
 
-# Resultado Final
-
-Ao executar o código, são obtidos:
-
-- senoides com frequência variável;
-- eventos transitórios localizados;
-- um sinal não-estacionário;
-- visualização completa do sinal no domínio do tempo.
-
----
-
----
-
-# Prática 5 — Questão 3(b)
-
-# Decomposição Wavelet do Sinal Não-Estacionário
+# b) Decomposição Wavelet do Sinal Não-Estacionário
 
 Nesta etapa foi realizada a decomposição wavelet do sinal gerado anteriormente utilizando:
 
@@ -2960,43 +2462,12 @@ Capturam:
 ## Decomposição Wavelet do Sinal
 
 <p align="center">
-  <img src="assets5/Q3BP5.png" width="900">
+  <img src="assets5/doisQ3P5.png" width="900">
 </p>
 
 ---
 
-# Resultado Final
-
-Ao executar o código, são obtidos:
-
-- filtros wavelet biortogonais;
-- decomposição multinível;
-- coeficientes de detalhe;
-- separação de componentes em diferentes escalas;
-- análise temporal e espectral do sinal.
-
----
-
----
-
-# Prática 5 — Questão 3(d)
-
-# Decomposição Wavelet em 5 Níveis
-
-Nesta etapa foi realizada uma decomposição wavelet multinível utilizando:
-
-- wavelet biortogonal bior4.4;
-- cinco níveis de decomposição;
-- análise das subfaixas de detalhe e aproximação.
-
-O objetivo é separar o sinal em diferentes bandas de frequência para analisar:
-
-- componentes lentas;
-- componentes rápidas;
-- transientes;
-- mudanças locais do sinal.
-
----
+# c) Decomposição Wavelet em 5 Níveis
 
 # Importação da Biblioteca
 
@@ -3331,59 +2802,19 @@ A decomposição wavelet permite:
 
 ---
 
-# Resultado Esperado
-
-Os gráficos mostram:
-
-- maior atividade nos detalhes onde existem transientes;
-- redução gradual das componentes rápidas nos níveis mais altos;
-- tendência global concentrada em `cA5`.
-
----
-
 # Resultado do Gráfico
 
 ## Aproximação e Subfaixas Wavelet
 
 <p align="center">
-  <img src="assets5/Q3DP5.png" width="900">
+  <img src="assets5/tresQ3P5.png" width="900">
 </p>
 
 ---
 
-# Resultado Final
+# Questão 4
 
-Ao executar o código, são obtidos:
-
-- decomposição wavelet multinível;
-- coeficientes de aproximação;
-- subfaixas de detalhe;
-- separação das bandas de frequência;
-- análise temporal e espectral do sinal.
-
----
-
----
-
-# Prática 5 — Questão 4(a)
-
-# Análise Temporal e Espectral do Sinal `leleccum.mat`
-
-Nesta etapa foi realizado:
-
-- carregamento do arquivo `.mat`;
-- extração do sinal;
-- cálculo da FFT;
-- análise espectral;
-- visualização no domínio do tempo e frequência.
-
-O objetivo é observar:
-
-- comportamento temporal;
-- distribuição espectral;
-- componentes de frequência presentes no sinal.
-
----
+# a) Análise Temporal e Espectral do Sinal `leleccum.mat`
 
 # Importação das Bibliotecas
 
@@ -3733,43 +3164,17 @@ O espectro permite identificar:
 
 ---
 
-# Resultado Esperado
-
-Os gráficos mostram:
-
-- o sinal original no tempo;
-- o espectro centrado em frequência zero;
-- as componentes de frequência presentes no sinal.
-
----
-
 # Resultado dos Gráficos
 
 ## Domínio do Tempo e Espectro
 
 <p align="center">
-  <img src="assets5/Q4AP5.png" width="900">
+  <img src="assets5/Q4P5.png" width="900">
 </p>
 
 ---
 
-# Resultado Final
-
-Ao executar o código, obtém-se:
-
-- leitura do arquivo `.mat`;
-- análise temporal;
-- cálculo da FFT;
-- espectro de magnitude;
-- visualização completa do sinal.
-
----
-
----
-
-# Prática 5 — Questão 4(b)
-
-# Remoção de Ruído (Denoising) com Wavelets
+# b) Remoção de Ruído (Denoising) com Wavelets
 
 Nesta etapa foi realizado o processo de:
 
@@ -4144,58 +3549,17 @@ Após o thresholding:
 
 ---
 
-# Resultado Esperado
-
-O gráfico deve mostrar:
-
-- sinal original mais irregular;
-- sinal filtrado mais suave;
-- preservação da estrutura principal do sinal.
-
----
-
 # Resultado do Denoising
 
 ## Comparação entre Sinal Original e Filtrado
 
 <p align="center">
-  <img src="assets5/Q4BP5.png" width="900">
+  <img src="assets5/doisQ4P5.png" width="900">
 </p>
 
 ---
 
-# Resultado Final
-
-Ao executar o código, obtém-se:
-
-- decomposição wavelet;
-- estimação do ruído;
-- thresholding dos coeficientes;
-- reconstrução do sinal;
-- redução eficiente do ruído.
-
----
-
-# Prática 5 — Questão 4(d)
-
-# Visualização das Subfaixas Wavelet do Sinal `leleccum`
-
-Nesta etapa foi realizada:
-
-- decomposição wavelet em 5 níveis;
-- separação entre aproximação e detalhes;
-- visualização das subfaixas;
-- análise multirresolução do sinal.
-
-O objetivo é observar como o sinal:
-
-```python
-signal_leleccum
-```
-
-é dividido em diferentes bandas de frequência através da transformada wavelet discreta.
-
----
+# d) Visualização das Subfaixas Wavelet do Sinal `leleccum`
 
 # Importação das Bibliotecas
 
@@ -4593,16 +3957,6 @@ mostram:
 
 - níveis baixos → maiores frequências;
 - níveis altos → menores frequências.
-
----
-
-# Resultado Esperado
-
-Os gráficos devem mostrar:
-
-- separação das bandas de frequência;
-- redução gradual das oscilações;
-- concentração das componentes lentas em `cA5`.
 
 ---
 
@@ -5084,34 +4438,14 @@ A wavelet trabalha simultaneamente em:
 
 ---
 
-# Resultado Esperado
-
-Os gráficos devem mostrar:
-
-- suavização do ruído;
-- preservação maior dos transientes via wavelet;
-- filtragem mais global via DFT;
-- diferenças nos resíduos removidos.
-
----
 
 # Resultado dos Gráficos
 
 ## Comparação entre Denoising Wavelet e DFT
 
 <p align="center">
-  <img src="assets5/Q4EP5.png" width="900">
+  <img src="assets5/tresQ4P5.png" width="900">
 </p>
 
 ---
 
-# Resultado Final
-
-Ao executar o código, obtém-se:
-
-- filtragem do sinal via DFT;
-- comparação entre Fourier e Wavelet;
-- análise dos resíduos removidos;
-- visualização das diferenças entre os métodos de denoising.
-
----
