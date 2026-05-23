@@ -4296,3 +4296,943 @@ Ao executar o código, obtém-se:
 - redução eficiente do ruído.
 
 ---
+
+# Prática 5 — Questão 4(d)
+
+# Visualização das Subfaixas Wavelet do Sinal `leleccum`
+
+Nesta etapa foi realizada:
+
+- decomposição wavelet em 5 níveis;
+- separação entre aproximação e detalhes;
+- visualização das subfaixas;
+- análise multirresolução do sinal.
+
+O objetivo é observar como o sinal:
+
+```python
+signal_leleccum
+```
+
+é dividido em diferentes bandas de frequência através da transformada wavelet discreta.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import pywt
+import numpy as np
+import matplotlib.pyplot as plt
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `pywt` → transformadas wavelet;
+- `numpy` → operações numéricas;
+- `matplotlib` → geração de gráficos.
+
+---
+
+# Decomposição Wavelet de 5 Níveis
+
+```python
+coeffs_lele_5 = pywt.wavedec(
+    signal_leleccum,
+    'db4',
+    level=5
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+wavedec()
+```
+
+realiza a decomposição wavelet discreta do sinal utilizando:
+
+```python
+db4
+```
+
+com:
+
+```python
+5 níveis
+```
+
+de decomposição.
+
+---
+
+# Estrutura dos Coeficientes
+
+A decomposição retorna:
+
+```python
+[cA5, cD5, cD4, cD3, cD2, cD1]
+```
+
+Onde:
+
+- `cA5` → aproximação final;
+- `cD5` → detalhes do nível 5;
+- `cD4` → detalhes do nível 4;
+- `cD3` → detalhes do nível 3;
+- `cD2` → detalhes do nível 2;
+- `cD1` → detalhes do nível 1.
+
+---
+
+# Separação dos Coeficientes
+
+```python
+ca5_lele = coeffs_lele_5[0]
+details_lele = coeffs_lele_5[1:]
+```
+
+## Explicação
+
+Os coeficientes foram separados em:
+
+- aproximação final;
+- coeficientes de detalhe.
+
+---
+
+# Aproximação `cA5`
+
+A componente:
+
+```python
+cA5
+```
+
+representa:
+
+- tendência global do sinal;
+- componentes lentas;
+- baixas frequências.
+
+---
+
+# Detalhes `cD`
+
+As componentes:
+
+```python
+cD1 até cD5
+```
+
+representam:
+
+- detalhes locais;
+- variações rápidas;
+- componentes de alta frequência;
+- transientes do sinal.
+
+---
+
+# Criação da Figura
+
+```python
+plt.figure(figsize=(14, 12))
+```
+
+## Explicação
+
+Define o tamanho da figura utilizada na visualização das subfaixas wavelet.
+
+---
+
+# Plotagem da Aproximação
+
+```python
+plt.subplot(6, 1, 1)
+```
+
+## Explicação
+
+O primeiro gráfico apresenta:
+
+```python
+cA5
+```
+
+---
+
+# Vetor de Tempo Normalizado
+
+```python
+t_norm = np.linspace(0, 1, len(ca5_lele))
+```
+
+## Explicação
+
+Foi criado um eixo temporal normalizado entre:
+
+```python
+0 e 1
+```
+
+para facilitar a visualização dos coeficientes.
+
+---
+
+# Plotagem da Aproximação
+
+```python
+plt.plot(t_norm, ca5_lele, color='black')
+```
+
+## Explicação
+
+Exibe os coeficientes de aproximação em preto.
+
+---
+
+# Título da Aproximação
+
+```python
+plt.title(
+    'Aproximação Final (cA5) - Escala Normalizada'
+)
+```
+
+## Explicação
+
+Identifica a componente de baixa frequência do sinal.
+
+---
+
+# Grid da Aproximação
+
+```python
+plt.grid(True)
+```
+
+## Explicação
+
+Adiciona grade ao gráfico para facilitar análise visual.
+
+---
+
+# Loop das Componentes de Detalhe
+
+```python
+for i, cd in enumerate(details_lele):
+```
+
+## Explicação
+
+O laço percorre todos os coeficientes de detalhe.
+
+---
+
+# Determinação do Nível
+
+```python
+level = 5 - i
+```
+
+## Explicação
+
+Define automaticamente o nível correspondente:
+
+- cD5;
+- cD4;
+- cD3;
+- cD2;
+- cD1.
+
+---
+
+# Criação dos Subplots
+
+```python
+plt.subplot(6, 1, i + 2)
+```
+
+## Explicação
+
+Cada subfaixa de detalhe é exibida em um gráfico separado.
+
+---
+
+# Tempo Normalizado dos Detalhes
+
+```python
+t_norm_d = np.linspace(0, 1, len(cd))
+```
+
+## Explicação
+
+Cria um eixo temporal normalizado para cada nível de detalhe.
+
+---
+
+# Plotagem dos Detalhes
+
+```python
+plt.plot(
+    t_norm_d,
+    cd,
+    color='C'+str(i+1)
+)
+```
+
+## Explicação
+
+Exibe os coeficientes de detalhe utilizando cores diferentes para cada nível.
+
+---
+
+# Título das Subfaixas
+
+```python
+plt.title(
+    f'Detalhes de Nível {level} (cD{level}) - Escala Normalizada'
+)
+```
+
+## Explicação
+
+Identifica cada banda de frequência correspondente.
+
+---
+
+# Label do Eixo Y
+
+```python
+plt.ylabel('Amplitude')
+```
+
+## Explicação
+
+Define o eixo vertical como amplitude dos coeficientes wavelet.
+
+---
+
+# Configuração da Grade
+
+```python
+plt.grid(True)
+```
+
+## Explicação
+
+Adiciona grade para facilitar análise visual.
+
+---
+
+# Label do Eixo X
+
+```python
+plt.xlabel('Tempo Normalizado [0, 1]')
+```
+
+## Explicação
+
+O eixo horizontal representa o tempo normalizado.
+
+---
+
+# Organização da Figura
+
+```python
+plt.tight_layout()
+```
+
+## Explicação
+
+Evita sobreposição entre gráficos e títulos.
+
+---
+
+# Exibição Final
+
+```python
+plt.show()
+```
+
+## Explicação
+
+Exibe todos os gráficos gerados.
+
+---
+
+# Interpretação dos Resultados
+
+A decomposição wavelet permite observar:
+
+- componentes lentas do sinal;
+- componentes rápidas;
+- transientes;
+- distribuição em bandas de frequência.
+
+---
+
+# Interpretação da Aproximação
+
+A componente:
+
+```python
+cA5
+```
+
+apresenta:
+
+- tendência global do sinal;
+- suavização;
+- comportamento de baixa frequência.
+
+---
+
+# Interpretação dos Detalhes
+
+Os coeficientes:
+
+```python
+cD1 até cD5
+```
+
+mostram:
+
+- oscilações rápidas;
+- variações locais;
+- transientes;
+- componentes de frequência mais elevada.
+
+---
+
+# Relação entre os Níveis
+
+- níveis baixos → maiores frequências;
+- níveis altos → menores frequências.
+
+---
+
+# Resultado Esperado
+
+Os gráficos devem mostrar:
+
+- separação das bandas de frequência;
+- redução gradual das oscilações;
+- concentração das componentes lentas em `cA5`.
+
+---
+
+# Resultado dos Gráficos
+
+## Subfaixas Wavelet do Sinal `leleccum`
+
+<p align="center">
+  <img src="assets5/Q4DP5.png" width="900">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, obtém-se:
+
+- análise multirresolução do sinal;
+- decomposição wavelet em subfaixas;
+- separação entre aproximações e detalhes;
+- visualização das bandas de frequência do sinal.
+
+---
+
+# Prática 5 — Questão 4(e)
+
+# Comparação entre Denoising via Wavelet e DFT
+
+Nesta etapa foi realizada:
+
+- filtragem do sinal utilizando DFT;
+- reconstrução via IDFT;
+- comparação com o método wavelet;
+- análise dos resíduos de ruído.
+
+O objetivo é comparar dois métodos de remoção de ruído:
+
+- Transformada de Fourier (DFT);
+- Transformada Wavelet.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → operações numéricas e FFT;
+- `matplotlib` → geração dos gráficos.
+
+---
+
+# Função de Denoising via DFT
+
+```python
+def denoise_dft(signal, threshold_percent=0.1):
+```
+
+## Explicação
+
+A função:
+
+```python
+denoise_dft()
+```
+
+realiza a remoção de ruído utilizando:
+
+- Transformada Discreta de Fourier;
+- filtragem espectral;
+- reconstrução via transformada inversa.
+
+---
+
+# Cálculo da DFT
+
+```python
+fft_coeffs = np.fft.fft(signal)
+```
+
+## Explicação
+
+A função:
+
+```python
+fft()
+```
+
+calcula os coeficientes espectrais do sinal no domínio da frequência.
+
+---
+
+# Magnitude do Espectro
+
+```python
+magnitudes = np.abs(fft_coeffs)
+```
+
+## Explicação
+
+Calcula a magnitude de cada componente espectral da DFT.
+
+---
+
+# Definição do Limiar
+
+```python
+limit = threshold_percent * np.max(magnitudes)
+```
+
+## Explicação
+
+O limiar é definido como:
+
+```python
+X%
+```
+
+da magnitude máxima do espectro.
+
+---
+
+# Modelo Matemático do Threshold
+
+O limiar aplicado é:
+
+\[
+T = \alpha \cdot \max(|X[k]|)
+\]
+
+Onde:
+
+- \(T\) → limiar;
+- \(\alpha\) → percentual definido;
+- \(X[k]\) → coeficientes da DFT.
+
+---
+
+# Cópia dos Coeficientes
+
+```python
+fft_filtered = fft_coeffs.copy()
+```
+
+## Explicação
+
+Cria uma cópia dos coeficientes para aplicar a filtragem.
+
+---
+
+# Aplicação do Threshold
+
+```python
+fft_filtered[magnitudes < limit] = 0
+```
+
+## Explicação
+
+Todos os coeficientes cuja magnitude seja inferior ao limiar são anulados.
+
+---
+
+# Interpretação do Threshold
+
+Essa etapa remove:
+
+- componentes de baixa energia;
+- pequenas oscilações;
+- parte do ruído presente no sinal.
+
+---
+
+# Reconstrução via IDFT
+
+```python
+reconstructed = np.fft.ifft(fft_filtered)
+```
+
+## Explicação
+
+A função:
+
+```python
+ifft()
+```
+
+reconstrói o sinal filtrado no domínio do tempo.
+
+---
+
+# Parte Real do Sinal
+
+```python
+return np.real(reconstructed)
+```
+
+## Explicação
+
+Como pequenas partes imaginárias podem surgir devido a erros numéricos, utiliza-se apenas a parte real do sinal reconstruído.
+
+---
+
+# Aplicação do Método DFT
+
+```python
+signal_dft = denoise_dft(
+    signal_leleccum,
+    threshold_percent=0.05
+)
+```
+
+## Explicação
+
+O sinal:
+
+```python
+signal_leleccum
+```
+
+é filtrado utilizando um limiar de:
+
+```python
+5%
+```
+
+da magnitude máxima do espectro.
+
+---
+
+# Método Wavelet
+
+O sinal:
+
+```python
+signal_denoised
+```
+
+foi obtido anteriormente utilizando:
+
+- wavelet db4;
+- thresholding VisuShrink;
+- soft-thresholding.
+
+---
+
+# Comparação Visual
+
+```python
+plt.figure(figsize=(15, 10))
+```
+
+## Explicação
+
+Cria a figura utilizada para comparar:
+
+- sinal original;
+- filtragem wavelet;
+- filtragem DFT;
+- resíduos.
+
+---
+
+# Primeiro Subplot — Wavelet
+
+```python
+plt.subplot(3, 1, 1)
+```
+
+## Explicação
+
+O primeiro gráfico apresenta o resultado da filtragem wavelet.
+
+---
+
+# Plotagem do Sinal Original
+
+```python
+plt.plot(
+    signal_leleccum,
+    color='lightgray',
+    alpha=0.5
+)
+```
+
+## Explicação
+
+O sinal ruidoso original é exibido em cinza.
+
+---
+
+# Plotagem do Sinal Wavelet
+
+```python
+plt.plot(
+    signal_denoised,
+    color='blue'
+)
+```
+
+## Explicação
+
+Exibe o sinal filtrado utilizando wavelets.
+
+---
+
+# Título do Método Wavelet
+
+```python
+plt.title(
+    'Denoising via Wavelet (Preservação de Transientes)'
+)
+```
+
+## Explicação
+
+Indica que o método wavelet preserva melhor transientes e detalhes locais.
+
+---
+
+# Segundo Subplot — DFT
+
+```python
+plt.subplot(3, 1, 2)
+```
+
+## Explicação
+
+O segundo gráfico apresenta a filtragem via Fourier.
+
+---
+
+# Plotagem do Sinal Filtrado por DFT
+
+```python
+plt.plot(
+    signal_dft,
+    color='red'
+)
+```
+
+## Explicação
+
+Mostra o sinal reconstruído após filtragem espectral.
+
+---
+
+# Título do Método DFT
+
+```python
+plt.title(
+    'Denoising via DFT (Filtro de Magnitude)'
+)
+```
+
+## Explicação
+
+Indica que a filtragem ocorre diretamente no domínio da frequência.
+
+---
+
+# Terceiro Subplot — Resíduos
+
+```python
+plt.subplot(3, 1, 3)
+```
+
+## Explicação
+
+O terceiro gráfico compara os resíduos removidos pelos dois métodos.
+
+---
+
+# Resíduo Wavelet
+
+```python
+signal_leleccum - signal_denoised
+```
+
+## Explicação
+
+Representa a diferença entre:
+
+- sinal original;
+- sinal filtrado wavelet.
+
+---
+
+# Resíduo DFT
+
+```python
+signal_leleccum - signal_dft
+```
+
+## Explicação
+
+Representa a diferença entre:
+
+- sinal original;
+- sinal filtrado via Fourier.
+
+---
+
+# Interpretação dos Resíduos
+
+Os resíduos representam:
+
+- ruído removido;
+- componentes descartadas durante a filtragem.
+
+---
+
+# Organização da Figura
+
+```python
+plt.tight_layout()
+```
+
+## Explicação
+
+Evita sobreposição entre gráficos e títulos.
+
+---
+
+# Exibição Final
+
+```python
+plt.show()
+```
+
+## Explicação
+
+Exibe os resultados da comparação entre os métodos.
+
+---
+
+# Comparação entre Wavelet e DFT
+
+## Método Wavelet
+
+A filtragem wavelet apresenta:
+
+- melhor localização temporal;
+- preservação de transientes;
+- preservação de detalhes locais;
+- melhor desempenho em sinais não-estacionários.
+
+---
+
+## Método DFT
+
+A filtragem via Fourier apresenta:
+
+- análise global do espectro;
+- boa remoção de componentes periódicas;
+- menor capacidade de localizar eventos no tempo.
+
+---
+
+# Diferença Fundamental
+
+## DFT
+
+A DFT trabalha apenas no domínio da frequência.
+
+---
+
+## Wavelet
+
+A wavelet trabalha simultaneamente em:
+
+- tempo;
+- frequência.
+
+---
+
+# Resultado Esperado
+
+Os gráficos devem mostrar:
+
+- suavização do ruído;
+- preservação maior dos transientes via wavelet;
+- filtragem mais global via DFT;
+- diferenças nos resíduos removidos.
+
+---
+
+# Resultado dos Gráficos
+
+## Comparação entre Denoising Wavelet e DFT
+
+<p align="center">
+  <img src="assets5/Q4EP5.png" width="900">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, obtém-se:
+
+- filtragem do sinal via DFT;
+- comparação entre Fourier e Wavelet;
+- análise dos resíduos removidos;
+- visualização das diferenças entre os métodos de denoising.
+
+---
