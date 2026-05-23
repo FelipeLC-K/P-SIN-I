@@ -2,7 +2,7 @@
   <img src="assets1/bannercefet.png" width="100%">
 </p>
 
-<h1 align="center">PROSIN</h1>
+<h1 align="center">PROSIN-I</h1>
 
 <p align="center">
   
@@ -10,7 +10,7 @@
   
 </p>
 
-# PROSIN — Processamento de Sinais
+# PROSIN I — Processamento de Sinais I
 
 
 - **Professor:** Rafael da Silva Chaves
@@ -18,7 +18,7 @@
 - **Dupla:** Lucas de Farias dos Santos e Luís Felipe Chaves de Oliveira
 - **Semestre:** 2026.1
 
-# Prática 1 — Geração e Análise de Sinais
+# Prática 1 — Sinais e sistemas
 
 # Bibliotecas Utilizadas
 
