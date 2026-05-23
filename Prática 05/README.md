@@ -2,7 +2,7 @@
   <img src="assets5/bannercefet.png" width="100%">
 </p>
 
-# PROSIN — Processamento de Sinais
+# PROSIN I — Processamento de Sinais I
 
 
 - **Professor:** Rafael da Silva Chaves
