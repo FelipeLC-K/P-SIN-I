@@ -65,6 +65,4 @@
   </tr>
 </table>
 
-<p align="center">
-  <img src="assets/vert_azul.png" width="100%">
-</p>
+
