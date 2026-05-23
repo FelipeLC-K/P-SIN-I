@@ -22,7 +22,7 @@
   <tr>
     <td width="60"><b>01</b></td>
     <td>
-      <a href="#"><b>Prática 1 - Sinais e sistemas</b></a>
+      <a href="Prática%2001/README.md"><b>Prática 1 - Sinais e sistemas</b></a>
       <br><br>
       Geração e visualização de sinais no domínio do tempo, a criação de sinais chirp,  análise e reprodução de sinais de áudio e aplicação da convolução entre sinais.
     </td>
