@@ -139,7 +139,7 @@ for i, wave in enumerate(cossine_waves):
 
 # Questão 2
 
-# 2) Definição dos Parâmetros Iniciais
+# Definição dos Parâmetros Iniciais
 
 ```python
 f0 = 500
@@ -155,7 +155,7 @@ Os parâmetros utilizados definem:
 
 Neste experimento, o sinal varia de:
 
-# 2A) Geração dos Sinais Chirp
+# a) Geração dos Sinais Chirp
 
 ```python
 # Geração do sinal chirp linear
@@ -221,7 +221,7 @@ limita a visualização para facilitar a observação da variação de frequênc
 
 ---
 
-# 2B) Reprodução dos Áudios
+# b) Reprodução dos Áudios
 
 ```python
 print("Áudios dos chirps:")
@@ -245,11 +245,9 @@ display(Audio(data=logarithmic_chirp, rate=freq_amostragem))
 
 ---
 
----
-
 # Questão 3
 
-# 3A) Carregamento do Arquivo de Áudio
+# a) Carregamento do Arquivo de Áudio
 
 ```python
 file_path = 'handel.wav'
@@ -319,7 +317,7 @@ matplotlib.pyplot.show()
 
 ---
 
-# 3B) Reprodução dos Áudios
+# b) Reprodução dos Áudios
 
 ```python
 normalized_data = data / numpy.max(numpy.abs(data))
@@ -360,7 +358,7 @@ O sinal é normalizado para evitar clipping e garantir melhor reprodução sonor
 
 # Questão 5
 
-# 5A) Carregamento do Áudio de Resposta ao Impulso (Banheiro)
+# a) Carregamento do Áudio de Resposta ao Impulso (Banheiro)
 
 ```python
 hbanheiro = 'h_banheiro.wav'
@@ -450,7 +448,7 @@ O áudio é normalizado para evitar distorções e permitir melhor reprodução 
 
 ---
 
-# 5B) Carregamento do Áudio da Taça
+# b) Carregamento do Áudio da Taça
 
 ```python
 sinaltaca = 'sinal_taca.wav'
