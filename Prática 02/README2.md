@@ -2,12 +2,6 @@
   <img src="assets2/bannercefet.png" width="100%">
 </p>
 
-<h1 align="center">PROSIN</h1>
-
-<p align="center">
-  
-  Prática 02
-  
 </p>
 
 # PROSIN — Processamento de Sinais
