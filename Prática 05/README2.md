@@ -3962,7 +3962,7 @@ mostram:
 ## Subfaixas Wavelet do Sinal `leleccum`
 
 <p align="center">
-  <img src="assets5/Q4DP5.png" width="900">
+  <img src="assets5/Q4P5.png" width="900">
 </p>
 
 ---
