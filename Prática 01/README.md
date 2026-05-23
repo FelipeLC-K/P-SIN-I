@@ -6,8 +6,6 @@
 
 <p align="center">
   
-  Prática 01
-  
 </p>
 
 # PROSIN I — Processamento de Sinais I
