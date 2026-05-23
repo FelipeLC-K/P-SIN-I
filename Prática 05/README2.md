@@ -161,7 +161,7 @@ print("m2:", m2)
 print("m3:", m3)
 ```
 
-# 2) Geração da Matriz de Hadamard
+# Geração da Matriz de Hadamard
 
 ```python
 H = hadamard(N)
@@ -213,7 +213,7 @@ para:
 i ≠ j
 ```
 
-# 3) Codificação dos Sinais
+# Codificação dos Sinais
 
 ## Espalhamento Espectral
 
