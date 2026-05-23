@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  
+
 </p>
 
 # PROSIN I — Processamento de Sinais I
