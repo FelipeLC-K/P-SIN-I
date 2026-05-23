@@ -1596,3 +1596,353 @@ pois grande parte da energia da imagem fica concentrada em poucos coeficientes.
 </p>
 
 ---
+
+# Questão 5
+
+# Compressão de Imagens RGB com DCT Bidimensional em Blocos
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+from scipy.fftpack import dctn, idctn
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → operações matriciais;
+- `PIL` → leitura e manipulação de imagens;
+- `matplotlib` → exibição gráfica;
+- `scipy.fftpack` → cálculo da DCT e IDCT multidimensional.
+
+---
+
+# Definição da Transformada DCT 2D
+
+```python
+def dct2d(block):
+    return dctn(block, axes=(0,1), norm='ortho')
+```
+
+## Explicação
+
+A função aplica a:
+
+```python
+Transformada Discreta do Cosseno bidimensional
+```
+
+sobre cada bloco da imagem.
+
+A opção:
+
+```python
+norm='ortho'
+```
+
+garante normalização ortogonal.
+
+---
+
+# Modelo Matemático da DCT 2D
+
+A DCT bidimensional pode ser representada por:
+
+\[
+C(u,v)=\alpha(u)\alpha(v)
+\sum_{x=0}^{N-1}
+\sum_{y=0}^{N-1}
+f(x,y)
+\cos\left[\frac{(2x+1)u\pi}{2N}\right]
+\cos\left[\frac{(2y+1)v\pi}{2N}\right]
+\]
+
+---
+
+# Definição da IDCT 2D
+
+```python
+def idct2d(coefficients):
+    return idctn(coefficients, axes=(0,1), norm='ortho')
+```
+
+## Explicação
+
+Aplica a transformada inversa para reconstrução espacial do bloco.
+
+---
+
+# Compressão de um Bloco
+
+```python
+def compress_block(block, r_percentage):
+```
+
+## Explicação
+
+Essa função realiza:
+
+- transformação DCT;
+- ordenação por magnitude;
+- seleção dos maiores coeficientes;
+- anulação dos demais;
+- reconstrução via IDCT.
+
+---
+
+# Ordenação dos Coeficientes
+
+```python
+sorted_indices = np.argsort(
+    np.abs(flat_coefficients)
+)[::-1]
+```
+
+## Explicação
+
+Os coeficientes são organizados em ordem decrescente de magnitude.
+
+Os maiores coeficientes carregam:
+
+- maior energia;
+- maior informação visual relevante.
+
+---
+
+# Definição da Taxa de Retenção
+
+```python
+num_coeffs_to_keep =
+int(len(flat_coefficients)*r_percentage)
+```
+
+## Explicação
+
+Define quantos coeficientes serão mantidos.
+
+Exemplo:
+
+- `0.95` → mantém 95%;
+- `0.50` → mantém 50%.
+
+---
+
+# Aplicação da Máscara
+
+```python
+compressed_flat_coeffs =
+np.zeros_like(flat_coefficients)
+```
+
+## Explicação
+
+Inicialmente todos os coeficientes são zerados.
+
+Depois apenas os maiores são preservados.
+
+Isso produz compressão espectral.
+
+---
+
+# Reconstrução do Bloco
+
+```python
+compressed_block =
+idct2d(filtered_dct_coefficients)
+```
+
+## Explicação
+
+Converte o bloco filtrado de volta ao domínio espacial.
+
+---
+
+# Processamento por Canal RGB
+
+```python
+def process_image_channel(
+    channel,
+    L,
+    r_percentage
+)
+```
+
+## Explicação
+
+Cada canal:
+
+- vermelho;
+- verde;
+- azul
+
+é processado separadamente.
+
+---
+
+# Preenchimento da Imagem
+
+```python
+np.pad(...)
+```
+
+## Explicação
+
+Se a imagem não for múltipla de `L`, são adicionados pixels extras.
+
+Isso permite dividir exatamente em blocos:
+
+```python
+L × L
+```
+
+---
+
+# Cálculo do EQM
+
+```python
+avg_mse = total_mse / num_pixels
+```
+
+## Explicação
+
+O erro quadrático médio mede a diferença entre:
+
+- imagem original;
+- imagem reconstruída.
+
+Quanto menor o EQM:
+
+- melhor a fidelidade visual.
+
+---
+
+# Compressão RGB Completa
+
+```python
+def compress_rgb_image(...)
+```
+
+## Explicação
+
+Executa compressão independente para:
+
+- canal R;
+- canal G;
+- canal B.
+
+Depois recompõe a imagem colorida.
+
+---
+
+# Definição dos Parâmetros
+
+```python
+L_values = [8,64]
+r_percentages = [0.95,0.50]
+```
+
+## Explicação
+
+Foram testadas diferentes configurações.
+
+## Tamanho do bloco
+
+- `L=8` → compressão local refinada;
+- `L=64` → compressão global.
+
+## Retenção espectral
+
+- `95%` → baixa perda;
+- `50%` → alta compressão.
+
+---
+
+# Execução dos Testes
+
+```python
+for L in L_values:
+    for r_percent in r_percentages:
+```
+
+## Explicação
+
+Executa todas as combinações possíveis.
+
+Total:
+
+- 4 cenários experimentais.
+
+---
+
+# Cálculo da Taxa Real de Retenção
+
+```python
+coeff_retention_ratio =
+avg_non_zero_coeffs /
+total_possible_coeffs_per_channel
+```
+
+## Explicação
+
+Mede a porcentagem real de coeficientes preservados.
+
+---
+
+# Exibição da Imagem Original
+
+```python
+plt.imshow(original_image_pil)
+```
+
+## Explicação
+
+Mostra a referência visual para comparação.
+
+---
+
+# Exibição das Imagens Comprimidas
+
+```python
+plt.subplots(2,2)
+```
+
+## Explicação
+
+Organiza os resultados em grade comparativa.
+
+Cada gráfico apresenta:
+
+- tamanho do bloco;
+- taxa de retenção;
+- EQM médio;
+- porcentagem de coeficientes mantidos.
+
+---
+
+# Relação com Compressão JPEG
+
+O método utilizado é semelhante ao padrão:
+
+```python
+JPEG
+```
+
+pois utiliza:
+
+- DCT por blocos;
+- descarte de altas frequências;
+- reconstrução aproximada.
+
+---
+
+# Resultado dos Gráficos
+
+<p align="center">
+  <img src="assets4/Q5P4.png" width="700">
+</p>
+
+---
