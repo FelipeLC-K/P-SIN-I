@@ -653,16 +653,6 @@ organiza automaticamente os gráficos na janela.
 
 # d) Probabilidade de Erro de Bit (BER) em Sistema CDMA
 
-Nesta etapa, foi analisado o desempenho do sistema CDMA na presença de ruído AWGN utilizando simulação de Monte Carlo.
-
-O objetivo é calcular:
-
-- probabilidade de erro de bit (BER);
-- impacto da variância do ruído;
-- desempenho dos usuários no sistema CDMA.
-
----
-
 # Importação das Bibliotecas
 
 ```python
@@ -1087,20 +1077,10 @@ Os ticks do eixo Y são ajustados manualmente para melhor visualização da BER.
 
 ---
 
-# Resultado Esperado
-
-À medida que a variância do ruído aumenta:
-
-- a BER cresce;
-- o desempenho do sistema piora;
-- aumenta a probabilidade de erro de detecção.
-
----
-
 # Resultado do Gráfico
 
 <p align="center">
-  <img src="assets5/Q2P5.png" width="850">
+  <img src="assets5/quatroQ1P5.png" width="850">
 </p>
 
 ---
