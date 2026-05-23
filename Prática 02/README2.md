@@ -2423,3 +2423,320 @@ Ao executar o código, são obtidos:
 </p>
 
 ---
+
+# Prática 2 — Questão 10
+
+# Convolução dos Sinais de Áudio
+
+Nesta etapa, foi realizada a convolução entre:
+
+- `handel.wav`
+- `h_banheiro.wav`
+- `sinal_taca.wav`
+
+A convolução permite simular o efeito de resposta impulsiva de um ambiente acústico.
+
+---
+
+# Igualando as Frequências de Amostragem
+
+## Importação da Função
+
+```python
+from scipy.signal import resample_poly
+```
+
+## Explicação
+
+A função `resample_poly()` é utilizada para reamostrar sinais com diferentes frequências de amostragem.
+
+---
+
+# Problema Inicial
+
+Os sinais possuem frequências de amostragem diferentes:
+
+- `handel.wav` → 8192 Hz
+- `h_banheiro.wav` → 44100 Hz
+- `sinal_taca.wav` → 44100 Hz
+
+Para realizar a convolução corretamente, todos os sinais precisam possuir a mesma frequência de amostragem.
+
+---
+
+# Definição da Frequência de Destino
+
+```python
+target_fs = fs_banheiro
+```
+
+## Explicação
+
+Foi utilizada a frequência:
+
+```python
+44100 Hz
+```
+
+como frequência padrão para todos os sinais.
+
+---
+
+# Reamostragem de `handel.wav`
+
+```python
+handel_reamostrado = resample_poly(
+    normalized_data_handel,
+    target_fs,
+    fs_handel_original
+)
+```
+
+## Explicação
+
+O sinal `handel.wav` é reamostrado de:
+
+```python
+8192 Hz → 44100 Hz
+```
+
+A função:
+
+```python
+resample_poly(signal, up, down)
+```
+
+realiza:
+
+- interpolação;
+- filtragem;
+- ajuste da frequência de amostragem.
+
+---
+
+# Convolução dos Sinais
+
+## Convolução entre Handel e Banheiro
+
+```python
+handel_convoluido_com_banheiro = np.convolve(
+    handel_reamostrado,
+    normalized_data_banheiro,
+    mode='full'
+)
+```
+
+## Explicação
+
+A convolução simula o efeito acústico do ambiente `h_banheiro.wav` aplicado sobre o áudio `handel.wav`.
+
+---
+
+# Convolução entre Taça e Banheiro
+
+```python
+handel_convoluido_com_taca = np.convolve(
+    normalized_data_taca,
+    normalized_data_banheiro,
+    mode='full'
+)
+```
+
+## Explicação
+
+O sinal da taça é convoluído com a resposta impulsiva do banheiro.
+
+---
+
+# Conceito Matemático da Convolução
+
+A convolução discreta é definida por:
+
+:contentReference[oaicite:0]{index=0}
+
+Onde:
+
+- \(x[n]\) → sinal de entrada;
+- \(h[n]\) → resposta impulsiva;
+- \(y[n]\) → sinal convoluído.
+
+---
+
+# Normalização dos Sinais Convoluídos
+
+```python
+handel_convoluido_com_banheiro_normalizado =
+handel_convoluido_com_banheiro /
+np.max(np.abs(handel_convoluido_com_banheiro))
+
+handel_convoluido_com_taca_normalizado =
+handel_convoluido_com_taca /
+np.max(np.abs(handel_convoluido_com_taca))
+```
+
+## Explicação
+
+Os sinais convoluídos são normalizados para evitar:
+
+- clipping;
+- saturação;
+- distorções de amplitude.
+
+---
+
+# Informações dos Sinais
+
+```python
+print(
+    f"Sinal handel.wav reamostrado para {target_fs} Hz."
+)
+```
+
+## Explicação
+
+São exibidas informações sobre:
+
+- nova frequência de amostragem;
+- duração dos sinais;
+- tamanho dos sinais convoluídos.
+
+---
+
+# 10A) Cálculo do Espectro das Respostas
+
+## Espectro da Convolução Handel + Banheiro
+
+```python
+frequencies_handel_conv_banheiro,
+amplitudes_handel_conv_banheiro =
+calculate_spectrum(
+    handel_convoluido_com_banheiro_normalizado,
+    target_fs
+)
+```
+
+## Explicação
+
+A FFT é aplicada ao sinal convoluído para análise espectral.
+
+---
+
+# Espectro da Convolução Taça + Banheiro
+
+```python
+frequencies_taca_conv_banheiro,
+amplitudes_taca_conv_banheiro =
+calculate_spectrum(
+    handel_convoluido_com_taca_normalizado,
+    target_fs
+)
+```
+
+## Explicação
+
+O espectro da convolução do sinal da taça também é calculado utilizando FFT.
+
+---
+
+# Plotagem dos Espectros
+
+```python
+plt.figure(figsize=(12, 10))
+```
+
+## Explicação
+
+A figura é criada para exibir os dois espectros em subgráficos separados.
+
+---
+
+# Espectro Handel + Banheiro
+
+```python
+plt.subplot(2, 1, 1)
+
+plt.plot(
+    frequencies_handel_conv_banheiro,
+    amplitudes_handel_conv_banheiro
+)
+
+plt.title(
+    'Espectro da Convolução (Handel Reamostrado * h_banheiro)'
+)
+
+plt.xlabel('Frequência (Hz)')
+plt.ylabel('Amplitude')
+
+plt.grid(True)
+
+plt.xlim(0, target_fs / 2)
+```
+
+## Explicação
+
+O gráfico apresenta o conteúdo espectral do sinal convoluído entre:
+
+- música de Handel;
+- resposta impulsiva do banheiro.
+
+---
+
+# Espectro Taça + Banheiro
+
+```python
+plt.subplot(2, 1, 2)
+
+plt.plot(
+    frequencies_taca_conv_banheiro,
+    amplitudes_taca_conv_banheiro
+)
+
+plt.title(
+    'Espectro da Convolução (sinal_taca * h_banheiro)'
+)
+
+plt.xlabel('Frequência (Hz)')
+plt.ylabel('Amplitude')
+
+plt.grid(True)
+
+plt.xlim(0, target_fs / 2)
+```
+
+## Explicação
+
+O gráfico apresenta o espectro do sinal da taça convoluído com a resposta impulsiva do banheiro.
+
+---
+
+# Frequência de Nyquist
+
+A frequência máxima exibida nos gráficos é limitada pela frequência de Nyquist:
+
+:contentReference[oaicite:1]{index=1}
+
+---
+
+# Resultado Esperado
+
+Ao executar o código, são obtidos:
+
+- sinais convoluídos;
+- espectros das respostas impulsivas;
+- simulação acústica do ambiente;
+- análise espectral das convoluções.
+
+---
+
+# Resultado dos Gráficos
+
+## Handel + Banheiro e Taça + Banheiro
+
+<p align="center">
+  <img src="assets2/Q10P2.png" width="850">
+</p>
+
+---
+
+
+---
