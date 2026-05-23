@@ -804,7 +804,7 @@ Ao executar o código, observa-se:
 # Resultado dos Gráficos
 
 <p align="center">
-  <img src="assets2/Q4P1.png" width="850">
+  <img src="assets2/Q4P2.png" width="850">
 </p>
 
 ---
