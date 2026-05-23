@@ -31,7 +31,7 @@
   <tr>
     <td><b>02</b></td>
     <td>
-      <a href="#"><b>Prática 2 - Amostragem</b></a>
+      <a href="Prática 02/README.md"><b>Prática 2 - Amostragem</b></a>
       <br><br>
       Amostragem e análise no domínio da frequência. 
     </td>
@@ -40,7 +40,7 @@
   <tr>
     <td><b>03</b></td>
     <td>
-      <a href="#"><b>Prática 3 - Transformada Z</b></a>
+      <a href="Prática 03/README.md"><b>Prática 3 - Transformada Z</b></a>
       <br><br>
       Análise de sistemas discretos descritos por funções de transferência no domínio Z , análise de suas respostas em frequência e diagramas de pólos e zeros, avaliação dos efeitos de filtros da função de transferência.
     </td>
@@ -49,7 +49,7 @@
   <tr>
     <td><b>04</b></td>
     <td>
-      <a href="#"><b>Prática 4 - DCT E DFT</b></a>
+      <a href="Prática 04/README.md"><b>Prática 4 - DCT E DFT</b></a>
       <br><br>
       Análise no domínio da frequência através da  (DTFT) e  (DFT), Efeitos da técnica de zero-padding e Análise do desempenho das transformadas DFT e DCT  aplicadas à compressão de sinais 2D.
     </td>
@@ -58,7 +58,7 @@
   <tr>
     <td><b>05</b></td>
     <td>
-      <a href="#"><b>Prática 5 - Transformadas de Hadamard e Wavelet.</b></a>
+      <a href="Prática 05/README5.md"><b>Prática 5 - Transformadas de Hadamard e Wavelet.</b></a>
       <br><br>
       Aplicações envolvendo sistemas CDMA, influência do ruído AWGN, técnicas de decomposição e filtragem de sinais não estacionários, exploração da técnica de denoising com wavelets.
     </td>
