@@ -2,15 +2,15 @@
   <img src="assets/bannercefet.png" width="100%">
 </p>
 
-<h1 align="center">PROSIN</h1>
+<h1 align="center">PROSIN-I</h1>
 
 <p align="center">
   
-  Repositório das práticas da disciplina de Processamento de Sinais
+  Repositório das práticas da disciplina de Processamento de Sinais I
   
 </p>
 
-# PROSIN — Processamento de Sinais
+# PROSIN I — Processamento de Sinais I
 
 
 - **Professor:** Rafael da Silva Chaves
