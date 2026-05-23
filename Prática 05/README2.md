@@ -17,7 +17,6 @@
 - **Semestre:** 2026.1
 
 # Prática 5 — Transformadas de  e Wavelets  
-
 ---
 
 # Questão 1
