@@ -8,7 +8,6 @@
 
 # PROSIN I — Processamento de Sinais I
 
-
 - **Professor:** Rafael da Silva Chaves
 - **Instituição:** Centro Federal de Educação Tecnológica Celso Suckow da Fonseca- CEFET/RJ
 - **Dupla:** Lucas de Farias dos Santos e Luís Felipe Chaves de Oliveira
