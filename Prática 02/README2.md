@@ -295,3 +295,205 @@ Ao executar o código, são obtidos:
 </p>
 
 ---
+
+# Questão 2
+
+# Geração e Análise Espectral de Chirps
+
+## Definição dos Parâmetros
+
+```python
+f0 = 500
+f1 = 10000
+
+fs = 44100
+
+duracaox = 5
+```
+
+## Explicação
+
+Os parâmetros utilizados definem as características dos sinais chirp:
+
+- `f0` → frequência inicial do sinal.
+- `f1` → frequência final do sinal.
+- `fs` → frequência de amostragem.
+- `duracaox` → duração do sinal em segundos.
+
+Neste experimento:
+
+- frequência inicial = 500 Hz
+- frequência final = 10000 Hz
+- frequência de amostragem = 44100 Hz
+
+---
+
+# Criação do Vetor Temporal
+
+```python
+t_chirp = np.linspace(
+    0,
+    duracaox,
+    int(duracaox * fs),
+    endpoint=False
+)
+```
+
+## Explicação
+
+O vetor `t_chirp` representa o eixo temporal utilizado na geração dos sinais chirp.
+
+A função:
+
+```python
+np.linspace()
+```
+
+gera amostras igualmente espaçadas ao longo do tempo.
+
+---
+
+# Geração dos Chirps
+
+```python
+linear_chirp = chirp(
+    t_chirp,
+    f0=f0,
+    f1=f1,
+    t1=duracaox,
+    method='linear'
+)
+
+quadratic_chirp = chirp(
+    t_chirp,
+    f0=f0,
+    f1=f1,
+    t1=duracaox,
+    method='quadratic'
+)
+
+logarithmic_chirp = chirp(
+    t_chirp,
+    f0=f0,
+    f1=f1,
+    t1=duracaox,
+    method='logarithmic'
+)
+```
+
+## Explicação
+
+Foram gerados três tipos diferentes de sinais chirp.
+
+### Chirp Linear
+
+A frequência aumenta linearmente ao longo do tempo.
+
+### Chirp Quadrático
+
+A frequência varia de forma quadrática.
+
+### Chirp Logarítmico
+
+A frequência varia exponencialmente.
+
+---
+
+# Organização dos Sinais
+
+```python
+chirps = {
+    'Linear Chirp': linear_chirp,
+    'Quadratic Chirp': quadratic_chirp,
+    'Logarithmic Chirp': logarithmic_chirp
+}
+```
+
+## Explicação
+
+Os sinais foram armazenados em um dicionário para facilitar o processamento e a geração dos gráficos.
+
+---
+
+# Plotagem dos Espectros
+
+```python
+fig, axs = plt.subplots(
+    len(chirps),
+    1,
+    figsize=(12, 4 * len(chirps))
+)
+
+fig.suptitle(
+    'Espectro de Chirps (Linear, Quadrático, Logarítmico)',
+    y=1.02,
+    fontsize=16
+)
+
+for i, (name, signal) in enumerate(chirps.items()):
+
+    frequencies_spec, amplitudes_spec = calculate_spectrum(
+        signal,
+        fs
+    )
+
+    ax = axs[i]
+
+    ax.plot(
+        frequencies_spec,
+        amplitudes_spec
+    )
+
+    ax.set_title(f'Espectro do {name}')
+
+    ax.set_xlabel('Frequência (Hz)')
+    ax.set_ylabel('Amplitude')
+
+    ax.grid(True)
+
+    ax.set_xlim(0, f1 * 1.5)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+## Explicação
+
+O código calcula e exibe o espectro de frequência dos sinais chirp utilizando FFT.
+
+Cada gráfico apresenta:
+
+- eixo horizontal → frequência;
+- eixo vertical → amplitude espectral.
+
+O comando:
+
+```python
+ax.set_xlim(0, f1 * 1.5)
+```
+
+limita a visualização do espectro para destacar a faixa de frequências de interesse.
+
+---
+
+# Resultado Esperado
+
+Ao executar o código, são obtidos:
+
+- espectros de frequência dos sinais chirp;
+- comparação entre chirps lineares, quadráticos e logarítmicos;
+- visualização da distribuição espectral dos sinais;
+- análise da variação de frequência ao longo do tempo.
+
+---
+
+# Resultado dos Gráficos
+
+<p align="center">
+  <img src="assets2/Q2P2.png" width="850">
+</p>
+
+---
+
+---
