@@ -58,7 +58,7 @@
   <tr>
     <td><b>05</b></td>
     <td>
-      <a href="Prática%2005/README5.md"><b>Prática 5 - Transformadas de Hadamard e Wavelet.</b></a>
+      <a href="Prática%2005/README.md"><b>Prática 5 - Transformadas de Hadamard e Wavelet.</b></a>
       <br><br>
       Aplicações envolvendo sistemas CDMA, influência do ruído AWGN, técnicas de decomposição e filtragem de sinais não estacionários, exploração da técnica de denoising com wavelets.
     </td>
