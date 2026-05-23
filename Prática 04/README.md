@@ -722,25 +722,9 @@ Visualização ainda mais detalhada do espectro.
 
 ---
 
-# Prática 4 — Questão 3
+# Questão 3
 
 # Compressão de Sinais Utilizando DFT e DCT
-
-Nesta etapa foi realizada:
-
-- geração de um sinal de áudio;
-- aplicação da DFT;
-- aplicação da DCT;
-- compressão baseada em energia;
-- reconstrução do sinal;
-- cálculo do erro médio quadrático (MSE);
-- comparação entre DFT e DCT.
-
-O objetivo é avaliar:
-
-- eficiência de compactação;
-- quantidade de coeficientes necessários;
-- erro introduzido pela compressão.
 
 ---
 
