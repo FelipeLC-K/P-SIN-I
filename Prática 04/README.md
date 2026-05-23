@@ -13,7 +13,7 @@
 - **Dupla:** Lucas de Farias dos Santos e Luís Felipe Chaves de Oliveira
 - **Semestre:** 2026.1
 
-# Prática 4 — Sinais e sistemas
+# Prática 4 — DCT E DFT
 
 # Questão 1
 
