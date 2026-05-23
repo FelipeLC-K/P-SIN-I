@@ -375,16 +375,6 @@ for ax in axes.flatten():
 
 # b) Adição de Ruído AWGN ao Sistema CDMA
 
-Nesta etapa, foi analisado o comportamento do sistema CDMA na presença de ruído branco gaussiano aditivo (*AWGN — Additive White Gaussian Noise*).
-
-O objetivo é observar:
-
-- degradação do sinal recebido;
-- alteração do espectro;
-- impacto da variância do ruído.
-
----
-
 # Importação das Bibliotecas
 
 ```python
@@ -553,16 +543,6 @@ axes[i, 0].set_ylabel('Amplitude')
 axes[i, 0].grid(True)
 ```
 
-## Explicação
-
-Cada gráfico apresenta:
-
-- amplitude do sinal;
-- valor da variância utilizada;
-- grade auxiliar para visualização.
-
----
-
 # Cálculo do Espectro
 
 ```python
@@ -640,15 +620,6 @@ axes[-1, 0].set_xlabel('n (Amostras)')
 axes[-1, 1].set_xlabel('Frequência Normalizada')
 ```
 
-## Explicação
-
-Os eixos horizontais representam:
-
-- amostras discretas;
-- frequência normalizada.
-
----
-
 # Ajuste Final da Figura
 
 ```python
@@ -669,23 +640,13 @@ organiza automaticamente os gráficos na janela.
 
 ---
 
-# Efeito do Ruído no Sistema
-
-À medida que a variância aumenta:
-
-- o sinal torna-se mais distorcido;
-- o espectro fica mais espalhado;
-- aumenta a interferência no sistema;
-- reduz-se a qualidade da recepção.
-
----
 
 # Resultado dos Gráficos
 
 ## Sinais Recebidos e Espectros
 
 <p align="center">
-  <img src="assets5/Q2P5.png" width="950">
+  <img src="assets5/tresQ1P5.png" width="950">
 </p>
 
 ---
