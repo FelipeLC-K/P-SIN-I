@@ -16,7 +16,7 @@
 - **Dupla:** Lucas de Farias dos Santos e Luís Felipe Chaves de Oliveira
 - **Semestre:** 2026.1
 
-# Prática 5 — Transformadas de  e Wavelets  
+# Prática 5 — Transformadas de Hadamard e Wavelet
 ---
 
 # Questão 1
