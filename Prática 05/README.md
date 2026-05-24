@@ -47,11 +47,6 @@ O parâmetro `N` define:
 - tamanho da matriz de Hadamard;
 - tamanho dos códigos ortogonais.
 
-Neste caso:
-
-```python
-N = 8
-```
 ---
 
 # a) Inicialização da Semente Aleatória
