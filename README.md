@@ -4,8 +4,6 @@
 
 <p align="center">
   
-  Repositório das práticas da disciplina de Processamento de Sinais I
-  
 </p>
 
 # PROSIN I — Processamento de Sinais I
