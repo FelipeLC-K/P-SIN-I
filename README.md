@@ -61,7 +61,6 @@
       Aplicações envolvendo sistemas CDMA, influência do ruído AWGN, técnicas de decomposição e filtragem de sinais não estacionários, exploração da técnica de denoising com wavelets.
     </td>
   </tr>
-</table>
 
   <tr>
     <td><b>05</b></td>
