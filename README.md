@@ -63,7 +63,7 @@
   </tr>
 
   <tr>
-    <td><b>05</b></td>
+    <td><b>06</b></td>
     <td>
       <a href="Prática%2006/README.md"><b>Prática 6 - Projeto de Filtros IIR.</b></a>
       <br><br>
