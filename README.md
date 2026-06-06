@@ -67,7 +67,7 @@
     <td>
       <a href="Prática%2006/README.md"><b>Prática 6 - Projeto de Filtros IIR.</b></a>
       <br><br>
-      construção e análise de filtros digitais IIR utilizando blocos componentes básicos de 2ª ordem.
+      Construção e análise de filtros digitais IIR utilizando blocos componentes básicos de 2ª ordem.
     </td>
   </tr>
 </table>
