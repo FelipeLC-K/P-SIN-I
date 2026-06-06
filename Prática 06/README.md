@@ -10,7 +10,7 @@
 - **Dupla:** Lucas de Farias dos Santos e Luís Felipe Chaves de Oliveira
 - **Semestre:** 2026.1
 
-# Prática 6 — Transformadas de Hadamard e Wavelet
+# Prática 6 — Projeto de Filtros IIR.
 ---
 
 
