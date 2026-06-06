@@ -20,7 +20,7 @@
   <tr>
     <td width="60"><b>01</b></td>
     <td>
-      <a href="Prática%2001/README.md"><b>Prática 1 - Sinais e sistemas</b></a>
+      <a href="Prática%2001/README.md"><b>Prática 1 - Sinais e sistemas.</b></a>
       <br><br>
       Geração e visualização de sinais no domínio do tempo, a criação de sinais chirp,  análise e reprodução de sinais de áudio e aplicação da convolução entre sinais.
     </td>
@@ -29,7 +29,7 @@
   <tr>
     <td><b>02</b></td>
     <td>
-      <a href="Prática%2002/README.md"><b>Prática 2 - Amostragem</b></a>
+      <a href="Prática%2002/README.md"><b>Prática 2 - Amostragem.</b></a>
       <br><br>
       Amostragem e análise no domínio da frequência. 
     </td>
@@ -38,7 +38,7 @@
   <tr>
     <td><b>03</b></td>
     <td>
-      <a href="Prática 03/README.md"><b>Prática 3 - Transformada Z</b></a>
+      <a href="Prática 03/README.md"><b>Prática 3 - Transformada Z.</b></a>
       <br><br>
       Análise de sistemas discretos descritos por funções de transferência no domínio Z , análise de suas respostas em frequência e diagramas de pólos e zeros, avaliação dos efeitos de filtros da função de transferência.
     </td>
@@ -47,7 +47,7 @@
   <tr>
     <td><b>04</b></td>
     <td>
-      <a href="Prática 04/README.md"><b>Prática 4 - DCT E DFT</b></a>
+      <a href="Prática 04/README.md"><b>Prática 4 - DCT E DFT.</b></a>
       <br><br>
       Análise no domínio da frequência através da  (DTFT) e  (DFT), Efeitos da técnica de zero-padding e Análise do desempenho das transformadas DFT e DCT  aplicadas à compressão de sinais 2D.
     </td>
