@@ -70,5 +70,15 @@
       Construção e análise de filtros digitais IIR utilizando blocos componentes básicos de 2ª ordem.
     </td>
   </tr>
+
+    <tr>
+    <td><b>06</b></td>
+    <td>
+      <a href="Prática%2007/README.md"><b>Prática 7 - Projeto de Filtros FIR.</b></a>
+      <br><br>
+      Construção e análise de filtros digitais FIR.
+    </td>
+  </tr>
+  
 </table>
 
