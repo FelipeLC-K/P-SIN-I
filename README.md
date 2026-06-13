@@ -71,7 +71,7 @@
     </td>
   </tr>
     <tr>
-    <td><b>06</b></td>
+    <td><b>07</b></td>
     <td>
       <a href="Prática%2007/README.md"><b>Prática 7 - Projeto de Filtros FIR.</b></a>
       <br><br>
