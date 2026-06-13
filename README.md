@@ -70,7 +70,6 @@
       Construção e análise de filtros digitais IIR utilizando blocos componentes básicos de 2ª ordem.
     </td>
   </tr>
-
     <tr>
     <td><b>06</b></td>
     <td>
