@@ -2480,3 +2480,326 @@ onde os erros de quantização são mais significativos.
 
 ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Questão 5: Preparação do Áudio e Geração dos Sinais Contaminados
+
+O objetivo é produzir sinais degradados que serão utilizados posteriormente para avaliar o desempenho dos filtros projetados ao longo da prática.
+
+---
+
+# Carregamento do Arquivo de Áudio
+
+O áudio foi carregado utilizando a biblioteca Librosa:
+
+```python
+x_t, fs_audio = librosa.load(
+    file_path,
+    sr=None
+)
+```
+
+## Explicação
+
+A função retorna:
+
+```python
+x_t
+```
+
+→ vetor contendo as amostras do sinal.
+
+e
+
+```python
+fs_audio
+```
+
+→ frequência de amostragem original do arquivo.
+
+A opção:
+
+```python
+sr=None
+```
+
+preserva a frequência de amostragem original do áudio.
+
+---
+
+# Definição das Interferências
+
+Foram adicionadas duas componentes senoidais ao sinal.
+
+## Interferência de Baixa Frequência
+
+```python
+0.05 cos(200πt)
+```
+
+Implementada como:
+
+```python
+interference_low =
+0.05*np.cos(
+    2*np.pi*freq_low*time
+)
+```
+
+### Efeito
+
+Introduz uma oscilação lenta no sinal de áudio.
+
+---
+
+## Interferência de Alta Frequência
+
+```python
+0.075 sin(4000πt)
+```
+
+Implementada como:
+
+```python
+interference_high =
+0.075*np.sin(
+    2*np.pi*freq_high*time
+)
+```
+
+### Efeito
+
+Introduz uma componente de frequência elevada que pode ser observada claramente no espectro.
+
+---
+
+# Definição do Ruído Branco
+
+Foram avaliadas três intensidades de ruído:
+
+```python
+variances = {
+    '0.01': 10**-2,
+    '0.1' : 10**-1,
+    '1'   : 1
+}
+```
+
+Ou seja:
+
+- σ² = 0.01
+- σ² = 0.1
+- σ² = 1
+
+---
+
+# Geração do Ruído
+
+O ruído branco gaussiano foi gerado por:
+
+```python
+noise =
+np.random.normal(
+    0,
+    np.sqrt(variance),
+    len(x_t)
+)
+```
+
+---
+
+# Formação do Sinal Contaminado
+
+Para cada valor de variância foi criado:
+
+```python
+y_t =
+x_t +
+interference_low +
+interference_high +
+noise
+```
+
+---
+
+# Armazenamento dos Sinais
+
+Os sinais contaminados foram armazenados em:
+
+```python
+y_signals
+```
+
+onde cada chave corresponde a uma variância diferente.
+
+Exemplo:
+
+```python
+y_signals['0.01']
+y_signals['0.1']
+y_signals['1']
+```
+
+---
+
+# Construção do Vetor de Tempo
+
+Foi criado o vetor:
+
+```python
+time =
+np.arange(
+    len(x_t)
+) / fs_audio
+```
+
+## Explicação
+
+Esse vetor associa cada amostra ao seu instante temporal correspondente.
+
+---
+
+# Comparação no Domínio do Tempo
+
+Foi selecionado um intervalo entre:
+
+```python
+1 s
+```
+
+e
+
+```python
+1.05 s
+```
+
+para comparar:
+
+```python
+x(t)
+```
+
+e
+
+```python
+y(t)
+```
+
+---
+
+---
+
+# Análise Espectral
+
+Foi criada a função:
+
+```python
+plot_spectrum()
+```
+
+baseada na Transformada Rápida de Fourier:
+
+```python
+np.fft.fft()
+```
+
+---
+
+# Objetivo da FFT
+
+A FFT converte o sinal para o domínio da frequência:
+
+---
+
+# Espectro do Sinal Original
+
+Foi calculado o espectro de:
+
+```python
+x_t
+```
+
+para servir como referência.
+
+---
+
+# Espectro dos Sinais Contaminados
+
+Para cada valor de variância foi calculado o espectro de:
+
+```python
+y_t
+```
+
+permitindo comparar o efeito das diferentes intensidades de ruído.
+
+---
+
+# Marcação das Frequências de Interferência
+
+Foram adicionadas linhas verticais indicando:
+
+```python
+freq_low
+```
+
+e
+
+```python
+freq_high
+```
+
+através de:
+
+```python
+axs[1].axvline(...)
+```
+
+---
+
+---
+
+# Influência da Variância do Ruído
+
+À medida que a variância aumenta:
+
+```python
+σ² = 0.01
+```
+
+→ ruído fraco.
+
+```python
+σ² = 0.1
+```
+
+→ ruído moderado.
+
+```python
+σ² = 1
+```
+
+→ ruído intenso.
+
+---
+
+---
