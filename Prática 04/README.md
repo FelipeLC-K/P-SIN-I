@@ -2197,5 +2197,3 @@ além do ruído branco distribuído em toda a faixa de frequências.
 A estratégia mais adequada consiste em utilizar filtros Notch centrados nessas frequências e, se necessário, complementar o processamento com filtros passa-faixas ou passa-baixas para reduzir parte do ruído branco.
 
 ---
-
----
