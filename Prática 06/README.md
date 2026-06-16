@@ -13,7 +13,7 @@
 # Prática 6 — Projeto de Filtros IIR.
 ---
 
-# Prática 6 — Questão 1(a)
+Questão 1(a)
 
 # Projeto e Análise de um Filtro Passa-Baixas Butterworth de 2ª Ordem
 
@@ -1232,5 +1232,419 @@ Ao executar o código, obtém-se:
 - diagrama de polos e zeros;
 - análise da estabilidade;
 - estudo da influência do raio dos polos sobre a seletividade do filtro.
+
+---
+
+# Prática 6 — Questão 1(d)
+
+# Projeto e Análise de um Filtro Notch Digital de Segunda Ordem
+
+Nesta etapa foi realizado:
+
+- projeto de um filtro Notch digital;
+- definição da frequência de rejeição;
+- cálculo dos coeficientes do filtro;
+- análise da resposta em frequência;
+- análise do diagrama de polos e zeros;
+- estudo da influência do parâmetro \(r\).
+
+O objetivo é rejeitar uma frequência específica do sinal preservando as demais componentes espectrais.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → cálculos numéricos;
+- `matplotlib` → geração de gráficos;
+- `scipy.signal` → projeto e análise de filtros digitais.
+
+---
+
+# Definição dos Parâmetros
+
+```python
+fs_notch = 20000
+fc_notch = 3000
+```
+
+## Explicação
+
+Foram definidos:
+
+- frequência de amostragem:
+
+```python
+fs = 20000 Hz
+```
+
+- frequência central do filtro Notch:
+
+```python
+fc = 3000 Hz
+```
+
+A frequência de 3000 Hz será atenuada pelo filtro.
+
+---
+
+# Conversão para Frequência Digital
+
+```python
+theta_c_notch = 2*np.pi*fc_notch/fs_notch
+```
+
+## Explicação
+
+A frequência central deve ser convertida para radianos por amostra:
+
+\[
+\theta_c=\frac{2\pi f_c}{f_s}
+\]
+
+onde:
+
+- \(f_c\) é a frequência de rejeição;
+- \(f_s\) é a frequência de amostragem.
+
+---
+
+# Definição do Raio dos Polos
+
+```python
+r_notch = 0.95
+```
+
+## Explicação
+
+O parâmetro:
+
+```python
+r
+```
+
+controla a largura da banda rejeitada.
+
+Valores de \(r\):
+
+- próximos de 1 → notch estreito;
+- menores → notch mais largo.
+
+---
+
+# Cálculo dos Coeficientes do Numerador
+
+```python
+b_notch = [1, -2*np.cos(theta_c_notch), 1]
+```
+
+## Explicação
+
+O numerador gera dois zeros sobre o círculo unitário:
+
+\[
+B(z)=z^2-2\cos(\theta_c)z+1
+\]
+
+Esses zeros anulam a frequência desejada.
+
+---
+
+# Cálculo dos Coeficientes do Denominador
+
+```python
+a_notch = [
+    1,
+    -2*r_notch*np.cos(theta_c_notch),
+    r_notch**2
+]
+```
+
+## Explicação
+
+O denominador posiciona polos próximos aos zeros:
+
+\[
+A(z)=z^2-2r\cos(\theta_c)z+r^2
+\]
+
+Os polos aumentam a seletividade da rejeição.
+
+---
+
+# Fator de Normalização
+
+```python
+K_notch
+```
+
+## Explicação
+
+Foi calculado um fator de ganho para garantir:
+
+\[
+H(1)=1
+\]
+
+ou seja, ganho unitário em DC.
+
+O fator utilizado foi:
+
+\[
+K=
+\frac{1-2r\cos(\theta_c)+r^2}
+     {2-2\cos(\theta_c)}
+\]
+
+---
+
+# Função de Transferência
+
+Após a normalização, o filtro pode ser representado por:
+
+\[
+H(z)=
+K\,
+\frac
+{z^2-2\cos(\theta_c)z+1}
+{z^2-2r\cos(\theta_c)z+r^2}
+\]
+
+---
+
+# Resposta em Frequência
+
+```python
+w_notch, H_notch = signal.freqz(
+    b_notch_scaled,
+    a_notch,
+    worN=8192
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+freqz()
+```
+
+calcula a resposta em frequência do filtro.
+
+Foram obtidas:
+
+- magnitude;
+- fase.
+
+---
+
+# Gráfico da Magnitude
+
+```python
+20*np.log10(abs(H_notch))
+```
+
+## Explicação
+
+A magnitude é apresentada em decibéis:
+
+\[
+|H(f)|_{dB}
+=
+20\log_{10}|H(f)|
+\]
+
+Observa-se uma forte atenuação em:
+
+```python
+3000 Hz
+```
+
+caracterizando o comportamento Notch.
+
+---
+
+# Gráfico da Fase
+
+```python
+np.angle(H_notch)
+```
+
+## Explicação
+
+A fase mostra o deslocamento angular introduzido pelo filtro em cada frequência.
+
+---
+
+# Diagrama de Polos e Zeros
+
+```python
+zeros_notch = np.roots(b_notch_scaled)
+poles_notch = np.roots(a_notch)
+```
+
+## Explicação
+
+Foram calculadas as raízes do numerador e denominador.
+
+Essas raízes representam:
+
+- zeros;
+- polos.
+
+---
+
+# Interpretação dos Zeros
+
+Os zeros ficam localizados sobre o círculo unitário na frequência:
+
+\[
+\theta_c
+\]
+
+e são responsáveis pela rejeição total da componente de 3000 Hz.
+
+---
+
+# Interpretação dos Polos
+
+Os polos ficam próximos dos zeros, porém dentro do círculo unitário.
+
+Sua função é aumentar a seletividade da rejeição.
+
+Quanto mais próximos do círculo unitário:
+
+```python
+r → 1
+```
+
+mais estreito será o notch.
+
+---
+
+# Verificação de Estabilidade
+
+```python
+np.all(np.abs(poles_notch) < 1)
+```
+
+## Explicação
+
+Um filtro digital é estável quando:
+
+\[
+|p_i|<1
+\]
+
+para todos os polos.
+
+Como:
+
+```python
+r = 0.95
+```
+
+todos os polos permanecem dentro do círculo unitário.
+
+Portanto, o filtro é estável.
+
+---
+
+# Influência do Parâmetro r
+
+Foram analisados os valores:
+
+```python
+r = [0.7, 0.85, 0.95, 0.99]
+```
+
+---
+
+## r = 0.7
+
+- notch largo;
+- menor seletividade;
+- maior faixa rejeitada.
+
+---
+
+## r = 0.85
+
+- rejeição intermediária;
+- melhor compromisso entre largura e seletividade.
+
+---
+
+## r = 0.95
+
+- notch estreito;
+- elevada seletividade.
+
+---
+
+## r = 0.99
+
+- notch extremamente estreito;
+- rejeição muito seletiva;
+- polos muito próximos do círculo unitário.
+
+---
+
+# Interpretação dos Resultados
+
+Observa-se que:
+
+- a frequência de 3000 Hz é fortemente atenuada;
+- as demais frequências permanecem praticamente inalteradas;
+- o parâmetro \(r\) controla a largura da banda rejeitada;
+- o filtro permanece estável para \(0<r<1\).
+
+---
+
+# Resultado dos Gráficos
+
+## Resposta em Frequência do Filtro Notch
+
+<p align="center">
+  <img src="assets6/Q1D_1.png" width="900">
+</p>
+
+---
+
+## Diagrama de Polos e Zeros
+
+<p align="center">
+  <img src="assets6/Q1D_2.png" width="700">
+</p>
+
+---
+
+## Influência do Parâmetro r
+
+<p align="center">
+  <img src="assets6/Q1D_3.png" width="900">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código obtém-se:
+
+- projeto completo de um filtro Notch digital;
+- análise da magnitude e fase;
+- visualização dos polos e zeros;
+- verificação da estabilidade;
+- estudo do efeito do parâmetro \(r\) sobre a largura da banda rejeitada.
 
 ---
