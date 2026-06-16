@@ -1929,4 +1929,273 @@ pois utiliza:
   <img src="assets4/Q5P4.png" width="700">
 </p>
 
+# Prática 6 — Questão 5(b)
+
+O objetivo é determinar quais filtros devem ser utilizados para remover as componentes indesejadas preservando ao máximo o conteúdo original do sinal.
+
+---
+
+# Seleção do Caso Mais Crítico
+
+Foi escolhido o sinal contaminado com:
+
+```python
+σ² = 1
+```
+
+O espectro analisado foi:
+
+```python
+y_signals['1']
+```
+
+---
+
+# Comparação entre x(t) e y(t)
+
+Foram plotados:
+
+```python
+plot_spectrum(
+    x_t,
+    fs_audio,
+    ...
+)
+```
+
+e
+
+```python
+plot_spectrum(
+    y_signals['1'],
+    fs_audio,
+    ...
+)
+```
+
+---
+
+# Interferência de Baixa Frequência
+
+Foi adicionada a componente:
+
+```python
+0.05 cos(200πt)
+```
+
+A frequência correspondente é:
+
+```python
+f =
+200π / (2π)
+```
+
+resultando em:
+
+```python
+f = 100 Hz
+```
+
+---
+
+## Observação no Espectro
+
+Essa interferência aparece como um pico estreito próximo de:
+
+```python
+100 Hz
+```
+
+sendo claramente visível no espectro contaminado.
+
+---
+
+# Interferência de Alta Frequência
+
+Foi adicionada a componente:
+
+```python
+0.075 sin(4000πt)
+```
+
+A frequência correspondente é:
+
+```python
+f =
+4000π / (2π)
+```
+
+resultando em:
+
+```python
+f = 2000 Hz
+```
+
+---
+
+## Observação no Espectro
+
+Essa interferência produz um pico pronunciado em:
+
+```python
+2000 Hz
+```
+
+que não está presente no sinal original.
+
+---
+
+# Efeito do Ruído Branco
+
+Além das interferências senoidais, foi adicionado ruído branco com:
+
+```python
+σ² = 1
+```
+
+---
+
+
+# Identificação dos Componentes Indesejados
+
+A análise do espectro permite identificar três fontes principais de degradação:
+
+## Baixa Frequência
+
+```python
+100 Hz
+```
+
+Interferência senoidal.
+
+---
+
+## Alta Frequência
+
+```python
+2000 Hz
+```
+
+Interferência senoidal.
+
+---
+
+## Banda Completa
+
+Ruído branco distribuído ao longo de todo o espectro.
+
+---
+
+# Estratégia de Filtragem
+
+A partir da análise espectral, conclui-se que a melhor estratégia é combinar filtros capazes de remover especificamente as componentes senoidais.
+
+---
+
+# Remoção da Interferência em 100 Hz
+
+Pode ser utilizado um filtro:
+
+```python
+Notch
+```
+
+centrado em:
+
+```python
+100 Hz
+```
+
+---
+
+## Objetivo
+
+Eliminar o pico estreito de baixa frequência sem afetar significativamente o restante do espectro.
+
+---
+
+# Remoção da Interferência em 2000 Hz
+
+Pode ser utilizado um segundo filtro:
+
+```python
+Notch
+```
+
+centrado em:
+
+```python
+2000 Hz
+```
+
+---
+
+## Objetivo
+
+Remover a componente senoidal de alta frequência preservando o conteúdo útil do áudio.
+
+---
+
+## Possíveis Estratégias
+
+Dependendo da banda útil do áudio, podem ser utilizados:
+
+```python
+Passa-baixas
+```
+
+ou
+
+```python
+Passa-faixas
+```
+
+para reduzir parte da energia do ruído.
+
+---
+
+# Limitação da Filtragem
+
+Embora os filtros Notch removam eficientemente as componentes em:
+
+```python
+100 Hz
+```
+
+e
+
+```python
+2000 Hz
+```
+
+o ruído branco não pode ser completamente eliminado por filtragem linear simples sem também afetar parte do sinal desejado.
+
+---
+
+# Conclusão
+
+A partir do espectro do sinal contaminado com:
+
+```python
+σ² = 1
+```
+
+identificam-se duas interferências principais:
+
+```python
+100 Hz
+```
+
+e
+
+```python
+2000 Hz
+```
+
+além do ruído branco distribuído em toda a faixa de frequências.
+
+A estratégia mais adequada consiste em utilizar filtros Notch centrados nessas frequências e, se necessário, complementar o processamento com filtros passa-faixas ou passa-baixas para reduzir parte do ruído branco.
+
+---
+
 ---
