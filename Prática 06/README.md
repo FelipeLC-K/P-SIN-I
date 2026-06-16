@@ -2960,3 +2960,422 @@ Ao executar o código, obtém-se:
 - avaliação do impacto da precisão numérica sobre o desempenho dos filtros digitais.
 
 ---
+
+# Prática 6 — Questão 4(b)
+
+# Quantização dos Coeficientes em Cada Bloco dos Filtros
+
+Nesta etapa foi realizada:
+
+- quantização individual dos blocos componentes dos filtros;
+- quantização separada dos coeficientes dos filtros passa-baixas e passa-altas;
+- reconstrução dos filtros após a quantização;
+- análise das respostas em frequência;
+- análise dos diagramas de polos e zeros.
+
+O objetivo é verificar se a quantização realizada em cada bloco separadamente produz menor degradação quando comparada à quantização do filtro completo realizada na Questão 4(a).
+
+---
+
+# Estratégia Utilizada
+
+Na Questão 4(a), a quantização foi aplicada diretamente sobre os coeficientes finais dos filtros:
+
+```python
+b_cascata
+a_cascata
+```
+
+e
+
+```python
+b_parallel_br
+a_parallel_br
+```
+
+Nesta etapa, a quantização é realizada antes da combinação dos blocos.
+
+---
+
+# Vantagem da Quantização por Blocos
+
+Ao quantizar cada estágio separadamente:
+
+- os coeficientes permanecem menores;
+- a faixa dinâmica é reduzida;
+- o erro de quantização tende a ser menor;
+- a estabilidade pode ser melhor preservada.
+
+---
+
+# Quantização do Filtro Passa-Faixas em Cascata
+
+O filtro passa-faixas foi construído a partir de:
+
+```python
+HPF + LPF
+```
+
+onde:
+
+- HPF → filtro passa-altas;
+- LPF → filtro passa-baixas.
+
+---
+
+# Resoluções Testadas
+
+```python
+bits_to_test = [2, 4, 8, 16, 32]
+```
+
+## Explicação
+
+Foram analisadas cinco precisões diferentes:
+
+- 2 bits;
+- 4 bits;
+- 8 bits;
+- 16 bits;
+- 32 bits.
+
+---
+
+# Quantização dos Blocos Individuais
+
+```python
+b_hp_q = quantize_coefficients_simple(b_hp, bits)
+a_hp_q = quantize_coefficients_simple(a_hp, bits)
+
+b_lp_q = quantize_coefficients_simple(b_lp, bits)
+a_lp_q = quantize_coefficients_simple(a_lp, bits)
+```
+
+## Explicação
+
+Cada bloco é quantizado separadamente antes da montagem do filtro completo.
+
+---
+
+# Reconstrução da Cascata
+
+```python
+b_cascata_blocks_q =
+np.convolve(
+    b_hp_q,
+    b_lp_q
+)
+
+a_cascata_blocks_q =
+np.convolve(
+    a_hp_q,
+    a_lp_q
+)
+```
+
+## Explicação
+
+Após a quantização dos blocos:
+
+- os numeradores são convolvidos;
+- os denominadores são convolvidos;
+
+reconstruindo o filtro passa-faixas.
+
+---
+
+# Cálculo da Resposta em Frequência
+
+```python
+w_q_blocks, H_q_blocks =
+signal.freqz(
+    b_cascata_blocks_q,
+    a_cascata_blocks_q,
+    worN=8192
+)
+```
+
+## Explicação
+
+Calcula-se a resposta em frequência do filtro reconstruído após a quantização.
+
+---
+
+# Comparação com o Filtro Original
+
+```python
+axs[0].plot(...)
+axs[1].plot(...)
+```
+
+## Explicação
+
+São comparadas:
+
+- magnitude;
+- fase.
+
+entre o filtro original e o filtro quantizado.
+
+---
+
+# Cálculo dos Polos e Zeros
+
+```python
+zeros_q_blocks =
+np.roots(
+    b_cascata_blocks_q
+)
+
+poles_q_blocks =
+np.roots(
+    a_cascata_blocks_q
+)
+```
+
+## Explicação
+
+Obtêm-se os polos e zeros do filtro reconstruído após a quantização dos blocos.
+
+---
+
+# Diagrama de Polos e Zeros
+
+```python
+ax.plot(...)
+```
+
+## Explicação
+
+Os polos e zeros obtidos após a quantização são comparados com os polos e zeros do filtro original.
+
+---
+
+# Interpretação dos Resultados do Filtro em Cascata
+
+A quantização individual dos blocos tende a:
+
+- preservar melhor a estrutura do filtro;
+- reduzir erros acumulados;
+- minimizar deslocamentos dos polos;
+- aproximar a resposta da versão ideal.
+
+Para resoluções elevadas:
+
+```python
+16 bits
+```
+
+e
+
+```python
+32 bits
+```
+
+a diferença para o filtro original torna-se praticamente imperceptível.
+
+---
+
+# Quantização do Filtro Rejeita-Faixas em Paralelo
+
+O filtro rejeita-faixas foi implementado utilizando:
+
+```python
+LPF + HPF
+```
+
+em paralelo.
+
+---
+
+# Quantização dos Blocos
+
+```python
+b_lpf_br_q =
+quantize_coefficients_simple(
+    b_lpf_br,
+    bits
+)
+
+a_lpf_br_q =
+quantize_coefficients_simple(
+    a_lpf_br,
+    bits
+)
+
+b_hpf_br_q =
+quantize_coefficients_simple(
+    b_hpf_br,
+    bits
+)
+
+a_hpf_br_q =
+quantize_coefficients_simple(
+    a_hpf_br,
+    bits
+)
+```
+
+## Explicação
+
+Cada bloco é quantizado separadamente antes da associação paralela.
+
+---
+
+# Formação do Filtro Paralelo
+
+## Denominador
+
+```python
+a_parallel_blocks_q =
+np.convolve(
+    a_lpf_br_q,
+    a_hpf_br_q
+)
+```
+
+## Explicação
+
+O denominador do sistema paralelo é obtido pelo produto dos denominadores individuais.
+
+---
+
+# Numerador
+
+```python
+num1_q =
+np.convolve(
+    b_lpf_br_q,
+    a_hpf_br_q
+)
+
+num2_q =
+np.convolve(
+    b_hpf_br_q,
+    a_lpf_br_q
+)
+```
+
+## Explicação
+
+Cada ramo é convertido para um denominador comum.
+
+---
+
+# Soma dos Ramos
+
+```python
+b_parallel_blocks_q
+```
+
+## Explicação
+
+Os dois ramos são somados para formar o numerador final do filtro rejeita-faixas.
+
+---
+
+# Resposta em Frequência
+
+```python
+signal.freqz(
+    b_parallel_blocks_q,
+    a_parallel_blocks_q
+)
+```
+
+## Explicação
+
+A resposta em frequência do filtro quantizado é comparada com a resposta do filtro original.
+
+---
+
+# Polos e Zeros
+
+```python
+zeros_q_blocks
+poles_q_blocks
+```
+
+## Explicação
+
+São calculadas as novas posições dos polos e zeros após a quantização dos blocos.
+
+---
+
+# Comparação Visual
+
+Nos diagramas:
+
+- azul → filtro original;
+- vermelho → filtro quantizado.
+
+---
+
+# Interpretação dos Resultados do Filtro Rejeita-Faixas
+
+A quantização dos blocos geralmente apresenta:
+
+- menor deslocamento dos polos;
+- menor deslocamento dos zeros;
+- melhor preservação da banda rejeitada;
+- maior estabilidade numérica.
+
+Os benefícios tornam-se mais evidentes para:
+
+```python
+2 bits
+```
+
+e
+
+```python
+4 bits
+```
+
+onde os erros de quantização são mais significativos.
+
+---
+
+# Comparação com a Questão 4(a)
+
+Na quantização direta do filtro completo:
+
+- os erros afetam coeficientes de ordem mais alta;
+- os deslocamentos de polos podem ser maiores.
+
+Na quantização por blocos:
+
+- cada estágio preserva melhor suas características;
+- os erros ficam distribuídos;
+- a implementação costuma ser mais robusta.
+
+---
+
+# Influência do Número de Bits
+
+Poucos bits:
+
+- maior erro de arredondamento;
+- maior distorção espectral;
+- maior deslocamento dos polos e zeros.
+
+Muitos bits:
+
+- menor erro de quantização;
+- resposta próxima da ideal;
+- estabilidade preservada.
+
+---
+
+# Resultado Final
+
+Ao executar o código, obtém-se:
+
+- quantização individual dos blocos componentes;
+- reconstrução dos filtros após a quantização;
+- comparação entre filtros originais e quantizados;
+- análise das respostas em frequência;
+- análise dos diagramas de polos e zeros;
+- comparação entre quantização por blocos e quantização do filtro completo.
+
+---
