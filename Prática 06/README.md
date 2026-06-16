@@ -664,7 +664,11 @@ theta_c = 2*np.pi*fc/fs
 
 ## Explicação
 
-A frequência central deve ser convertida para radianos por amostra.
+A frequência central deve ser convertida para radianos por amostra:
+
+\[
+\theta_c=\frac{2\pi f_c}{f_s}
+\]
 
 onde:
 
@@ -834,10 +838,6 @@ zeros = np.roots(b_scaled)
 poles = np.roots(a)
 ```
 
-## Explicação
-
-São calculadas as raízes do numerador e do denominador.
-
 ---
 
 # Plotagem do Círculo Unitário
@@ -864,7 +864,7 @@ ax.plot(...,'x')
 
 ## Explicação
 
-Os polos aparecem como X.
+Os polos aparecem como X e os zeros como O
 
 ---
 
@@ -906,7 +906,7 @@ plt.plot(...)
 
 ---
 
-# Questão 1(d) : Filtro Notch ta certo
+# Questão 1(d) : Filtro Notch 
 
 ---
 
@@ -991,11 +991,6 @@ r
 ```
 
 controla a largura da banda rejeitada.
-
-Valores de \(r\):
-
-- próximos de 1 → notch estreito;
-- menores → notch mais largo.
 
 ---
 
@@ -1099,11 +1094,6 @@ freqz()
 
 calcula a resposta em frequência do filtro.
 
-Foram obtidas:
-
-- magnitude;
-- fase.
-
 ---
 
 # Gráfico da Magnitude
@@ -1114,21 +1104,13 @@ Foram obtidas:
 
 ## Explicação
 
-A magnitude é apresentada em decibéis:
-
-\[
-|H(f)|_{dB}
-=
-20\log_{10}|H(f)|
-\]
+A magnitude é apresentada em dB.
 
 Observa-se uma forte atenuação em:
 
 ```python
 3000 Hz
 ```
-
-caracterizando o comportamento Notch.
 
 ---
 
@@ -1138,10 +1120,6 @@ caracterizando o comportamento Notch.
 np.angle(H_notch)
 ```
 
-## Explicação
-
-A fase mostra o deslocamento angular introduzido pelo filtro em cada frequência.
-
 ---
 
 # Diagrama de Polos e Zeros
@@ -1150,123 +1128,6 @@ A fase mostra o deslocamento angular introduzido pelo filtro em cada frequência
 zeros_notch = np.roots(b_notch_scaled)
 poles_notch = np.roots(a_notch)
 ```
-
-## Explicação
-
-Foram calculadas as raízes do numerador e denominador.
-
-Essas raízes representam:
-
-- zeros;
-- polos.
-
----
-
-# Interpretação dos Zeros
-
-Os zeros ficam localizados sobre o círculo unitário na frequência:
-
-\[
-\theta_c
-\]
-
-e são responsáveis pela rejeição total da componente de 3000 Hz.
-
----
-
-# Interpretação dos Polos
-
-Os polos ficam próximos dos zeros, porém dentro do círculo unitário.
-
-Sua função é aumentar a seletividade da rejeição.
-
-Quanto mais próximos do círculo unitário:
-
-```python
-r → 1
-```
-
-mais estreito será o notch.
-
----
-
-# Verificação de Estabilidade
-
-```python
-np.all(np.abs(poles_notch) < 1)
-```
-
-## Explicação
-
-Um filtro digital é estável quando:
-
-\[
-|p_i|<1
-\]
-
-para todos os polos.
-
-Como:
-
-```python
-r = 0.95
-```
-
-todos os polos permanecem dentro do círculo unitário.
-
-Portanto, o filtro é estável.
-
----
-
-# Influência do Parâmetro r
-
-Foram analisados os valores:
-
-```python
-r = [0.7, 0.85, 0.95, 0.99]
-```
-
----
-
-## r = 0.7
-
-- notch largo;
-- menor seletividade;
-- maior faixa rejeitada.
-
----
-
-## r = 0.85
-
-- rejeição intermediária;
-- melhor compromisso entre largura e seletividade.
-
----
-
-## r = 0.95
-
-- notch estreito;
-- elevada seletividade.
-
----
-
-## r = 0.99
-
-- notch extremamente estreito;
-- rejeição muito seletiva;
-- polos muito próximos do círculo unitário.
-
----
-
-# Interpretação dos Resultados
-
-Observa-se que:
-
-- a frequência de 3000 Hz é fortemente atenuada;
-- as demais frequências permanecem praticamente inalteradas;
-- o parâmetro \(r\) controla a largura da banda rejeitada;
-- o filtro permanece estável para \(0<r<1\).
-
 ---
 
 # Resultado dos Gráficos
@@ -1295,29 +1156,11 @@ Observa-se que:
 
 ---
 
-# Resultado Final
-
-Ao executar o código obtém-se:
-
-- projeto completo de um filtro Notch digital;
-- análise da magnitude e fase;
-- visualização dos polos e zeros;
-- verificação da estabilidade;
-- estudo do efeito do parâmetro \(r\) sobre a largura da banda rejeitada.
-
 ---
 
-# Prática 6 — Questão 2
+# Prática 6 —
 
-# Projeto de Filtro Passa-Faixas em Cascata
-
-Nesta etapa foi realizado:
-
-- projeto de um filtro passa-altas de segunda ordem;
-- projeto de um filtro passa-baixas de segunda ordem;
-- associação em cascata dos dois filtros;
-- análise da resposta em frequência;
-- análise do diagrama de polos e zeros.
+#  Questão 2: Filtro Passa-Faixas em Cascata
 
 O objetivo é obter um filtro passa-faixas com banda útil compreendida entre:
 
@@ -1427,16 +1270,6 @@ com frequência de corte:
 ```python
 6000 Hz
 ```
-
----
-
-# Características do Butterworth
-
-O filtro Butterworth apresenta:
-
-- resposta maximamente plana;
-- ausência de ondulações na banda passante;
-- transição suave entre bandas.
 
 ---
 
@@ -1570,13 +1403,6 @@ A magnitude é convertida para:
 ```text
 decibéis (dB)
 ```
-
-permitindo observar:
-
-- banda passante;
-- banda de rejeição;
-- frequência de corte.
-
 ---
 
 # Frequências de Corte
@@ -1602,11 +1428,6 @@ delimitando a faixa de frequências transmitidas pelo filtro.
 ```python
 np.angle(H_cascata)
 ```
-
-## Explicação
-
-A fase mostra o deslocamento angular introduzido pelo filtro para cada frequência.
-
 ---
 
 # Diagrama de Polos e Zeros
@@ -1626,16 +1447,6 @@ poles_cascata = np.roots(a_cascata)
 np.roots(b_cascata)
 ```
 
-## Explicação
-
-Os zeros correspondem às frequências atenuadas pelo filtro.
-
-Graficamente são representados por:
-
-```text
-○
-```
-
 ---
 
 # Polos
@@ -1643,15 +1454,6 @@ Graficamente são representados por:
 ```python
 np.roots(a_cascata)
 ```
-
-## Explicação
-
-Os polos determinam:
-
-- estabilidade;
-- seletividade;
-- formato da resposta em frequência.
-
 Graficamente são representados por:
 
 ```text
@@ -1669,58 +1471,6 @@ plt.Circle((0,0),1)
 ## Explicação
 
 O círculo unitário é utilizado para verificar a estabilidade.
-
-Um filtro digital é estável quando:
-
-```math
-|p_i| < 1
-```
-
-para todos os polos.
-
----
-
-# Interpretação da Resposta em Frequência
-
-O filtro obtido:
-
-- rejeita frequências abaixo de 6000 Hz;
-- permite a passagem de frequências entre 6000 Hz e 8000 Hz;
-- rejeita frequências acima de 8000 Hz.
-
-Dessa forma comporta-se como um filtro passa-faixas.
-
----
-
-# Interpretação do Diagrama de Polos e Zeros
-
-Observa-se que:
-
-- os polos permanecem dentro do círculo unitário;
-- o sistema é estável;
-- a distribuição dos polos determina a largura da banda passante;
-- os zeros contribuem para a rejeição fora da faixa desejada.
-
----
-
-# Comparação com os Filtros da Questão 1
-
-Enquanto na Questão 1 foram analisados:
-
-- passa-baixas;
-- passa-altas;
-- passa-faixas ressonante;
-- notch;
-
-nesta questão foi utilizado um método diferente para obter um passa-faixas.
-
-Em vez de utilizar um único bloco de segunda ordem, o filtro foi construído pela associação em cascata de:
-
-```text
-Passa-Altas + Passa-Baixas
-```
-
-resultando em um filtro de ordem superior e maior seletividade.
 
 ---
 
@@ -1742,27 +1492,7 @@ resultando em um filtro de ordem superior e maior seletividade.
 
 ---
 
-# Resultado Final
-
-Ao executar o código, obtém-se:
-
-- projeto de um filtro passa-faixas digital;
-- implementação por cascata de filtros Butterworth;
-- resposta em magnitude e fase;
-- diagrama de polos e zeros;
-- verificação da estabilidade do sistema.
-
-# Prática 6 — Questão 3
-
-# Projeto de Filtro Rejeita-Faixas em Paralelo
-
-Nesta etapa foi realizado:
-
-- projeto de um filtro passa-baixas de segunda ordem;
-- projeto de um filtro passa-altas de segunda ordem;
-- combinação dos filtros em paralelo;
-- análise da resposta em frequência;
-- análise do diagrama de polos e zeros.
+# Questão 3: Filtro Rejeita-Faixas em Paralelo
 
 O objetivo é obter um filtro rejeita-faixas capaz de atenuar as frequências compreendidas entre:
 
@@ -1923,7 +1653,7 @@ A estrutura pode ser representada por:
 
 ```text
              ┌─ LPF ─┐
-Entrada ─────┤       ├──── Saída
+Entrada ─────┤       + ──── Saída
              └─ HPF ─┘
 ```
 
@@ -2029,7 +1759,7 @@ calcula a resposta em frequência do filtro digital.
 
 ## Explicação
 
-A magnitude é convertida para decibéis para facilitar a visualização da atenuação.
+A magnitude é convertida para dB.
 
 A região entre:
 
@@ -2052,10 +1782,6 @@ apresenta forte redução de ganho.
 ```python
 np.angle(H_parallel_br)
 ```
-
-## Explicação
-
-O gráfico de fase mostra o deslocamento angular provocado pelo filtro em cada frequência.
 
 ---
 
@@ -2097,12 +1823,6 @@ np.roots(a_parallel_br)
 np.roots(b_parallel_br)
 ```
 
-## Explicação
-
-Os zeros representam frequências nas quais ocorre forte atenuação da resposta.
-
-No filtro rejeita-faixas, eles são responsáveis pela formação da banda rejeitada.
-
 ---
 
 # Polos
@@ -2110,14 +1830,6 @@ No filtro rejeita-faixas, eles são responsáveis pela formação da banda rejei
 ```python
 np.roots(a_parallel_br)
 ```
-
-## Explicação
-
-Os polos controlam:
-
-- seletividade;
-- estabilidade;
-- inclinação das transições.
 
 ---
 
@@ -2127,60 +1839,8 @@ Os polos controlam:
 plt.Circle((0,0),1)
 ```
 
-## Explicação
-
-O círculo unitário é utilizado para verificar a estabilidade do sistema.
-
-O filtro é estável quando:
-
-```math
-|p_i|<1
-```
-
-para todos os polos.
-
 ---
 
-# Interpretação da Resposta em Frequência
-
-O filtro obtido:
-
-- permite a passagem de frequências abaixo de 1000 Hz;
-- rejeita frequências entre 1000 Hz e 4000 Hz;
-- permite a passagem de frequências acima de 4000 Hz.
-
-Portanto, apresenta comportamento típico de um filtro rejeita-faixas.
-
----
-
-# Interpretação do Diagrama de Polos e Zeros
-
-Observa-se que:
-
-- os polos permanecem dentro do círculo unitário;
-- o sistema é estável;
-- os zeros produzem a região de rejeição;
-- a posição dos polos controla a transição entre as bandas.
-
----
-
-# Comparação com o Filtro Notch da Questão 1(d)
-
-O filtro Notch desenvolvido anteriormente possui:
-
-- rejeição extremamente localizada;
-- faixa estreita de atenuação;
-- alta seletividade em torno de uma única frequência.
-
-Já o filtro rejeita-faixas desta questão apresenta:
-
-- rejeição distribuída em uma faixa mais larga;
-- atenuação entre 1000 Hz e 4000 Hz;
-- comportamento adequado para eliminar uma banda inteira de frequências.
-
-Assim, o filtro Notch pode ser considerado um caso particular de filtro rejeita-faixas com largura de banda muito pequena.
-
----
 
 # Resultado dos Gráficos
 
@@ -2200,30 +1860,9 @@ Assim, o filtro Notch pode ser considerado um caso particular de filtro rejeita-
 
 ---
 
-# Resultado Final
+# 
 
-Ao executar o código, obtém-se:
-
-- projeto de um filtro rejeita-faixas digital;
-- implementação por associação paralela de filtros Butterworth;
-- resposta em magnitude e fase;
-- diagrama de polos e zeros;
-- verificação da estabilidade do sistema;
-- comparação com o filtro Notch estudado anteriormente.
-
-# Prática 6 — Questão 4(a)
-
-# Quantização dos Coeficientes dos Filtros Digitais
-
-Nesta etapa foi realizada:
-
-- implementação de uma rotina de quantização de coeficientes;
-- quantização dos coeficientes do filtro passa-faixas em cascata;
-- quantização dos coeficientes do filtro rejeita-faixas em paralelo;
-- análise da resposta em frequência para diferentes resoluções;
-- análise da movimentação dos polos e zeros após a quantização.
-
-O objetivo é verificar como a precisão numérica dos coeficientes afeta o comportamento dos filtros digitais.
+# Questão 4(a): Quantização dos Coeficientes dos Filtros Digitais
 
 ---
 
@@ -2329,11 +1968,6 @@ quantization_step = (2 * max_abs_coeff) / num_levels
 
 Calcula a distância entre dois níveis consecutivos de quantização.
 
-Quanto maior o número de bits:
-
-- menor o passo;
-- menor o erro de quantização.
-
 ---
 
 # Quantização dos Coeficientes
@@ -2437,12 +2071,7 @@ axs[1].plot(...)
 
 ## Explicação
 
-A resposta do filtro quantizado é comparada com a resposta do filtro original.
-
-São avaliadas:
-
-- magnitude;
-- fase.
+A resposta em frequência do filtro quantizado é comparada com a resposta em frequência do filtro original.
 
 ---
 
@@ -2469,28 +2098,6 @@ após a quantização.
 ```python
 ax.plot(...)
 ```
-
-## Explicação
-
-Os polos e zeros quantizados são comparados com aqueles obtidos no filtro original.
-
-Isso permite visualizar diretamente o efeito da quantização.
-
----
-
-# Interpretação dos Resultados do Filtro em Cascata
-
-Quando poucos bits são utilizados:
-
-- ocorre grande distorção dos coeficientes;
-- polos e zeros se deslocam significativamente;
-- a resposta em frequência é alterada.
-
-À medida que o número de bits aumenta:
-
-- os coeficientes aproximam-se dos valores originais;
-- os polos retornam às posições desejadas;
-- a resposta em frequência converge para a resposta ideal.
 
 ---
 
@@ -2540,12 +2147,6 @@ signal.freqz(
 
 A resposta do filtro quantizado é comparada com a resposta do filtro original.
 
-São avaliadas:
-
-- largura da faixa rejeitada;
-- profundidade da rejeição;
-- comportamento da fase.
-
 ---
 
 # Polos e Zeros Quantizados
@@ -2569,67 +2170,9 @@ Nos diagramas gerados:
 
 ---
 
-# Interpretação dos Resultados do Filtro Rejeita-Faixas
-
-A quantização provoca:
-
-- deslocamento dos polos;
-- deslocamento dos zeros;
-- alteração da frequência rejeitada;
-- redução da profundidade do notch.
-
-Os efeitos tornam-se mais severos para:
-
-```python
-2 bits
-```
-
-e
-
-```python
-4 bits
-```
-
 ---
 
-# Influência da Quantização
-
-Quanto menor a quantidade de bits:
-
-- maior o erro de arredondamento;
-- maior a distorção espectral;
-- maior o risco de degradação do filtro.
-
-Quanto maior a quantidade de bits:
-
-- menor o erro numérico;
-- maior a fidelidade ao projeto original.
-
----
-
-# Resultado Final
-
-Ao executar o código, obtém-se:
-
-- quantização dos coeficientes dos filtros;
-- comparação entre filtros originais e quantizados;
-- análise das respostas em frequência;
-- análise dos diagramas de polos e zeros;
-- avaliação do impacto da precisão numérica sobre o desempenho dos filtros digitais.
-
----
-
-# Prática 6 — Questão 4(b)
-
-# Quantização dos Coeficientes em Cada Bloco dos Filtros
-
-Nesta etapa foi realizada:
-
-- quantização individual dos blocos componentes dos filtros;
-- quantização separada dos coeficientes dos filtros passa-baixas e passa-altas;
-- reconstrução dos filtros após a quantização;
-- análise das respostas em frequência;
-- análise dos diagramas de polos e zeros.
+# Questão 4: Quantização dos Coeficientes em Cada Bloco dos Filtros
 
 O objetivo é verificar se a quantização realizada em cada bloco separadamente produz menor degradação quando comparada à quantização do filtro completo realizada na Questão 4(a).
 
@@ -2652,17 +2195,6 @@ a_parallel_br
 ```
 
 Nesta etapa, a quantização é realizada antes da combinação dos blocos.
-
----
-
-# Vantagem da Quantização por Blocos
-
-Ao quantizar cada estágio separadamente:
-
-- os coeficientes permanecem menores;
-- a faixa dinâmica é reduzida;
-- o erro de quantização tende a ser menor;
-- a estabilidade pode ser melhor preservada.
 
 ---
 
@@ -2809,41 +2341,6 @@ Os polos e zeros obtidos após a quantização são comparados com os polos e ze
 
 ---
 
-# Interpretação dos Resultados do Filtro em Cascata
-
-A quantização individual dos blocos tende a:
-
-- preservar melhor a estrutura do filtro;
-- reduzir erros acumulados;
-- minimizar deslocamentos dos polos;
-- aproximar a resposta da versão ideal.
-
-Para resoluções elevadas:
-
-```python
-16 bits
-```
-
-e
-
-```python
-32 bits
-```
-
-a diferença para o filtro original torna-se praticamente imperceptível.
-
----
-
-# Quantização do Filtro Rejeita-Faixas em Paralelo
-
-O filtro rejeita-faixas foi implementado utilizando:
-
-```python
-LPF + HPF
-```
-
-em paralelo.
-
 ---
 
 # Quantização dos Blocos
@@ -2969,17 +2466,6 @@ Nos diagramas:
 
 ---
 
-# Interpretação dos Resultados do Filtro Rejeita-Faixas
-
-A quantização dos blocos geralmente apresenta:
-
-- menor deslocamento dos polos;
-- menor deslocamento dos zeros;
-- melhor preservação da banda rejeitada;
-- maior estabilidade numérica.
-
-Os benefícios tornam-se mais evidentes para:
-
 ```python
 2 bits
 ```
@@ -2994,46 +2480,3 @@ onde os erros de quantização são mais significativos.
 
 ---
 
-# Comparação com a Questão 4(a)
-
-Na quantização direta do filtro completo:
-
-- os erros afetam coeficientes de ordem mais alta;
-- os deslocamentos de polos podem ser maiores.
-
-Na quantização por blocos:
-
-- cada estágio preserva melhor suas características;
-- os erros ficam distribuídos;
-- a implementação costuma ser mais robusta.
-
----
-
-# Influência do Número de Bits
-
-Poucos bits:
-
-- maior erro de arredondamento;
-- maior distorção espectral;
-- maior deslocamento dos polos e zeros.
-
-Muitos bits:
-
-- menor erro de quantização;
-- resposta próxima da ideal;
-- estabilidade preservada.
-
----
-
-# Resultado Final
-
-Ao executar o código, obtém-se:
-
-- quantização individual dos blocos componentes;
-- reconstrução dos filtros após a quantização;
-- comparação entre filtros originais e quantizados;
-- análise das respostas em frequência;
-- análise dos diagramas de polos e zeros;
-- comparação entre quantização por blocos e quantização do filtro completo.
-
----
