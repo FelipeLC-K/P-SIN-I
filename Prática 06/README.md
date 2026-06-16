@@ -13,19 +13,7 @@
 # Prática 6 — Projeto de Filtros IIR.
 ---
 
-
-
 # Questão 1(a) Filtro Passa-Baixas  de 2ª Ordem
-
-Nesta etapa foi realizado:
-
-- Projeto de um filtro digital passa-baixa de 2ª ordem;
-- obtenção dos coeficientes da função de transferência;
-- análise da resposta em frequência;
-- construção do diagrama de polos e zeros;
-- verificação do fator de normalização do filtro;
-- estudo da influência da posição dos polos na resposta em frequência.
-
 ---
 
 # Importação das Bibliotecas
