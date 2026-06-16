@@ -611,21 +611,7 @@ permitindo comparar o efeito da posição dos polos.
 
 ---
 
-# Prática 6 — Questão 1(c)
-
-# Projeto e Análise de um Filtro Rejeita-Faixa (Notch)
-
-Nesta etapa foi realizado:
-
-- projeto de um filtro rejeita-faixa digital de segunda ordem;
-- definição da frequência central de rejeição;
-- cálculo dos coeficientes da função de transferência;
-- ajuste do ganho para normalização;
-- análise da resposta em frequência;
-- construção do diagrama de polos e zeros;
-- estudo da influência do raio dos polos.
-
-O objetivo é criar um filtro capaz de rejeitar uma frequência específica do sinal, mantendo as demais componentes praticamente inalteradas.
+# Questão 1(c): Filtro Passa-faixas
 
 ---
 
@@ -659,7 +645,7 @@ fc = 7000
 Onde:
 
 - `fs` é a frequência de amostragem;
-- `fc` é a frequência central da rejeição.
+- `fc` é a frequência central.
 
 Neste caso:
 
@@ -680,10 +666,6 @@ theta_c = 2*np.pi*fc/fs
 
 A frequência central deve ser convertida para radianos por amostra.
 
-A relação utilizada é:
-
-
-
 onde:
 
 - \(f_c\) é a frequência central;
@@ -697,24 +679,6 @@ onde:
 r_default = 0.95
 ```
 
-## Explicação
-
-O parâmetro:
-
-```python
-r
-```
-
-controla a seletividade do filtro.
-
-Valores próximos de:
-
-```python
-1
-```
-
-produzem rejeições mais estreitas e seletivas.
-
 ---
 
 # Cálculo dos Coeficientes do Denominador
@@ -723,14 +687,6 @@ produzem rejeições mais estreitas e seletivas.
 m1 = -2*r_default*np.cos(theta_c)
 m2 = r_default**2
 ```
-
-## Explicação
-
-Os polos são posicionados próximos ao círculo unitário.
-
-O denominador assume a forma:
-
-
 
 ---
 
@@ -839,12 +795,6 @@ calcula a resposta em frequência do filtro.
 
 A magnitude é representada em decibéis.
 
-O gráfico permite visualizar:
-
-- banda rejeitada;
-- profundidade da rejeição;
-- comportamento fora da frequência central.
-
 ---
 
 # Resposta de Fase
@@ -855,7 +805,7 @@ np.angle(H)
 
 ## Explicação
 
-Mostra a variação de fase introduzida pelo filtro ao longo da frequência.
+Mostra a variação de fase ao longo da frequência.
 
 ---
 
@@ -896,14 +846,6 @@ São calculadas as raízes do numerador e do denominador.
 unit_circle = plt.Circle(...)
 ```
 
-## Explicação
-
-O círculo unitário é utilizado para verificar:
-
-- estabilidade;
-- posição dos polos;
-- posição dos zeros.
-
 ---
 
 # Zeros
@@ -911,12 +853,6 @@ O círculo unitário é utilizado para verificar:
 ```python
 ax.plot(...,'o')
 ```
-
-## Explicação
-
-Os zeros aparecem como círculos.
-
-Eles são responsáveis pela rejeição da frequência desejada.
 
 ---
 
@@ -928,32 +864,7 @@ ax.plot(...,'x')
 
 ## Explicação
 
-Os polos aparecem como cruzes.
-
-Sua posição controla:
-
-- seletividade;
-- largura da banda rejeitada.
-
----
-
-# Verificação da Estabilidade
-
-```python
-if np.all(np.abs(poles) < 1)
-```
-
-## Explicação
-
-Um filtro digital é estável quando todos os polos estão dentro do círculo unitário.
-
-Matematicamente:
-
-\[
-|p_i| < 1
-\]
-
-para todos os polos.
+Os polos aparecem como X.
 
 ---
 
@@ -993,88 +904,9 @@ e posteriormente a resposta em frequência.
 plt.plot(...)
 ```
 
-## Explicação
-
-As curvas obtidas permitem comparar o efeito da variação do raio dos polos.
-
 ---
 
-# Efeito do Raio dos Polos
-
-### r = 0.5
-
-- rejeição larga;
-- baixa seletividade.
-
----
-
-### r = 0.85
-
-- banda rejeitada mais estreita;
-- seletividade intermediária.
-
----
-
-### r = 0.95
-
-- rejeição mais seletiva;
-- comportamento mais próximo do ideal.
-
----
-
-### r = 0.99
-
-- rejeição extremamente estreita;
-- alta seletividade;
-- polos muito próximos do círculo unitário.
-
----
-
-# Interpretação dos Resultados
-
-O filtro rejeita-faixa remove componentes próximas de:
-
-```text
-7000 Hz
-```
-
-mantendo as demais frequências praticamente preservadas.
-
-Observa-se que:
-
-- a frequência central permanece fixa;
-- o parâmetro \(r\) controla a largura da rejeição;
-- quanto maior \(r\), mais estreita e seletiva é a banda rejeitada;
-- todos os casos permanecem estáveis enquanto os polos estiverem dentro do círculo unitário.
-
----
-
-# Resultado Final
-
-Ao executar o código, obtém-se:
-
-- projeto completo de um filtro rejeita-faixa digital;
-- resposta de magnitude e fase;
-- diagrama de polos e zeros;
-- análise da estabilidade;
-- estudo da influência do raio dos polos sobre a seletividade do filtro.
-
----
-
-# Prática 6 — Questão 1(d)
-
-# Projeto e Análise de um Filtro Notch Digital de Segunda Ordem
-
-Nesta etapa foi realizado:
-
-- projeto de um filtro Notch digital;
-- definição da frequência de rejeição;
-- cálculo dos coeficientes do filtro;
-- análise da resposta em frequência;
-- análise do diagrama de polos e zeros;
-- estudo da influência do parâmetro \(r\).
-
-O objetivo é rejeitar uma frequência específica do sinal preservando as demais componentes espectrais.
+# Questão 1(d) : Filtro Notch ta certo
 
 ---
 
