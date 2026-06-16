@@ -14,7 +14,7 @@
 ---
 
 # Questão 1(a) Filtro Passa-Baixas  de 2ª Ordem
----
+
 
 # Importação das Bibliotecas
 
