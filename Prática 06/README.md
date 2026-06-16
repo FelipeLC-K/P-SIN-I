@@ -1648,3 +1648,448 @@ Ao executar o código obtém-se:
 - estudo do efeito do parâmetro \(r\) sobre a largura da banda rejeitada.
 
 ---
+
+# Prática 6 — Questão 2
+
+# Projeto de Filtro Passa-Faixas em Cascata
+
+Nesta etapa foi realizado:
+
+- projeto de um filtro passa-altas de segunda ordem;
+- projeto de um filtro passa-baixas de segunda ordem;
+- associação em cascata dos dois filtros;
+- análise da resposta em frequência;
+- análise do diagrama de polos e zeros.
+
+O objetivo é obter um filtro passa-faixas com banda útil compreendida entre:
+
+- 6000 Hz;
+- 8000 Hz.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → operações matemáticas;
+- `matplotlib` → geração de gráficos;
+- `scipy.signal` → projeto e análise de filtros digitais.
+
+---
+
+# Definição dos Parâmetros
+
+```python
+fs = 20000
+fc1 = 6000
+fc2 = 8000
+```
+
+## Explicação
+
+Foram definidas:
+
+- frequência de amostragem:
+
+```python
+fs = 20000 Hz
+```
+
+- frequência de corte inferior:
+
+```python
+fc1 = 6000 Hz
+```
+
+- frequência de corte superior:
+
+```python
+fc2 = 8000 Hz
+```
+
+---
+
+# Estrutura do Filtro
+
+O filtro passa-faixas é obtido pela cascata de:
+
+```text
+Passa-Altas → Passa-Baixas
+```
+
+onde:
+
+```text
+HPF(fc1 = 6000 Hz)
+```
+
+remove componentes abaixo de 6000 Hz
+
+e
+
+```text
+LPF(fc2 = 8000 Hz)
+```
+
+remove componentes acima de 8000 Hz.
+
+---
+
+# Projeto do Filtro Passa-Altas
+
+```python
+b_hp, a_hp = signal.butter(
+    2,
+    fc1,
+    btype='highpass',
+    fs=fs,
+    output='ba'
+)
+```
+
+## Explicação
+
+Foi utilizado um filtro:
+
+```python
+Butterworth de 2ª ordem
+```
+
+com frequência de corte:
+
+```python
+6000 Hz
+```
+
+---
+
+# Características do Butterworth
+
+O filtro Butterworth apresenta:
+
+- resposta maximamente plana;
+- ausência de ondulações na banda passante;
+- transição suave entre bandas.
+
+---
+
+# Projeto do Filtro Passa-Baixas
+
+```python
+b_lp, a_lp = signal.butter(
+    2,
+    fc2,
+    btype='lowpass',
+    fs=fs,
+    output='ba'
+)
+```
+
+## Explicação
+
+Foi projetado um segundo filtro Butterworth de:
+
+```python
+2ª ordem
+```
+
+com frequência de corte:
+
+```python
+8000 Hz
+```
+
+---
+
+# Coeficientes dos Filtros
+
+Os coeficientes retornados são:
+
+```python
+b_hp , a_hp
+```
+
+para o filtro passa-altas
+
+e
+
+```python
+b_lp , a_lp
+```
+
+para o filtro passa-baixas.
+
+Esses coeficientes representam a função de transferência digital:
+
+```math
+H(z)=\frac{B(z)}{A(z)}
+```
+
+---
+
+# Formação da Cascata
+
+```python
+b_cascata = np.convolve(b_hp, b_lp)
+a_cascata = np.convolve(a_hp, a_lp)
+```
+
+## Explicação
+
+A cascata de filtros equivale à multiplicação das funções de transferência:
+
+```math
+H_{PF}(z)=H_{HP}(z)\cdot H_{LP}(z)
+```
+
+Como multiplicação no domínio Z corresponde à convolução dos coeficientes:
+
+```python
+np.convolve()
+```
+
+é utilizada para obter os coeficientes finais.
+
+---
+
+# Função de Transferência Resultante
+
+O filtro resultante possui:
+
+```python
+ordem = 4
+```
+
+pois é formado por:
+
+```text
+2ª ordem + 2ª ordem
+```
+
+---
+
+# Resposta em Frequência
+
+```python
+w_cascata, H_cascata = signal.freqz(
+    b_cascata,
+    a_cascata,
+    worN=8192
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+freqz()
+```
+
+calcula a resposta em frequência do filtro digital.
+
+---
+
+# Gráfico de Magnitude
+
+```python
+20*np.log10(abs(H_cascata))
+```
+
+## Explicação
+
+A magnitude é convertida para:
+
+```text
+decibéis (dB)
+```
+
+permitindo observar:
+
+- banda passante;
+- banda de rejeição;
+- frequência de corte.
+
+---
+
+# Frequências de Corte
+
+As linhas verticais indicam:
+
+```python
+fc1 = 6000 Hz
+```
+
+e
+
+```python
+fc2 = 8000 Hz
+```
+
+delimitando a faixa de frequências transmitidas pelo filtro.
+
+---
+
+# Gráfico de Fase
+
+```python
+np.angle(H_cascata)
+```
+
+## Explicação
+
+A fase mostra o deslocamento angular introduzido pelo filtro para cada frequência.
+
+---
+
+# Diagrama de Polos e Zeros
+
+Os polos e zeros são obtidos por:
+
+```python
+zeros_cascata = np.roots(b_cascata)
+poles_cascata = np.roots(a_cascata)
+```
+
+---
+
+# Zeros
+
+```python
+np.roots(b_cascata)
+```
+
+## Explicação
+
+Os zeros correspondem às frequências atenuadas pelo filtro.
+
+Graficamente são representados por:
+
+```text
+○
+```
+
+---
+
+# Polos
+
+```python
+np.roots(a_cascata)
+```
+
+## Explicação
+
+Os polos determinam:
+
+- estabilidade;
+- seletividade;
+- formato da resposta em frequência.
+
+Graficamente são representados por:
+
+```text
+×
+```
+
+---
+
+# Círculo Unitário
+
+```python
+plt.Circle((0,0),1)
+```
+
+## Explicação
+
+O círculo unitário é utilizado para verificar a estabilidade.
+
+Um filtro digital é estável quando:
+
+```math
+|p_i| < 1
+```
+
+para todos os polos.
+
+---
+
+# Interpretação da Resposta em Frequência
+
+O filtro obtido:
+
+- rejeita frequências abaixo de 6000 Hz;
+- permite a passagem de frequências entre 6000 Hz e 8000 Hz;
+- rejeita frequências acima de 8000 Hz.
+
+Dessa forma comporta-se como um filtro passa-faixas.
+
+---
+
+# Interpretação do Diagrama de Polos e Zeros
+
+Observa-se que:
+
+- os polos permanecem dentro do círculo unitário;
+- o sistema é estável;
+- a distribuição dos polos determina a largura da banda passante;
+- os zeros contribuem para a rejeição fora da faixa desejada.
+
+---
+
+# Comparação com os Filtros da Questão 1
+
+Enquanto na Questão 1 foram analisados:
+
+- passa-baixas;
+- passa-altas;
+- passa-faixas ressonante;
+- notch;
+
+nesta questão foi utilizado um método diferente para obter um passa-faixas.
+
+Em vez de utilizar um único bloco de segunda ordem, o filtro foi construído pela associação em cascata de:
+
+```text
+Passa-Altas + Passa-Baixas
+```
+
+resultando em um filtro de ordem superior e maior seletividade.
+
+---
+
+# Resultado dos Gráficos
+
+## Resposta em Frequência do Filtro Passa-Faixas em Cascata
+
+<p align="center">
+  <img src="assets6/Q2_MagnitudeFase.png" width="900">
+</p>
+
+---
+
+## Diagrama de Polos e Zeros
+
+<p align="center">
+  <img src="assets6/Q2_PolosZeros.png" width="700">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, obtém-se:
+
+- projeto de um filtro passa-faixas digital;
+- implementação por cascata de filtros Butterworth;
+- resposta em magnitude e fase;
+- diagrama de polos e zeros;
+- verificação da estabilidade do sistema.
