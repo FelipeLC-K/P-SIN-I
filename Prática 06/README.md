@@ -13,9 +13,9 @@
 # Prática 6 — Projeto de Filtros IIR.
 ---
 
-Questão 1(a)
 
-# Projeto e Análise de um Filtro Passa-Baixas Butterworth de 2ª Ordem
+
+# Questão 1(a) Filtro Passa-Baixas  de 2ª Ordem
 
 Nesta etapa foi realizado:
 
