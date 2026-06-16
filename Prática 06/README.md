@@ -304,16 +304,6 @@ A frequência angular define a localização angular dos polos no círculo unit�
 
 ---
 
-Observa-se que:
-
-- o filtro Butterworth apresenta resposta plana na banda passante;
-- a frequência de corte ocorre próxima de 1000 Hz;
-- a fase varia continuamente ao longo da frequência;
-- todos os polos permanecem dentro do círculo unitário, garantindo estabilidade;
-- o aumento do raio dos polos torna o filtro mais seletivo.
-
----
-
 # Questão 1(b) Filtro Passa-Altas Butterworth de 2ª Ordem
 
 ---
