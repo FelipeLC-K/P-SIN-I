@@ -2801,5 +2801,3 @@ axs[1].axvline(...)
 → ruído intenso.
 
 ---
-
----
