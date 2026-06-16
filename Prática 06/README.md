@@ -2776,8 +2776,6 @@ axs[1].axvline(...)
 
 ---
 
----
-
 # Influência da Variância do Ruído
 
 À medida que a variância aumenta:
