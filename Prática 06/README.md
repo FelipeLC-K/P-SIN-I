@@ -2093,3 +2093,462 @@ Ao executar o código, obtém-se:
 - resposta em magnitude e fase;
 - diagrama de polos e zeros;
 - verificação da estabilidade do sistema.
+
+# Prática 6 — Questão 3
+
+# Projeto de Filtro Rejeita-Faixas em Paralelo
+
+Nesta etapa foi realizado:
+
+- projeto de um filtro passa-baixas de segunda ordem;
+- projeto de um filtro passa-altas de segunda ordem;
+- combinação dos filtros em paralelo;
+- análise da resposta em frequência;
+- análise do diagrama de polos e zeros.
+
+O objetivo é obter um filtro rejeita-faixas capaz de atenuar as frequências compreendidas entre:
+
+- 1000 Hz;
+- 4000 Hz.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → operações matemáticas;
+- `matplotlib` → geração dos gráficos;
+- `scipy.signal` → projeto e análise de filtros digitais.
+
+---
+
+# Definição dos Parâmetros
+
+```python
+fs_br = 20000
+fc1_br = 1000
+fc2_br = 4000
+```
+
+## Explicação
+
+Foram definidas:
+
+- frequência de amostragem:
+
+```python
+fs = 20000 Hz
+```
+
+- frequência limite inferior da banda rejeitada:
+
+```python
+fc1_br = 1000 Hz
+```
+
+- frequência limite superior da banda rejeitada:
+
+```python
+fc2_br = 4000 Hz
+```
+
+---
+
+# Estrutura do Filtro
+
+O filtro rejeita-faixas foi construído pela associação em paralelo de:
+
+```text
+Passa-Baixas + Passa-Altas
+```
+
+onde:
+
+```text
+LPF(fc = 1000 Hz)
+```
+
+permite a passagem das baixas frequências
+
+e
+
+```text
+HPF(fc = 4000 Hz)
+```
+
+permite a passagem das altas frequências.
+
+A região intermediária é rejeitada.
+
+---
+
+# Projeto do Filtro Passa-Baixas
+
+```python
+b_lpf_br, a_lpf_br = signal.butter(
+    order_br,
+    fc1_br,
+    btype='lowpass',
+    fs=fs_br,
+    output='ba'
+)
+```
+
+## Explicação
+
+Foi utilizado um filtro Butterworth de segunda ordem com frequência de corte igual a:
+
+```python
+1000 Hz
+```
+
+---
+
+# Projeto do Filtro Passa-Altas
+
+```python
+b_hpf_br, a_hpf_br = signal.butter(
+    order_br,
+    fc2_br,
+    btype='highpass',
+    fs=fs_br,
+    output='ba'
+)
+```
+
+## Explicação
+
+Foi utilizado um filtro Butterworth de segunda ordem com frequência de corte igual a:
+
+```python
+4000 Hz
+```
+
+---
+
+# Coeficientes dos Filtros
+
+Os coeficientes obtidos são:
+
+```python
+b_lpf_br , a_lpf_br
+```
+
+para o passa-baixas
+
+e
+
+```python
+b_hpf_br , a_hpf_br
+```
+
+para o passa-altas.
+
+Esses coeficientes definem as funções de transferência digitais dos filtros.
+
+---
+
+# Associação em Paralelo
+
+Diferentemente da cascata utilizada na Questão 2, nesta etapa os filtros são ligados em paralelo.
+
+A estrutura pode ser representada por:
+
+```text
+             ┌─ LPF ─┐
+Entrada ─────┤       ├──── Saída
+             └─ HPF ─┘
+```
+
+A saída total é dada pela soma das saídas dos dois filtros.
+
+---
+
+# Denominador Equivalente
+
+```python
+a_parallel_br = np.convolve(
+    a_lpf_br,
+    a_hpf_br
+)
+```
+
+## Explicação
+
+O denominador equivalente é obtido pelo produto dos denominadores dos filtros individuais.
+
+---
+
+# Numerador Equivalente
+
+```python
+num1 = np.convolve(
+    b_lpf_br,
+    a_hpf_br
+)
+
+num2 = np.convolve(
+    b_hpf_br,
+    a_lpf_br
+)
+```
+
+## Explicação
+
+Como os filtros estão em paralelo, as funções de transferência são somadas:
+
+```math
+H(z)=H_{LPF}(z)+H_{HPF}(z)
+```
+
+Após colocar as frações sob um denominador comum, obtém-se:
+
+```math
+H(z)=
+\frac{
+B_{LPF}(z)A_{HPF}(z)
++
+B_{HPF}(z)A_{LPF}(z)
+}
+{
+A_{LPF}(z)A_{HPF}(z)
+}
+```
+
+---
+
+# Soma dos Polinômios
+
+```python
+b_parallel_br
+```
+
+## Explicação
+
+O numerador final é obtido pela soma dos produtos cruzados dos coeficientes.
+
+Essa operação produz a função de transferência equivalente do filtro rejeita-faixas.
+
+---
+
+# Resposta em Frequência
+
+```python
+w_parallel_br, H_parallel_br =
+signal.freqz(
+    b_parallel_br,
+    a_parallel_br,
+    worN=8192
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+freqz()
+```
+
+calcula a resposta em frequência do filtro digital.
+
+---
+
+# Gráfico de Magnitude
+
+```python
+20*np.log10(abs(H_parallel_br))
+```
+
+## Explicação
+
+A magnitude é convertida para decibéis para facilitar a visualização da atenuação.
+
+A região entre:
+
+```python
+1000 Hz
+```
+
+e
+
+```python
+4000 Hz
+```
+
+apresenta forte redução de ganho.
+
+---
+
+# Gráfico de Fase
+
+```python
+np.angle(H_parallel_br)
+```
+
+## Explicação
+
+O gráfico de fase mostra o deslocamento angular provocado pelo filtro em cada frequência.
+
+---
+
+# Frequências de Rejeição
+
+As linhas verticais destacam:
+
+```python
+fc1_br = 1000 Hz
+```
+
+e
+
+```python
+fc2_br = 4000 Hz
+```
+
+delimitando a faixa rejeitada pelo sistema.
+
+---
+
+# Diagrama de Polos e Zeros
+
+Os polos e zeros são obtidos por:
+
+```python
+zeros_parallel_br =
+np.roots(b_parallel_br)
+
+poles_parallel_br =
+np.roots(a_parallel_br)
+```
+
+---
+
+# Zeros
+
+```python
+np.roots(b_parallel_br)
+```
+
+## Explicação
+
+Os zeros representam frequências nas quais ocorre forte atenuação da resposta.
+
+No filtro rejeita-faixas, eles são responsáveis pela formação da banda rejeitada.
+
+---
+
+# Polos
+
+```python
+np.roots(a_parallel_br)
+```
+
+## Explicação
+
+Os polos controlam:
+
+- seletividade;
+- estabilidade;
+- inclinação das transições.
+
+---
+
+# Círculo Unitário
+
+```python
+plt.Circle((0,0),1)
+```
+
+## Explicação
+
+O círculo unitário é utilizado para verificar a estabilidade do sistema.
+
+O filtro é estável quando:
+
+```math
+|p_i|<1
+```
+
+para todos os polos.
+
+---
+
+# Interpretação da Resposta em Frequência
+
+O filtro obtido:
+
+- permite a passagem de frequências abaixo de 1000 Hz;
+- rejeita frequências entre 1000 Hz e 4000 Hz;
+- permite a passagem de frequências acima de 4000 Hz.
+
+Portanto, apresenta comportamento típico de um filtro rejeita-faixas.
+
+---
+
+# Interpretação do Diagrama de Polos e Zeros
+
+Observa-se que:
+
+- os polos permanecem dentro do círculo unitário;
+- o sistema é estável;
+- os zeros produzem a região de rejeição;
+- a posição dos polos controla a transição entre as bandas.
+
+---
+
+# Comparação com o Filtro Notch da Questão 1(d)
+
+O filtro Notch desenvolvido anteriormente possui:
+
+- rejeição extremamente localizada;
+- faixa estreita de atenuação;
+- alta seletividade em torno de uma única frequência.
+
+Já o filtro rejeita-faixas desta questão apresenta:
+
+- rejeição distribuída em uma faixa mais larga;
+- atenuação entre 1000 Hz e 4000 Hz;
+- comportamento adequado para eliminar uma banda inteira de frequências.
+
+Assim, o filtro Notch pode ser considerado um caso particular de filtro rejeita-faixas com largura de banda muito pequena.
+
+---
+
+# Resultado dos Gráficos
+
+## Resposta em Frequência do Filtro Rejeita-Faixas
+
+<p align="center">
+  <img src="assets6/Q3_MagnitudeFase.png" width="900">
+</p>
+
+---
+
+## Diagrama de Polos e Zeros
+
+<p align="center">
+  <img src="assets6/Q3_PolosZeros.png" width="700">
+</p>
+
+---
+
+# Resultado Final
+
+Ao executar o código, obtém-se:
+
+- projeto de um filtro rejeita-faixas digital;
+- implementação por associação paralela de filtros Butterworth;
+- resposta em magnitude e fase;
+- diagrama de polos e zeros;
+- verificação da estabilidade do sistema;
+- comparação com o filtro Notch estudado anteriormente.
