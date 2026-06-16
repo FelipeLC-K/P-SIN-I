@@ -783,3 +783,454 @@ O filtro Butterworth passa-altas de 2ª ordem foi projetado e analisado com suce
 
 A análise da magnitude, da fase, do diagrama polo-zero e da influência do raio dos polos demonstrou como a localização dos polos afeta diretamente a seletividade e o comportamento espectral do filtro digital.
 
+---
+
+# Prática 6 — Questão 1(c)
+
+# Projeto e Análise de um Filtro Rejeita-Faixa (Notch)
+
+Nesta etapa foi realizado:
+
+- projeto de um filtro rejeita-faixa digital de segunda ordem;
+- definição da frequência central de rejeição;
+- cálculo dos coeficientes da função de transferência;
+- ajuste do ganho para normalização;
+- análise da resposta em frequência;
+- construção do diagrama de polos e zeros;
+- estudo da influência do raio dos polos.
+
+O objetivo é criar um filtro capaz de rejeitar uma frequência específica do sinal, mantendo as demais componentes praticamente inalteradas.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → operações matemáticas;
+- `matplotlib` → geração dos gráficos;
+- `scipy.signal` → projeto e análise de filtros digitais.
+
+---
+
+# Definição dos Parâmetros
+
+```python
+fs = 20000
+fc = 7000
+```
+
+## Explicação
+
+Onde:
+
+- `fs` é a frequência de amostragem;
+- `fc` é a frequência central da rejeição.
+
+Neste caso:
+
+```text
+fs = 20 kHz
+fc = 7 kHz
+```
+
+---
+
+# Conversão para Frequência Digital
+
+```python
+theta_c = 2*np.pi*fc/fs
+```
+
+## Explicação
+
+A frequência central deve ser convertida para radianos por amostra.
+
+A relação utilizada é:
+
+
+
+onde:
+
+- \(f_c\) é a frequência central;
+- \(f_s\) é a frequência de amostragem.
+
+---
+
+# Definição do Raio dos Polos
+
+```python
+r_default = 0.95
+```
+
+## Explicação
+
+O parâmetro:
+
+```python
+r
+```
+
+controla a seletividade do filtro.
+
+Valores próximos de:
+
+```python
+1
+```
+
+produzem rejeições mais estreitas e seletivas.
+
+---
+
+# Cálculo dos Coeficientes do Denominador
+
+```python
+m1 = -2*r_default*np.cos(theta_c)
+m2 = r_default**2
+```
+
+## Explicação
+
+Os polos são posicionados próximos ao círculo unitário.
+
+O denominador assume a forma:
+
+
+
+---
+
+# Definição dos Zeros
+
+```python
+b = [1, 0, -1]
+```
+
+## Explicação
+
+O numerador corresponde ao polinômio:
+
+\[
+z^2 - 1
+\]
+
+que cria zeros responsáveis pela rejeição de frequência.
+
+---
+
+# Função de Transferência
+
+A estrutura geral do filtro é:
+
+\[
+H(z)=K\frac{z^2-1}{z^2+m_1z+m_2}
+\]
+
+onde:
+
+- \(K\) é o ganho de normalização;
+- \(m_1\) e \(m_2\) determinam a posição dos polos.
+
+---
+
+# Cálculo do Ganho de Normalização
+
+```python
+omega, h = signal.freqz(b, a, worN=[theta_c])
+gain_at_fc = np.abs(h[0])
+K = 1/gain_at_fc
+```
+
+## Explicação
+
+O fator:
+
+```python
+K
+```
+
+é calculado para ajustar o ganho do filtro.
+
+Após o cálculo:
+
+```python
+b_scaled = [K*val for val in b]
+```
+
+---
+
+# Coeficientes Obtidos
+
+```python
+print(...)
+```
+
+## Explicação
+
+São exibidos:
+
+- valor de \(r\);
+- coeficientes \(m_1\) e \(m_2\);
+- fator de ganho \(K\);
+- coeficientes finais do numerador;
+- coeficientes finais do denominador.
+
+---
+
+# Resposta em Frequência
+
+```python
+w, H = signal.freqz(b_scaled, a, worN=8192)
+```
+
+## Explicação
+
+A função:
+
+```python
+freqz()
+```
+
+calcula a resposta em frequência do filtro.
+
+---
+
+# Resposta de Magnitude
+
+```python
+20*np.log10(abs(H))
+```
+
+## Explicação
+
+A magnitude é representada em decibéis.
+
+O gráfico permite visualizar:
+
+- banda rejeitada;
+- profundidade da rejeição;
+- comportamento fora da frequência central.
+
+---
+
+# Resposta de Fase
+
+```python
+np.angle(H)
+```
+
+## Explicação
+
+Mostra a variação de fase introduzida pelo filtro ao longo da frequência.
+
+---
+
+# Frequência Central
+
+```python
+axs[0].axvline(fc)
+```
+
+## Explicação
+
+Uma linha vertical é utilizada para destacar a frequência:
+
+```text
+7000 Hz
+```
+
+que corresponde ao centro da rejeição.
+
+---
+
+# Diagrama de Polos e Zeros
+
+```python
+zeros = np.roots(b_scaled)
+poles = np.roots(a)
+```
+
+## Explicação
+
+São calculadas as raízes do numerador e do denominador.
+
+---
+
+# Plotagem do Círculo Unitário
+
+```python
+unit_circle = plt.Circle(...)
+```
+
+## Explicação
+
+O círculo unitário é utilizado para verificar:
+
+- estabilidade;
+- posição dos polos;
+- posição dos zeros.
+
+---
+
+# Zeros
+
+```python
+ax.plot(...,'o')
+```
+
+## Explicação
+
+Os zeros aparecem como círculos.
+
+Eles são responsáveis pela rejeição da frequência desejada.
+
+---
+
+# Polos
+
+```python
+ax.plot(...,'x')
+```
+
+## Explicação
+
+Os polos aparecem como cruzes.
+
+Sua posição controla:
+
+- seletividade;
+- largura da banda rejeitada.
+
+---
+
+# Verificação da Estabilidade
+
+```python
+if np.all(np.abs(poles) < 1)
+```
+
+## Explicação
+
+Um filtro digital é estável quando todos os polos estão dentro do círculo unitário.
+
+Matematicamente:
+
+\[
+|p_i| < 1
+\]
+
+para todos os polos.
+
+---
+
+# Influência do Parâmetro r
+
+Foram avaliados os valores:
+
+```python
+r_values = [0.5, 0.85, 0.95, 0.99]
+```
+
+---
+
+# Recalculo dos Coeficientes
+
+Para cada valor de:
+
+```python
+r
+```
+
+são recalculados:
+
+```python
+m1
+m2
+K
+```
+
+e posteriormente a resposta em frequência.
+
+---
+
+# Comparação das Respostas
+
+```python
+plt.plot(...)
+```
+
+## Explicação
+
+As curvas obtidas permitem comparar o efeito da variação do raio dos polos.
+
+---
+
+# Efeito do Raio dos Polos
+
+### r = 0.5
+
+- rejeição larga;
+- baixa seletividade.
+
+---
+
+### r = 0.85
+
+- banda rejeitada mais estreita;
+- seletividade intermediária.
+
+---
+
+### r = 0.95
+
+- rejeição mais seletiva;
+- comportamento mais próximo do ideal.
+
+---
+
+### r = 0.99
+
+- rejeição extremamente estreita;
+- alta seletividade;
+- polos muito próximos do círculo unitário.
+
+---
+
+# Interpretação dos Resultados
+
+O filtro rejeita-faixa remove componentes próximas de:
+
+```text
+7000 Hz
+```
+
+mantendo as demais frequências praticamente preservadas.
+
+Observa-se que:
+
+- a frequência central permanece fixa;
+- o parâmetro \(r\) controla a largura da rejeição;
+- quanto maior \(r\), mais estreita e seletiva é a banda rejeitada;
+- todos os casos permanecem estáveis enquanto os polos estiverem dentro do círculo unitário.
+
+---
+
+# Resultado Final
+
+Ao executar o código, obtém-se:
+
+- projeto completo de um filtro rejeita-faixa digital;
+- resposta de magnitude e fase;
+- diagrama de polos e zeros;
+- análise da estabilidade;
+- estudo da influência do raio dos polos sobre a seletividade do filtro.
+
+---
