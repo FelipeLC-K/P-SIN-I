@@ -2552,3 +2552,411 @@ Ao executar o código, obtém-se:
 - diagrama de polos e zeros;
 - verificação da estabilidade do sistema;
 - comparação com o filtro Notch estudado anteriormente.
+
+# Prática 6 — Questão 4(a)
+
+# Quantização dos Coeficientes dos Filtros Digitais
+
+Nesta etapa foi realizada:
+
+- implementação de uma rotina de quantização de coeficientes;
+- quantização dos coeficientes do filtro passa-faixas em cascata;
+- quantização dos coeficientes do filtro rejeita-faixas em paralelo;
+- análise da resposta em frequência para diferentes resoluções;
+- análise da movimentação dos polos e zeros após a quantização.
+
+O objetivo é verificar como a precisão numérica dos coeficientes afeta o comportamento dos filtros digitais.
+
+---
+
+# Importação das Bibliotecas
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+```
+
+## Explicação
+
+As bibliotecas utilizadas foram:
+
+- `numpy` → operações numéricas;
+- `matplotlib` → geração de gráficos;
+- `scipy.signal` → análise de filtros digitais.
+
+---
+
+# Função de Quantização
+
+```python
+def quantize_coefficients_simple(coefficients, bits):
+```
+
+## Explicação
+
+Foi implementada uma função responsável por quantizar os coeficientes dos filtros utilizando uma representação de precisão limitada.
+
+---
+
+# Verificação de Vetor Vazio
+
+```python
+if not coefficients.size:
+    return coefficients
+```
+
+## Explicação
+
+Caso o vetor esteja vazio, ele é retornado sem alterações.
+
+---
+
+# Determinação da Faixa Dinâmica
+
+```python
+max_abs_coeff = np.max(np.abs(coefficients))
+```
+
+## Explicação
+
+Calcula o maior valor absoluto presente entre os coeficientes.
+
+Esse valor será utilizado para definir a faixa de quantização.
+
+---
+
+# Tratamento para Coeficientes Nulos
+
+```python
+if max_abs_coeff == 0:
+    return np.zeros_like(coefficients)
+```
+
+## Explicação
+
+Se todos os coeficientes forem iguais a zero, o vetor quantizado também será composto apenas por zeros.
+
+---
+
+# Número de Níveis de Quantização
+
+```python
+num_levels = 2**bits
+```
+
+## Explicação
+
+O número de níveis disponíveis depende da quantidade de bits utilizada.
+
+Exemplos:
+
+| Bits | Níveis |
+|--------|--------|
+| 2 | 4 |
+| 4 | 16 |
+| 8 | 256 |
+| 16 | 65536 |
+| 32 | 4294967296 |
+
+---
+
+# Passo de Quantização
+
+```python
+quantization_step = (2 * max_abs_coeff) / num_levels
+```
+
+## Explicação
+
+Calcula a distância entre dois níveis consecutivos de quantização.
+
+Quanto maior o número de bits:
+
+- menor o passo;
+- menor o erro de quantização.
+
+---
+
+# Quantização dos Coeficientes
+
+```python
+quantized_coeffs =
+np.round(coefficients / quantization_step)
+* quantization_step
+```
+
+## Explicação
+
+Cada coeficiente é:
+
+1. dividido pelo passo;
+2. arredondado para o nível mais próximo;
+3. convertido novamente para o valor correspondente.
+
+---
+
+# Quantização do Filtro Passa-Faixas em Cascata
+
+Os coeficientes utilizados foram obtidos na Questão 2:
+
+```python
+b_cascata
+a_cascata
+```
+
+---
+
+# Resoluções Testadas
+
+```python
+bits_to_test = [2, 4, 8, 16, 32]
+```
+
+## Explicação
+
+Foram analisadas cinco precisões diferentes:
+
+- 2 bits;
+- 4 bits;
+- 8 bits;
+- 16 bits;
+- 32 bits.
+
+---
+
+# Quantização dos Coeficientes
+
+```python
+b_cascata_q =
+quantize_coefficients_simple(
+    b_cascata,
+    bits
+)
+
+a_cascata_q =
+quantize_coefficients_simple(
+    a_cascata,
+    bits
+)
+```
+
+## Explicação
+
+Os coeficientes do numerador e do denominador são quantizados para cada quantidade de bits.
+
+---
+
+# Cálculo da Resposta em Frequência
+
+```python
+w_q, H_q =
+signal.freqz(
+    b_cascata_q,
+    a_cascata_q,
+    worN=8192
+)
+```
+
+## Explicação
+
+A função:
+
+```python
+freqz()
+```
+
+calcula a resposta em frequência do filtro quantizado.
+
+---
+
+# Comparação com o Filtro Original
+
+```python
+axs[0].plot(...)
+axs[1].plot(...)
+```
+
+## Explicação
+
+A resposta do filtro quantizado é comparada com a resposta do filtro original.
+
+São avaliadas:
+
+- magnitude;
+- fase.
+
+---
+
+# Cálculo dos Polos e Zeros
+
+```python
+zeros_q = np.roots(b_cascata_q)
+poles_q = np.roots(a_cascata_q)
+```
+
+## Explicação
+
+Obtém-se a localização dos:
+
+- polos;
+- zeros;
+
+após a quantização.
+
+---
+
+# Diagrama de Polos e Zeros
+
+```python
+ax.plot(...)
+```
+
+## Explicação
+
+Os polos e zeros quantizados são comparados com aqueles obtidos no filtro original.
+
+Isso permite visualizar diretamente o efeito da quantização.
+
+---
+
+# Interpretação dos Resultados do Filtro em Cascata
+
+Quando poucos bits são utilizados:
+
+- ocorre grande distorção dos coeficientes;
+- polos e zeros se deslocam significativamente;
+- a resposta em frequência é alterada.
+
+À medida que o número de bits aumenta:
+
+- os coeficientes aproximam-se dos valores originais;
+- os polos retornam às posições desejadas;
+- a resposta em frequência converge para a resposta ideal.
+
+---
+
+# Quantização do Filtro Rejeita-Faixas em Paralelo
+
+Os coeficientes utilizados foram obtidos na Questão 3:
+
+```python
+b_parallel_br
+a_parallel_br
+```
+
+---
+
+# Quantização dos Coeficientes
+
+```python
+b_parallel_br_q =
+quantize_coefficients_simple(
+    b_parallel_br,
+    bits
+)
+
+a_parallel_br_q =
+quantize_coefficients_simple(
+    a_parallel_br,
+    bits
+)
+```
+
+## Explicação
+
+Os coeficientes do filtro rejeita-faixas também são quantizados para diferentes resoluções.
+
+---
+
+# Resposta em Frequência
+
+```python
+signal.freqz(
+    b_parallel_br_q,
+    a_parallel_br_q
+)
+```
+
+## Explicação
+
+A resposta do filtro quantizado é comparada com a resposta do filtro original.
+
+São avaliadas:
+
+- largura da faixa rejeitada;
+- profundidade da rejeição;
+- comportamento da fase.
+
+---
+
+# Polos e Zeros Quantizados
+
+```python
+np.roots(...)
+```
+
+## Explicação
+
+São calculadas as novas posições dos polos e zeros após a quantização.
+
+---
+
+# Comparação Visual
+
+Nos diagramas gerados:
+
+- azul → filtro original;
+- vermelho → filtro quantizado.
+
+---
+
+# Interpretação dos Resultados do Filtro Rejeita-Faixas
+
+A quantização provoca:
+
+- deslocamento dos polos;
+- deslocamento dos zeros;
+- alteração da frequência rejeitada;
+- redução da profundidade do notch.
+
+Os efeitos tornam-se mais severos para:
+
+```python
+2 bits
+```
+
+e
+
+```python
+4 bits
+```
+
+---
+
+# Influência da Quantização
+
+Quanto menor a quantidade de bits:
+
+- maior o erro de arredondamento;
+- maior a distorção espectral;
+- maior o risco de degradação do filtro.
+
+Quanto maior a quantidade de bits:
+
+- menor o erro numérico;
+- maior a fidelidade ao projeto original.
+
+---
+
+# Resultado Final
+
+Ao executar o código, obtém-se:
+
+- quantização dos coeficientes dos filtros;
+- comparação entre filtros originais e quantizados;
+- análise das respostas em frequência;
+- análise dos diagramas de polos e zeros;
+- avaliação do impacto da precisão numérica sobre o desempenho dos filtros digitais.
+
+---
