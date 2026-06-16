@@ -19,11 +19,10 @@
 
 Nesta etapa foi realizado:
 
-- projeto de um filtro digital passa-baixas Butterworth de 2ª ordem;
+- Projeto de um filtro digital passa-baixa de 2ª ordem;
 - obtenção dos coeficientes da função de transferência;
 - análise da resposta em frequência;
-- análise da resposta de fase;
-- construção do diagrama polo-zero;
+- construção do diagrama de polos e zeros;
 - verificação do fator de normalização do filtro;
 - estudo da influência da posição dos polos na resposta em frequência.
 
