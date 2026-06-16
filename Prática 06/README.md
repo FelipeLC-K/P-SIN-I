@@ -15,7 +15,6 @@
 
 # Questão 1(a) Filtro Passa-Baixas  de 2ª Ordem
 
-
 # Importação das Bibliotecas
 
 ```python
@@ -48,10 +47,6 @@ Foi especificada uma frequência de corte de:
 fc = 1000 Hz
 ```
 
-Esta frequência define a região onde o filtro começa a atenuar as componentes do sinal.
-
----
-
 # Conversão para Frequência Normalizada
 
 ```python
@@ -66,9 +61,7 @@ A função:
 signal.butter()
 ```
 
-utiliza frequência normalizada.
-
-A normalização é feita em relação à frequência de Nyquist:
+utiliza frequência normalizada. A normalização é feita em relação à frequência de Nyquist:
 
 ```math
 f_N=\frac{f_s}{2}
@@ -99,8 +92,6 @@ Foi projetado um filtro:
 - Butterworth;
 - passa-baixas;
 - ordem 2.
-
-A aproximação Butterworth possui resposta maximamente plana na banda passante.
 
 ---
 
@@ -166,7 +157,7 @@ para diversos valores de frequência.
 
 ## Explicação
 
-A magnitude é convertida para decibéis:
+A magnitude é convertida para dB:
 
 ```math
 |H(f)|_{dB}
@@ -174,19 +165,11 @@ A magnitude é convertida para decibéis:
 20\log_{10}|H(f)|
 ```
 
-permitindo visualizar claramente a atenuação produzida pelo filtro.
-
----
-
 # Resposta de Fase
 
 ```python
 np.unwrap(np.angle(h_lp))
 ```
-
-## Explicação
-
-A fase mostra o deslocamento introduzido pelo filtro para cada frequência.
 
 A função:
 
@@ -207,20 +190,6 @@ plot_pole_zero(
     ...
 )
 ```
-
-## Explicação
-
-O diagrama polo-zero permite analisar:
-
-- estabilidade;
-- seletividade;
-- comportamento espectral.
-
-Os zeros correspondem às raízes do numerador.
-
-Os polos correspondem às raízes do denominador.
-
----
 
 # Cálculo dos Coeficientes do Denominador
 
@@ -256,7 +225,7 @@ O fator de normalização garante:
 H(1)=1
 ```
 
-ou seja, ganho unitário em frequência zero.
+ganho unitário em frequência zero.
 
 ---
 
@@ -268,15 +237,11 @@ np.allclose(...)
 
 ## Explicação
 
-Foi verificado se os coeficientes calculados pelo Butterworth já satisfazem:
+Foi verificado se os coeficientes calculados já satisfazem:
 
 ```math
 B(z)=K(z+1)^2
 ```
-
-garantindo a normalização automática do filtro.
-
----
 
 # Influência do Raio dos Polos
 
@@ -286,9 +251,7 @@ Foram analisados diferentes valores:
 r = [0.5, 0.7, 0.9, 0.99]
 ```
 
----
-
-# Construção do Filtro com Raio Variável
+# Construção do Filtro com Raio r Variável
 
 ```python
 a1 = -2r\cos(\theta_0)
@@ -323,40 +286,9 @@ A frequência angular define a localização angular dos polos no círculo unit�
 
 ---
 
-# Efeito da Variação de r
-
-À medida que:
-
-```math
-r \rightarrow 1
-```
-
-os polos aproximam-se do círculo unitário.
-
-Consequentemente:
-
-- a seletividade aumenta;
-- a transição torna-se mais estreita;
-- ocorre maior ressonância próxima da frequência de corte.
-
-Quando:
-
-```math
-r \rightarrow 0
-```
-
-os polos aproximam-se da origem.
-
-Nesse caso:
-
-- a resposta torna-se mais suave;
-- a seletividade diminui.
-
----
-
 # Resultado dos Gráficos
 
-## Resposta em Frequência do Filtro Butterworth
+## Resposta em Frequência do Filtro:
 
 <p align="center">
   <img src="assets6/Q1AP6.png" width="900">
@@ -364,15 +296,13 @@ Nesse caso:
 
 ---
 
-## Influência do Raio dos Polos
+## Influência do Raio dos Polos:
 
 <p align="center">
   <img src="assets6/Q1A2P6.png" width="900">
 </p>
 
 ---
-
-# Interpretação dos Resultados
 
 Observa-se que:
 
@@ -384,24 +314,7 @@ Observa-se que:
 
 ---
 
-# Conclusão
-
-O filtro Butterworth de 2ª ordem foi projetado e analisado com sucesso.
-
-A avaliação da resposta em frequência, da fase, do diagrama polo-zero e da influência do raio dos polos permitiu compreender como a localização dos polos afeta diretamente o comportamento espectral do filtro digital.
-
-Questão 1(b)
-
-# Projeto e Análise de um Filtro Passa-Altas Butterworth de 2ª Ordem
-
-Nesta etapa foi realizado:
-
-- projeto de um filtro digital passa-altas Butterworth de 2ª ordem;
-- obtenção dos coeficientes da função de transferência;
-- análise da resposta em frequência;
-- análise da resposta de fase;
-- construção do diagrama polo-zero;
-- estudo da influência da posição dos polos na resposta espectral.
+# Questão 1(b) Filtro Passa-Altas Butterworth de 2ª Ordem
 
 ---
 
@@ -436,9 +349,6 @@ Foi especificada uma frequência de corte igual a:
 ```text
 fc = 2000 Hz
 ```
-
-O filtro deverá permitir a passagem das componentes acima dessa frequência e atenuar as componentes inferiores.
-
 ---
 
 # Conversão para Frequência Normalizada
@@ -477,12 +387,8 @@ b_hp, a_hp = signal.butter(
 
 Foi projetado um filtro:
 
-- Butterworth;
-- passa-altas;
-- ordem 2.
-
-A resposta Butterworth apresenta comportamento suave e sem ondulações na banda passante.
-
+- passa-altas de ordem 2.;
+  
 ---
 
 # Coeficientes da Função de Transferência
@@ -545,8 +451,6 @@ A magnitude é representada em decibéis:
 20\log_{10}|H(f)|
 ```
 
-permitindo visualizar claramente a região de atenuação e a banda passante.
-
 ---
 
 # Resposta de Fase
@@ -555,10 +459,7 @@ permitindo visualizar claramente a região de atenuação e a banda passante.
 np.unwrap(np.angle(h_hp))
 ```
 
-## Explicação
-
-A fase indica o deslocamento angular introduzido pelo filtro em cada componente de frequência.
-
+---
 A função:
 
 ```python
@@ -579,20 +480,11 @@ plot_pole_zero(
 )
 ```
 
-## Explicação
-
-O diagrama polo-zero permite visualizar:
-
-- localização dos polos;
-- localização dos zeros;
-- estabilidade do sistema;
-- comportamento espectral do filtro.
-
 ---
 
 # Estrutura dos Zeros do Filtro Passa-Altas
 
-Em filtros passa-altas Butterworth digitais, os zeros ficam próximos de:
+Em filtros passa-altas  digitais, os zeros ficam próximos de:
 
 ```math
 z=1
@@ -683,40 +575,6 @@ onde:
 
 ---
 
-# Influência do Raio dos Polos
-
-Quando:
-
-```math
-r \rightarrow 1
-```
-
-os polos aproximam-se do círculo unitário.
-
-Isso produz:
-
-- maior seletividade;
-- transição mais abrupta;
-- resposta mais próxima do filtro ideal.
-
----
-
-Quando:
-
-```math
-r \rightarrow 0
-```
-
-os polos aproximam-se da origem.
-
-Nesse caso ocorre:
-
-- menor seletividade;
-- transição mais suave;
-- resposta menos pronunciada.
-
----
-
 # Resposta em Frequência para Diferentes Valores de r
 
 ```python
@@ -750,26 +608,6 @@ permitindo comparar o efeito da posição dos polos.
 <p align="center">
   <img src="assets6/Q1B2P6.png" width="900">
 </p>
-
----
-
-# Interpretação dos Resultados
-
-Observa-se que:
-
-- componentes abaixo de 2000 Hz são fortemente atenuadas;
-- componentes acima da frequência de corte permanecem praticamente inalteradas;
-- a fase varia com a frequência devido à natureza causal do filtro;
-- os polos permanecem dentro do círculo unitário, garantindo estabilidade;
-- o aumento do raio dos polos produz uma resposta mais seletiva e uma transição mais estreita.
-
----
-
-# Conclusão
-
-O filtro Butterworth passa-altas de 2ª ordem foi projetado e analisado com sucesso.
-
-A análise da magnitude, da fase, do diagrama polo-zero e da influência do raio dos polos demonstrou como a localização dos polos afeta diretamente a seletividade e o comportamento espectral do filtro digital.
 
 ---
 
