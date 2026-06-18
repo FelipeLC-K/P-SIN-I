@@ -159,6 +159,8 @@ plt.Circle(
 
 ---
 
+# Resultado Final
+
 -----------------------------------------------------------------------------------
 
 # Questão 2: Aplicação do Filtro H(z) ao Sinal de Áudio
@@ -292,6 +294,8 @@ plt.semilogy(...)
 Os espectros de potência são apresentados no mesmo gráfico utilizando escala logarítmica no eixo vertical.
 
 ---
+
+# Resultado Final
 
 ----------------------------------------------------------------------------------------------
 
@@ -639,3 +643,618 @@ plt.plot(
 # Resultado Final
 
 --------------------------------------------------
+
+
+# Questão 5: Aplicação dos Sistemas da Questão 4 ao Sinal de Áudio
+
+
+# Carregamento do Áudio
+
+```python
+sampling_rate, audio_data =
+wavfile.read('/content/handel.wav')
+```
+
+## Explicação
+
+O arquivo de áudio é carregado utilizando a biblioteca `scipy.io.wavfile`.
+
+Caso o áudio seja estéreo, apenas um canal é utilizado na análise.
+
+---
+
+# Normalização do Sinal
+
+```python
+audio_data =
+audio_data /
+np.max(np.abs(audio_data))
+```
+
+## Explicação
+
+O sinal é normalizado para o intervalo entre -1 e 1.
+
+Isso evita problemas numéricos durante a filtragem e facilita a comparação entre os sinais.
+
+---
+
+# Valores Testados
+
+```python
+valores_a = [0.7, 0.9]
+
+valores_L = [1, 4, 10]
+```
+
+## Explicação
+
+Foram avaliadas seis configurações do filtro:
+
+- a = 0.7, L = 1;
+- a = 0.7, L = 4;
+- a = 0.7, L = 10;
+- a = 0.9, L = 1;
+- a = 0.9, L = 4;
+- a = 0.9, L = 10.
+
+---
+
+# Construção do Filtro
+
+## Numerador
+
+```python
+b_coeffs =
+np.zeros(L_val + 1)
+
+b_coeffs[0] = 1
+
+b_coeffs[L_val] = -1
+```
+
+## Denominador
+
+```python
+a_coeffs =
+np.zeros(L_val + 1)
+
+a_coeffs[0] = 1
+
+a_coeffs[L_val] = -a_val
+```
+
+## Explicação
+
+Os coeficientes implementam a função de transferência
+
+```text
+H(z)=
+(1-z⁻ᴸ)
+/(1-az⁻ᴸ)
+```
+
+para cada combinação de parâmetros.
+
+---
+
+# Filtragem do Áudio
+
+```python
+filtered_audio_q4 =
+signal.lfilter(
+    b_coeffs,
+    a_coeffs,
+    audio_data
+)
+```
+
+## Explicação
+
+O filtro é aplicado diretamente ao sinal de áudio utilizando a função `lfilter()`, produzindo um novo sinal filtrado.
+
+---
+
+# Cálculo do Espectro
+
+```python
+freq_filtered_q4,
+Pxx_den_filtered_q4 =
+signal.welch(
+    filtered_audio_q4,
+    sampling_rate,
+    nperseg=1024
+)
+```
+
+## Explicação
+
+O método de Welch é utilizado para estimar a densidade espectral de potência do sinal filtrado.
+
+O mesmo procedimento já havia sido realizado para o sinal original, permitindo uma comparação direta.
+
+---
+
+# Comparação dos Espectros
+
+```python
+plt.semilogy(
+    freq_original,
+    Pxx_den_original
+)
+
+plt.semilogy(
+    freq_filtered_q4,
+    Pxx_den_filtered_q4
+)
+```
+
+---
+
+# Resultado Final
+
+------------------------------------------------
+
+
+# Questão 6: Recuperação do Sinal de Áudio Utilizando os Sistemas da Questão 4
+
+---
+
+# Sistemas Avaliados
+
+Foram analisadas todas as combinações:
+
+```python
+a ∈ {0.7, 0.9}
+
+L ∈ {1, 4, 10}
+```
+
+resultando em seis sistemas diferentes.
+
+---
+
+# Construção do Filtro Original
+
+Para cada combinação são definidos os coeficientes do sistema
+
+```python
+H(z)=
+(1-z^{-L})
+/
+(1-az^{-L})
+```
+
+através dos vetores:
+
+```python
+b_coeffs_q4
+```
+
+e
+
+```python
+a_coeffs_q4
+```
+
+---
+
+# Construção do Filtro Inverso
+
+O filtro utilizado para recuperar o áudio é
+
+```python
+Hinv(z)=
+1/H(z)
+```
+
+implementado por
+
+```python
+b_inv_q6 = a_coeffs_q4
+a_inv_q6 = b_coeffs_q4
+```
+
+## Explicação
+
+O numerador do filtro inverso corresponde ao denominador do filtro original e vice-versa.
+
+---
+
+# Resposta em Frequência
+
+```python
+ws_inv_q6, h_inv_q6 =
+signal.freqz(
+    b_inv_q6,
+    a_inv_q6,
+    worN=8192
+)
+```
+
+## Explicação
+
+É calculada a resposta em frequência do filtro inverso para verificar como ele compensa os efeitos introduzidos pelo sistema original.
+
+---
+
+# Cálculo dos Polos e Zeros
+
+```python
+z_inv_q6, p_inv_q6, k_inv_q6 =
+signal.tf2zpk(
+    b_inv_q6,
+    a_inv_q6
+)
+```
+
+---
+
+# Diagrama de Polos e Zeros
+
+```python
+plt.plot(...)
+```
+
+---
+
+# Aplicação do Filtro Original
+
+Antes da recuperação, o áudio original é novamente filtrado utilizando o sistema correspondente.
+
+```python
+filtered_audio_q4_current =
+signal.lfilter(
+    b_coeffs_q4,
+    a_coeffs_q4,
+    audio_data
+)
+```
+
+## Explicação
+
+Esse passo reproduz o efeito do sistema da Questão 4 sobre o sinal de áudio.
+
+---
+
+# Recuperação do Áudio
+
+```python
+recovered_audio_q6 =
+signal.lfilter(
+    b_inv_q6,
+    a_inv_q6,
+    filtered_audio_q4_current
+)
+```
+
+## Explicação
+
+O filtro inverso é aplicado ao áudio filtrado com o objetivo de reconstruir o sinal original.
+
+---
+
+# Cálculo do Espectro
+
+```python
+signal.welch(
+    recovered_trimmed_q6,
+    sampling_rate,
+    nperseg=1024
+)
+```
+
+## Explicação
+
+É calculada a densidade espectral de potência do áudio recuperado para comparação com o espectro original.
+
+---
+
+
+# Avaliação pelo Erro Quadrático Médio (MSE)
+
+```python
+mse_q6 =
+np.mean(
+(original_trimmed_q6 -
+ recovered_trimmed_q6)**2
+)
+```
+
+## Explicação
+
+O MSE mede a diferença média entre o sinal recuperado e o sinal original.
+
+---
+
+# Avaliação pela Relação Sinal-Ruído (SNR)
+
+```python
+snr_db_q6 =
+10*np.log10(
+signal_power_q6 /
+noise_power_q6
+)
+```
+
+## Explicação
+
+A SNR indica quanto do sinal útil foi preservado em relação ao erro introduzido durante o processo de recuperação.
+
+---
+
+
+# Resultado Final
+
+------------------------------
+
+
+# Questão 7: Aproximação FIR dos Filtros Inversos
+
+---
+
+# Ordens FIR Utilizadas
+
+Foram avaliadas duas aproximações:
+
+```python
+fir_order_low = 100
+```
+
+e
+
+```python
+fir_order_high = 250
+```
+
+## Explicação
+
+Essas ordens permitem comparar o efeito do comprimento do filtro FIR na qualidade da recuperação do sinal.
+
+---
+
+# Filtro Inverso da Questão 3
+
+O filtro inverso utilizado é
+
+```python
+Hinv(z)=
+1/H(z)
+```
+
+cujos coeficientes são definidos por
+
+```python
+b_inv_q3 = a
+a_inv_q3 = b
+```
+
+## Explicação
+
+Como o filtro original é FIR, seu inverso corresponde à troca entre numerador e denominador da função de transferência.
+
+---
+
+# Recuperação do Áudio Filtrado
+
+Caso o sinal filtrado ainda não exista na memória, ele é novamente calculado:
+
+```python
+filtered_audio =
+signal.lfilter(
+    b,
+    a,
+    audio_data
+)
+```
+
+## Explicação
+
+Esse sinal representa o áudio após passar pelo sistema da Questão 2 e será utilizado na recuperação.
+
+---
+
+# Obtenção da Resposta ao Impulso
+
+Para construir a aproximação FIR é aplicada uma entrada impulso ao filtro inverso.
+
+```python
+impulse_input_q3_low
+```
+
+e
+
+```python
+signal.lfilter(
+    b_inv_q3,
+    a_inv_q3,
+    impulse_input_q3_low
+)
+```
+
+## Explicação
+
+A resposta ao impulso obtida é truncada após um número finito de amostras, tornando possível representar o filtro inverso como um FIR.
+
+---
+
+# Aplicação da Aproximação FIR
+
+```python
+recovered_audio_fir_q3_low =
+signal.lfilter(
+    impulse_response_q3_low,
+    [1.0],
+    filtered_audio
+)
+```
+
+## Explicação
+
+A resposta ao impulso calculada passa a ser utilizada como os coeficientes do novo filtro FIR responsável pela recuperação do áudio.
+
+---
+
+# Função de Análise
+
+Toda a avaliação dos resultados é realizada pela função
+
+```python
+plot_analysis()
+```
+
+Ela executa:
+
+- cálculo do espectro;
+- comparação entre espectros;
+- cálculo do MSE;
+- cálculo da SNR;
+- plotagem da resposta em frequência do FIR.
+
+---
+
+# Aproximação FIR dos Sistemas da Questão 6
+
+Também foi realizada a aproximação FIR para todos os filtros inversos construídos na Questão 6.
+
+Foram analisadas as combinações:
+
+```python
+a ∈ {0.7, 0.9}
+```
+
+e
+
+```python
+L ∈ {1, 4, 10}
+```
+
+---
+
+# Construção dos Sistemas
+
+Para cada combinação são definidos:
+
+```python
+b_coeffs_q4
+```
+
+e
+
+```python
+a_coeffs_q4
+```
+
+representando o filtro original
+
+```python
+H(z)
+```
+
+---
+
+# Construção do Filtro Inverso
+
+O filtro inverso é obtido por
+
+```python
+b_inv_q6 = a_coeffs_q4
+
+a_inv_q6 = b_coeffs_q4
+```
+
+## Explicação
+
+Os coeficientes do numerador e denominador são invertidos para implementar
+
+```python
+Hinv(z)
+```
+
+---
+
+# Resposta ao Impulso do Filtro Inverso
+
+A resposta ao impulso é calculada por
+
+```python
+signal.lfilter(
+    b_inv_q6,
+    a_inv_q6,
+    impulse_input_q6_low
+)
+```
+
+e
+
+```python
+signal.lfilter(
+    b_inv_q6,
+    a_inv_q6,
+    impulse_input_q6_high
+)
+```
+
+## Explicação
+
+São obtidas aproximações FIR para duas ordens diferentes.
+
+---
+
+# Recuperação do Áudio
+
+O sinal filtrado é recuperado utilizando:
+
+```python
+signal.lfilter(
+    impulse_response_q6_low,
+    [1.0],
+    filtered_audio_q4_current
+)
+```
+
+e
+
+```python
+signal.lfilter(
+    impulse_response_q6_high,
+    [1.0],
+    filtered_audio_q4_current
+)
+```
+
+## Explicação
+
+A resposta ao impulso calculada passa a atuar diretamente como um filtro FIR.
+
+---
+
+# Avaliação pelo MSE
+
+```python
+mse =
+np.mean(
+(original_trimmed -
+ recovered_trimmed)**2
+)
+```
+
+---
+
+# Avaliação pela SNR
+
+```python
+snr_db =
+10*np.log10(
+signal_power /
+noise_power
+)
+```
+
+---
+
+# Resultado Final
+
+----------------------------------------
+
+
