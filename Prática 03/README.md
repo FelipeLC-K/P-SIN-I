@@ -161,6 +161,10 @@ plt.Circle(
 
 # Resultado Final
 
+<p align="center">
+  <img src="assets2/RQuestao1P3.png" width="850">
+</p>
+
 -----------------------------------------------------------------------------------
 
 # Questão 2: Aplicação do Filtro H(z) ao Sinal de Áudio
@@ -297,7 +301,11 @@ Os espectros de potência são apresentados no mesmo gráfico utilizando escala 
 
 # Resultado Final
 
-----------------------------------------------------------------------------------------------
+<p align="center">
+  <img src="assets3/RQuestao2P3.png" width="850">
+</p>
+
+---
 
 
 # Questão 3: Projeto do Filtro Inverso e Recuperação do Sinal de Áudio
@@ -485,12 +493,15 @@ noise_power
 )
 ```
 
-
 ---
 
 # Resultado Final
 
-----------------------------------------------------------------------------------------------------
+<p align="center">
+  <img src="assets3/RQuestao3P3.png" width="850">
+</p>
+
+---
 
 # Questão 4: Análise da Resposta em Frequência e do Diagrama de Polos e Zeros
 
@@ -642,8 +653,12 @@ plt.plot(
 
 # Resultado Final
 
---------------------------------------------------
+<p align="center">
+  <img src="assets3/RQuestao4aP3.png" width="850">
+  <img src="assets3/RQuestao4bP3.png" width="850">
+</p>
 
+---
 
 # Questão 5: Aplicação dos Sistemas da Questão 4 ao Sinal de Áudio
 
@@ -793,8 +808,11 @@ plt.semilogy(
 
 # Resultado Final
 
-------------------------------------------------
+<p align="center">
+  <img src="assets3/RQuestao5P3.png" width="850">
+</p>
 
+---
 
 # Questão 6: Recuperação do Sinal de Áudio Utilizando os Sistemas da Questão 4
 
@@ -983,11 +1001,14 @@ A SNR indica quanto do sinal útil foi preservado em relação ao erro introduzi
 
 ---
 
-
 # Resultado Final
 
-------------------------------
+<p align="center">
+  <img src="assets3/RQuestao6aP3.png" width="850">
+  <img src="assets3/RQuestao6bP3.png" width="850">
+</p>
 
+---
 
 # Questão 7: Aproximação FIR dos Filtros Inversos
 
@@ -1254,6 +1275,12 @@ noise_power
 ---
 
 # Resultado Final
+
+<p align="center">
+  <img src="assets3/RQuestao7aP3.png" width="850">
+  <img src="assets3/RQuestao7bP3.png" width="850">
+  <img src="assets3/RQuestao7cP3.png" width="850">
+</p>
 
 ----------------------------------------
 
