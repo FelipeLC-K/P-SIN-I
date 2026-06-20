@@ -15,7 +15,6 @@
 
 # Prática 4 — DCT E DFT
 
-
 # Questão 1: Comparação entre DTFT e DFT com Diferentes Valores de N
 
 # Importação das Bibliotecas
