@@ -286,7 +286,7 @@ A frequência angular define a localização angular dos polos no círculo unit�
 
 ---
 
-# Resultado dos Gráficos
+# Resultados
 
 ## Resposta em Frequência do Filtro:
 
@@ -302,9 +302,15 @@ A frequência angular define a localização angular dos polos no círculo unit�
   <img src="assets6/Q1A2P6.png" width="900">
 </p>
 
+## Diagrama de Polos e zeros:
+
+<p align="center">
+  <img src="assets6/Q1A3P6.png" width="900">
+</p>
+
 ---
 
-# Questão 1(b) Filtro Passa-Altas Butterworth de 2ª Ordem
+# Questão 1(b) Filtro Passa-Altas de 2ª Ordem
 
 ---
 
@@ -597,6 +603,14 @@ permitindo comparar o efeito da posição dos polos.
 
 <p align="center">
   <img src="assets6/Q1B2P6.png" width="900">
+</p>
+
+---
+
+## Diagrama de Polos e zeros:
+
+<p align="center">
+  <img src="assets6/Q1B3P6.png" width="900">
 </p>
 
 ---
