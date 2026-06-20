@@ -13,7 +13,7 @@
 # Prática 5 — Transformadas de Hadamard e Wavelet
 ---
 
-# Questão 1
+# Questão 1a: Sequencias CDMA via Hadamard
 
 # Importação das Bibliotecas
 
@@ -341,7 +341,7 @@ for ax in axes.flatten():
 ```
 
 
-# Resultado dos Gráficos
+# Resultados
 
 ## Espectros dos Sinais
 
@@ -359,7 +359,7 @@ for ax in axes.flatten():
 
 ---
 
-# b) Adição de Ruído AWGN ao Sistema CDMA
+# Questão 1b: Adição de Ruído AWGN ao Sistema CDMA
 
 # Importação das Bibliotecas
 
@@ -627,7 +627,7 @@ organiza automaticamente os gráficos na janela.
 ---
 
 
-# Resultado dos Gráficos
+# Resultados
 
 ## Sinais Recebidos e Espectros
 
@@ -637,7 +637,7 @@ organiza automaticamente os gráficos na janela.
 
 ---
 
-# d) Probabilidade de Erro de Bit (BER) em Sistema CDMA
+# Questão 1d: Probabilidade de Erro de Bit (BER) em Sistema CDMA
 
 # Importação das Bibliotecas
 
@@ -1063,13 +1063,13 @@ Os ticks do eixo Y são ajustados manualmente para melhor visualização da BER.
 
 ---
 
-# Resultado do Gráfico
+# Resultados
 
 <p align="center">
   <img src="assets5/quatroQ1P5.png" width="850">
 </p>
 
-# f) BER em Função da Distorção dos Códigos
+# Questão 1f: BER em Função da Distorção dos Códigos
 
 Nesta etapa, foi analisada a relação entre:
 
@@ -1622,9 +1622,7 @@ Os valores do eixo X são configurados manualmente.
 
 ---
 
-# Questão 3
-
-# a) Geração de um Sinal Não-Estacionário
+# Questão 3a) Geração de um Sinal Não-Estacionário
 
 # Importação das Bibliotecas
 
@@ -2026,7 +2024,7 @@ Exibe o sinal final gerado.
 
 ---
 
-# Resultado do Gráfico
+# Resultados
 
 ## Sinal Não-Estacionário Gerado
 
@@ -2036,20 +2034,7 @@ Exibe o sinal final gerado.
 
 ---
 
-# b) Decomposição Wavelet do Sinal Não-Estacionário
-
-Nesta etapa foi realizada a decomposição wavelet do sinal gerado anteriormente utilizando:
-
-- wavelet biortogonal bior4.4;
-- decomposição multinível;
-- análise em diferentes escalas.
-
-O objetivo é analisar:
-
-- componentes lentas;
-- componentes rápidas;
-- transientes;
-- mudanças de frequência no tempo.
+# Questão 3b) Decomposição Wavelet do Sinal Não-Estacionário
 
 ---
 
@@ -2121,26 +2106,6 @@ que pertence à família:
 
 ---
 
-# Características da Wavelet Biortogonal
-
-A wavelet bior4.4 possui:
-
-- boa reconstrução;
-- filtros simétricos;
-- boa representação de transientes;
-- baixa distorção de fase.
-
----
-
-# Estrutura da Decomposição Wavelet
-
-A transformada wavelet divide o sinal em:
-
-- aproximações;
-- detalhes.
-
----
-
 # Modelo Matemático da Decomposição
 
 :contentReference[oaicite:0]{index=0}
@@ -2173,14 +2138,6 @@ Os filtros de análise são utilizados durante a decomposição do sinal.
 Lo_D
 ```
 
-## Explicação
-
-O filtro passa-baixa extrai:
-
-- componentes lentas;
-- tendências gerais;
-- aproximações do sinal.
-
 ---
 
 # Filtro Passa-Alta
@@ -2188,14 +2145,6 @@ O filtro passa-baixa extrai:
 ```python
 Hi_D
 ```
-
-## Explicação
-
-O filtro passa-alta extrai:
-
-- detalhes rápidos;
-- transientes;
-- mudanças bruscas.
 
 ---
 
@@ -2216,15 +2165,6 @@ print(
 ## Explicação
 
 Os filtros de síntese são utilizados na reconstrução do sinal original.
-
----
-
-# Reconstrução do Sinal
-
-A reconstrução combina:
-
-- aproximações;
-- detalhes.
 
 ---
 
@@ -2413,37 +2353,7 @@ Exibe os resultados da decomposição wavelet.
 
 ---
 
-# Interpretação dos Resultados
-
-Os níveis de detalhe representam:
-
-- frequências altas;
-- frequências médias;
-- transientes;
-- mudanças locais do sinal.
-
----
-
-# Comportamento dos Níveis
-
-## Níveis Altos
-
-Capturam:
-
-- componentes lentas;
-- tendências globais.
-
-## Níveis Baixos
-
-Capturam:
-
-- transientes rápidos;
-- mudanças bruscas;
-- oscilações rápidas.
-
----
-
-# Resultado do Gráfico
+# Resultados
 
 ## Decomposição Wavelet do Sinal
 
@@ -2453,7 +2363,7 @@ Capturam:
 
 ---
 
-# c) Decomposição Wavelet em 5 Níveis
+# Questão 3c) Decomposição Wavelet em 5 Níveis
 
 # Importação da Biblioteca
 
@@ -2788,7 +2698,7 @@ A decomposição wavelet permite:
 
 ---
 
-# Resultado do Gráfico
+# Resultados
 
 ## Aproximação e Subfaixas Wavelet
 
@@ -2798,9 +2708,7 @@ A decomposição wavelet permite:
 
 ---
 
-# Questão 4
-
-# a) Análise Temporal e Espectral do Sinal `leleccum.mat`
+# Questão 4a) Análise Temporal e Espectral do Sinal `leleccum.mat`
 
 # Importação das Bibliotecas
 
@@ -3150,7 +3058,7 @@ O espectro permite identificar:
 
 ---
 
-# Resultado dos Gráficos
+# Resultados
 
 ## Domínio do Tempo e Espectro
 
@@ -3195,17 +3103,6 @@ Daubechies 4 (db4)
 
 ---
 
-# Características da Wavelet db4
-
-A wavelet db4 possui:
-
-- boa compactação de energia;
-- boa localização temporal;
-- eficiência para remoção de ruído;
-- suavização eficiente do sinal.
-
----
-
 # Definição do Nível de Decomposição
 
 ```python
@@ -3217,12 +3114,6 @@ level = 5
 O sinal foi decomposto em:
 
 - cinco níveis wavelet.
-
-Isso permite separar:
-
-- baixas frequências;
-- altas frequências;
-- componentes de ruído.
 
 ---
 
@@ -3535,7 +3426,7 @@ Após o thresholding:
 
 ---
 
-# Resultado do Denoising
+# Resultados
 
 ## Comparação entre Sinal Original e Filtrado
 
@@ -3545,7 +3436,7 @@ Após o thresholding:
 
 ---
 
-# d) Visualização das Subfaixas Wavelet do Sinal `leleccum`
+# Questão 4d) Visualização das Subfaixas Wavelet do Sinal `leleccum`
 
 # Importação das Bibliotecas
 
@@ -3946,7 +3837,7 @@ mostram:
 
 ---
 
-# Resultado dos Gráficos
+# Resultados
 
 ## Subfaixas Wavelet do Sinal `leleccum`
 
@@ -3956,20 +3847,7 @@ mostram:
 
 ---
 
-# Resultado Final
-
-Ao executar o código, obtém-se:
-
-- análise multirresolução do sinal;
-- decomposição wavelet em subfaixas;
-- separação entre aproximações e detalhes;
-- visualização das bandas de frequência do sinal.
-
----
-
-# Prática 5 — Questão 4(e)
-
-# Comparação entre Denoising via Wavelet e DFT
+# Questão 4e) Comparação entre Denoising via Wavelet e DFT
 
 Nesta etapa foi realizada:
 
@@ -4384,47 +4262,6 @@ Exibe os resultados da comparação entre os métodos.
 
 ---
 
-# Comparação entre Wavelet e DFT
-
-## Método Wavelet
-
-A filtragem wavelet apresenta:
-
-- melhor localização temporal;
-- preservação de transientes;
-- preservação de detalhes locais;
-- melhor desempenho em sinais não-estacionários.
-
----
-
-## Método DFT
-
-A filtragem via Fourier apresenta:
-
-- análise global do espectro;
-- boa remoção de componentes periódicas;
-- menor capacidade de localizar eventos no tempo.
-
----
-
-# Diferença Fundamental
-
-## DFT
-
-A DFT trabalha apenas no domínio da frequência.
-
----
-
-## Wavelet
-
-A wavelet trabalha simultaneamente em:
-
-- tempo;
-- frequência.
-
----
-
-
 # Resultado dos Gráficos
 
 ## Comparação entre Denoising Wavelet e DFT
@@ -4434,4 +4271,3 @@ A wavelet trabalha simultaneamente em:
 </p>
 
 ---
-
