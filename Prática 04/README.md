@@ -15,9 +15,9 @@
 
 # Prática 4 — DCT E DFT
 
-# Questão 1
+# 
 
-# Comparação entre DTFT e DFT com Diferentes Valores de N
+# Questão 1: Comparação entre DTFT e DFT com Diferentes Valores de N
 
 # Importação das Bibliotecas
 
@@ -354,27 +354,6 @@ Ajusta automaticamente o espaçamento dos gráficos e exibe o resultado.
 
 ---
 
-# Interpretação dos Resultados
-
-Observa-se que:
-
-- para valores pequenos de N, a DFT possui poucas amostras espectrais;
-- conforme N aumenta, a DFT aproxima melhor a DTFT;
-- o zero-padding aumenta a densidade espectral;
-- a forma do espectro torna-se mais detalhada.
-
----
-
-# Efeito do Zero-Padding
-
-O zero-padding:
-
-- não adiciona informação nova;
-- apenas melhora a visualização do espectro;
-- aumenta a resolução aparente da DFT.
-
----
-
 # Resultado dos Gráficos
 
 ## Comparação entre DTFT e DFT
@@ -385,9 +364,7 @@ O zero-padding:
 
 ---
 
-# Questão 2
-
-# Efeito do Zero-Padding e Resolução Espectral na DFT
+# Questão 2: Efeito do Zero-Padding e Resolução Espectral na DFT
 
 # Importação das Bibliotecas
 
@@ -712,7 +689,7 @@ Maior interpolação espectral.
 Visualização ainda mais detalhada do espectro.
 ---
 
-# Resultado dos Gráficos
+# Resultados
 
 ## Comparação dos Espectros
 
@@ -722,9 +699,8 @@ Visualização ainda mais detalhada do espectro.
 
 ---
 
-# Questão 3
 
-# Compressão de Sinais Utilizando DFT e DCT
+# Questão 3: Compressão de Sinais Utilizando DFT e DCT
 
 ---
 
@@ -1171,38 +1147,7 @@ A análise permite observar:
 
 ---
 
-# Comparação entre DFT e DCT
-
-## DFT
-
-A DFT:
-
-- representa o sinal no domínio da frequência complexa;
-- geralmente necessita mais coeficientes.
-
----
-
-## DCT
-
-A DCT:
-
-- concentra melhor a energia;
-- necessita menos coeficientes;
-- apresenta maior eficiência em compressão.
-
----
-
-# Resultado Esperado
-
-Os gráficos devem mostrar que:
-
-- a DCT utiliza menos coeficientes;
-- a DCT mantém menor MSE;
-- o erro aumenta conforme menos energia é preservada.
-
----
-
-# Resultado dos Gráficos
+# Resultados
 
 ## Comparação DFT vs DCT
 
@@ -1212,7 +1157,7 @@ Os gráficos devem mostrar que:
 
 ---
 
-# Prática 4 — Questão 4
+# Questão 4: Compressão de imagens utilizando DCT
 
 # Importação das Bibliotecas
 
@@ -1414,36 +1359,6 @@ A DCT bidimensional pode ser representada por:
 
 ---
 
-# Interpretação da DCT
-
-A DCT separa a imagem em:
-
-- componentes de baixa frequência;
-- componentes de alta frequência.
-
----
-
-# Baixas Frequências
-
-As componentes de baixa frequência:
-
-- concentram a maior parte da energia;
-- representam formas gerais da imagem;
-- aparecem próximas ao canto superior esquerdo.
-
----
-
-# Altas Frequências
-
-As componentes de alta frequência representam:
-
-- detalhes finos;
-- bordas;
-- ruídos;
-- texturas.
-
----
-
 # Visualização dos Coeficientes
 
 ```python
@@ -1532,30 +1447,7 @@ A reconstrução pode ser representada por:
 
 ---
 
-# Interpretação dos Resultados
-
-A análise dos coeficientes DCT permite observar:
-
-- concentração energética;
-- predominância das baixas frequências;
-- eficiência da DCT em compressão.
-
----
-
-# Relação com Compressão JPEG
-
-A DCT é amplamente utilizada em:
-
-```python
-JPEG
-```
-
-pois grande parte da energia da imagem fica concentrada em poucos coeficientes.
-
----
-
-
-# Resultado dos Gráficos
+# Resultados
 
 ## Imagem Original
 
@@ -1581,9 +1473,9 @@ pois grande parte da energia da imagem fica concentrada em poucos coeficientes.
 
 ---
 
-# Questão 5
 
-# Compressão de Imagens RGB com DCT Bidimensional em Blocos
+
+# Questão 5: Compressão de Imagens RGB com DCT Bidimensional em Blocos
 
 # Importação das Bibliotecas
 
@@ -1929,9 +1821,9 @@ pois utiliza:
   <img src="assets4/Q5P4.png" width="700">
 </p>
 
-# Prática 6 — Questão 5(b)
+---
 
-O objetivo é determinar quais filtros devem ser utilizados para remover as componentes indesejadas preservando ao máximo o conteúdo original do sinal.
+# Questão 5(b) : Determinar quais filtros devem ser utilizados para remover as componentes indesejadas preservando ao máximo o conteúdo original do sinal.
 
 ---
 
@@ -2169,31 +2061,5 @@ e
 ```
 
 o ruído branco não pode ser completamente eliminado por filtragem linear simples sem também afetar parte do sinal desejado.
-
----
-
-# Conclusão
-
-A partir do espectro do sinal contaminado com:
-
-```python
-σ² = 1
-```
-
-identificam-se duas interferências principais:
-
-```python
-100 Hz
-```
-
-e
-
-```python
-2000 Hz
-```
-
-além do ruído branco distribuído em toda a faixa de frequências.
-
-A estratégia mais adequada consiste em utilizar filtros Notch centrados nessas frequências e, se necessário, complementar o processamento com filtros passa-faixas ou passa-baixas para reduzir parte do ruído branco.
 
 ---
