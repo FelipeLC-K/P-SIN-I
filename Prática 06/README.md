@@ -907,10 +907,35 @@ e posteriormente a resposta em frequência.
 ```python
 plt.plot(...)
 ```
+---
+
+# Resultadoa
+
+## Resposta em Frequência do Filtro passa-faixas
+
+<p align="center">
+  <img src="assets6/Q1C_1.png" width="900">
+</p>
 
 ---
 
-# Questão 1(d) : Filtro Notch 
+## Diagrama de Polos e Zeros
+
+<p align="center">
+  <img src="assets6/Q1C_2.png" width="700">
+</p>
+
+---
+
+## Influência do Parâmetro r
+
+<p align="center">
+  <img src="assets6/Q1C_3.png" width="900">
+</p>
+
+---
+
+# Questão 1(d) : Filtro Notch
 
 ---
 
@@ -1134,7 +1159,7 @@ poles_notch = np.roots(a_notch)
 ```
 ---
 
-# Resultado dos Gráficos
+# Resultadoa
 
 ## Resposta em Frequência do Filtro Notch
 
@@ -1159,10 +1184,6 @@ poles_notch = np.roots(a_notch)
 </p>
 
 ---
-
----
-
-# Prática 6 —
 
 #  Questão 2: Filtro Passa-Faixas em Cascata
 
@@ -1649,22 +1670,6 @@ Esses coeficientes definem as funções de transferência digitais dos filtros.
 
 ---
 
-# Associação em Paralelo
-
-Diferentemente da cascata utilizada na Questão 2, nesta etapa os filtros são ligados em paralelo.
-
-A estrutura pode ser representada por:
-
-```text
-             ┌─ LPF ─┐
-Entrada ─────┤       + ──── Saída
-             └─ HPF ─┘
-```
-
-A saída total é dada pela soma das saídas dos dois filtros.
-
----
-
 # Denominador Equivalente
 
 ```python
@@ -1845,7 +1850,6 @@ plt.Circle((0,0),1)
 
 ---
 
-
 # Resultado dos Gráficos
 
 ## Resposta em Frequência do Filtro Rejeita-Faixas
@@ -1863,8 +1867,6 @@ plt.Circle((0,0),1)
 </p>
 
 ---
-
-# 
 
 # Questão 4(a): Quantização dos Coeficientes dos Filtros Digitais
 
@@ -2484,25 +2486,69 @@ onde os erros de quantização são mais significativos.
 
 ---
 
+# Resultado dos Gráficos
 
+## Resposta em Frequência do Filtro passa-Faixas em cascata quantizado 
 
+<p align="center">
+  <img src="assets6/Q4_A.png" width="900">
+</p>
 
+---
 
+## Diagrama de Polos e Zeros
 
+<p align="center">
+  <img src="assets6/Q4_B.png" width="700">
+</p>
 
+---
 
+## Resposta em Frequência do Filtro rejeita-Faixas em paralelo quantizado
 
+<p align="center">
+  <img src="assets6/Q4_C.png" width="900">
+</p>
 
+---
 
+## Diagrama de Polos e Zeros
 
+<p align="center">
+  <img src="assets6/Q4_D.png" width="700">
+</p>
 
+---
 
+## Resposta em Frequência do Filtro passa-Faixas em cascata quantizado em cada bloco 
 
+<p align="center">
+  <img src="assets6/Q4_A2.png" width="900">
+</p>
 
+---
 
+## Diagrama de Polos e Zeros
 
+<p align="center">
+  <img src="assets6/Q4_B2.png" width="700">
+</p>
 
+## Resposta em Frequência do Filtro rejeita-Faixas em paralelo quantizado em cada bloco
 
+<p align="center">
+  <img src="assets6/Q4_C2.png" width="900">
+</p>
+
+---
+
+## Diagrama de Polos e Zeros
+
+<p align="center">
+  <img src="assets6/Q4_D2.png" width="700">
+</p>
+
+---
 
 
 # Questão 5: Preparação do Áudio e Geração dos Sinais Contaminados
