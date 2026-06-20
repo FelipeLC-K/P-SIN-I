@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets7/bannercefet.png" width="100%">
+  <img src="assets/bannercefet.png" width="100%">
 </p>
 
 # PROSIN I — Processamento de Sinais I
