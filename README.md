@@ -75,7 +75,7 @@
     <td>
       <a href="Prática%2007/README.md"><b>Prática 7 - Projeto de Filtros FIR.</b></a>
       <br><br>
-      Construção e análise de filtros digitais FIR.
+      construção e análise de filtros digitais FIR através da transformada Z.
     </td>
   </tr>
   
